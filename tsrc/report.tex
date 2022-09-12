@@ -1,0 +1,93 @@
+\documentclass{esda}
+\font\titlefont=cmss12 at 40pt
+\font\authorfont=cmr12 at 30pt
+
+\title{\bf \titlefont How to Upset NATO}
+\author{\bf \authorfont Vladimir Putin}
+
+\header{\@title}
+
+%\category{PIC2 Report}
+\category{Master Thesis}
+
+\date{\today}
+
+\input{color}
+
+
+\begin{document}
+
+\includegraphics[bb=9.5cm 11cm 0cm 0cm,scale=0.29]{ist_logo.pdf}
+\vspace{2.5cm}
+
+{\let\newpage\relax\maketitle}
+\pagenumbering{gobble}
+
+\vspace{1.5cm}
+\begin{center}
+\begin{Large}
+  {\bf Project Report (PIC2)}\\
+  or\\
+  {\bf Master's Dissertation}\\
+  \vspace{1cm}
+  {\bf Department of Electrical and Computer Engineering}\\
+  \vspace{1cm}
+  Supervisors:\\
+  \vspace{0.5cm}
+  {\bf José Teixeira de Sousa\\
+  Horácio Neto}\\
+  \vspace{1cm}
+  Examiners:\\
+  \vspace{0.5cm}
+  {\bf Mário Véstias\\
+  Rui Duarte}\\
+\end{Large}
+\end{center}
+
+\cleardoublepage
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\section*{Abstract}
+\input{abstract}
+
+\cleardoublepage
+\tableofcontents
+\listoftables
+\listoffigures
+
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\cleardoublepage
+\section{Introduction}
+\label{sec:intro}
+\input{intro}
+
+\cleardoublepage
+\section{Background}
+\label{sec:back}
+\input{background}
+
+\cleardoublepage
+\section{The Work}
+\label{sec:curr}
+\input{current}
+
+\cleardoublepage
+\section{The Results}
+\label{sec:res}
+\input{results}
+
+\cleardoublepage
+\section{Conclusion}
+\label{sec:conc}
+\input{conclusion}
+
+\addcontentsline{toc}{section}{\bibname}
+\bibliographystyle{abbrvunsrtnat} % <<<<< SELECT IF USING REFERENCES BY NUMBER (CITATION ORDER)
+\bibliography{citations.bib}
+
+
+\end{document}
