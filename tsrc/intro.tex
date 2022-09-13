@@ -1,1 +1,38 @@
-\lipsum[1-2]
+This section should be written {\em after} the main sections are concluded. The suggested order for writing this document is the following:
+
+\begin{enumerate}
+\item The Background knowledge section: this section is mandatory for both PIC2 and the dissertation, which can reuse and improve it.
+\item The Present Work description section: if this is the PIC2 report, this section may not exist if one still has not done any work. In the dissertation, this section is mandatory.
+\item The Experimental Results section: if this is the PIC2 report, this section may not exist if one still has not done any work. In the dissertation, this section is mandatory.
+\item The Introduction section: this section.
+\item Write the Conclusion section.
+\item Write the Abstract section.
+\end{enumerate}
+
+In this section, one should write the following:
+\begin{itemize}
+\item Motivation: explain the problem one is trying to solve and why it is
+important. Describe the main existing works on this topic (summarize from the
+Background section).
+\item Objective: Explain this work's goal and how it tackled the problem to
+achieve it. (summarize from the Present Work section).
+\item Document outline: Describe in one paragraph the contents of each main section of
+the document.
+\end{itemize}
+
+This document should include tables and figures to ease the explanation. All
+tables and figures must have a caption, and a label to be referenced in the
+document and further explained. The reference to the table or figure is
+mandatory and unreferenced tables or figures should be removed. An example is
+shown in Table~\ref{tab:ex}.
+
+\begin{longtable}{|l|c|c|p{6.4cm}|}
+    \caption{Example table}\label{tab:ex}\\ \hline
+    \rowcolor{iob-green}
+    \multicolumn{1}{|c|}{\bf Name} & \multicolumn{1}{c|}{\bf Direction} & \multicolumn{1}{c|}{\bf Width} & \multicolumn{1}{c|}{\bf Description}  \\ \hline \hline
+    clk & INPUT & 1 & System clock input.
+ \\ \hline
+\rowcolor{iob-blue}
+rst & INPUT & 1 & System reset, asynchronous and active high.
+ \\ \hline
+\end{longtable}
