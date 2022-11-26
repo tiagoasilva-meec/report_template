@@ -1,12 +1,217 @@
-This section, or section group, should explain in detail {\bf the problem} this
-work is trying to solve and why it is essential. More sections containing
-background or state-of-the-art descriptions may be added if that improves the
-explanation.
+%MPEG1/2 layers I/II encoder using a RISC-V processor and hardware accelerators
 
-%JTS: delete all the above
+%This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
+%Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic and reference them in this document. An example citation is given in this sentence [1].
 
+\section{MPEG1/2 layers I/II}
 
-Describe the existing attempts at solving the problem and their limitations. One
-must perform a bibliography search, identify the principal works on this topic
-and reference them in this document. An example citation is given in this
-sentence~\cite{Lopes2017}.
+MPEG-1 audio standardizes three different coding schemes for digitized sound waves called Layers I, II, and III. It does not standardize the encoder but rather standardizes the type of information that an encoder has to produce and write to a MPEG-1 conformant bitstream, as well as how the decoder has to parse, decompress, and resynthesize the information to regain the encoded sound.
+
+Coding all types of sound signals, this standard performs perceptual audio coding, which does not attempt to retain the input signal exactly after encoding and decoding, rather its goal is to ensure that the output signal sounds the same to a human listener. It aims at eliminating those parts of the sound signal that are irrelevant to the human ear. Roughly speaking, an MPEG-1 audio encoder transforms the sound signal into the frequency domain, eliminates those frequency components that are masked by stronger frequency components (cannot be heard), and packages this analyzed signal into a MPEG-1 conformant audio bitstream.
+
+%layers
+MPEG-1 contains several layers, with the first two layers being the relevant ones in this work.
+Layer I has the lowest complexity and is specifically suitable for applications where also the encoder complexity plays an important role.
+Layer II requires a more complex encoder and a slightly more complex decoder, being directed towards one-to-many applications, i.e. one encoder serves many decoders. Compared to Layer I, Layer II can remove more of the signal redundancy and apply the psychoacoustic threshold more efficiently. Therefore, this project is focused on Layer II.
+
+%working principle
+Focusing on the encoding process, the primary psychoacoustic effect that the perceptual MPEG-1 audio coder uses is called 'auditory masking', where parts of a signal are not audible due to the function of the human auditory system. For example, if there is a sound that consists mainly of one frequency, all other sounds that consist of a close frequency but are much quieter will not be heard. The parts of the signal that are masked are commonly called 'irrelevant', as opposed to the 'redundant' parts of the signal, which are removed by a lossless coding operation.
+To remove this irrelevancy, the encoder contains a psychoacoustic model which analyzes the input signals within consecutive time blocks and determines, for each block, the spectral components of the input audio signal, by applying a frequency transform. Then, it models the masking properties of the human auditory system, and estimates the just noticeable noise level for each frequency band, sometimes called the 'threshold of masking'.
+In parallel, the input signal is fed through a time-to-frequency mapping, resulting in spectrum components for subsequent coding. In its quantization and coding stage, the encoder tries to allocate the available number of data bits in a way that meets both the bitrate and masking requirements taking into account the calculated thresholds of masking. The information on how the bits are distributed over the spectrum is contained in the bitstream as side information.
+
+%bitstream
+In Layer II, the digitized sound signal is divided up into blocks of 1152 samples, with each block being encoded within one MPEG-1 audio frame.
+Therefore, an MPEG-1 audio stream consists of consecutive audio frames, each one containing a header and the encoded sound data. The header contains general information such as the MPEG Layer, the sampling frequency, the number of channels, whether the frame is CRC protected, whether the sound is original, etc. Although most of this information may be the same for all frames, MPEG decided to give each audio frame a header to simplify synchronization and bitstream editing.
+
+%MPEG-2
+MPEG-1 represents the first phase of dealing with mono and two-channel stereo sound coding, at sampling frequencies commonly used for high-quality audio (48, 44.1, and 32 kHz).
+The second phase, MPEG-2, contains three different work items.
+The first is the extension of MPEG-1 to lower sampling frequencies (16 kHz, 22.05 kHz, and 24 kHz), providing better sound quality at very low bit rates.
+The second is the backward-compatible (BC) extension of MPEG-1 to multichannel sound, supporting up to 5 full bandwidth channels plus one low-frequency enhancement channel. The MPEG-2 BC stream adheres to the structure of a MPEG-1 bitstream, meaning that a MPEG-2 BC stream can be read and interpreted by a MPEG-1 audio decoder.
+The third and last item is a new coding scheme called "Advanced Audio Coding" (AAC), which is more efficient and presents higher quality.
+
+%applications
+Thanks to the technical merits and excellent audio quality performance of the MPEG-1 Audio standard, several standardization bodies include this standard in their recommendation.
+Within the professional and consumer market, four fields of applications can be identified: broadcasting, storage, multimedia, and telecommunication. This variety of applications is possible because of the big range of bitrates and the numerous configurations allowed within the MPEG-1 Audio standard. 
+
+%what is the work?
+Knowing the MPEG standards have an extremely wide range of customers belonging to all industries, who need digital audio and video package, the goal of this work is to develop an IP core to encode MPEG1/2 layers I/II, using a RISC-V processor and hardware accelerators.
+
+\section{IP core}
+
+An IP core consists of a block of logic or data that is used in a semiconductor chip when making a field programmable gate array (FPGA) or application-specific integrated circuit (ASIC).
+Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
+
+There are different categories for IP cores, including soft and hard IP cores.
+Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog or VHDL, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
+Hard IP cores have logic and physical implementation, meaning that the physical layout of a hard IP is finished and fixed in a particular process technology.
+
+%Motivation of IP Core to do the encoder
+Electronics engineers and designers use IP cores to implement components of unique logic and Integrated Circuits faster than they could otherwise. Since they accommodate the repeated reuse of previously designed components, they contribute to the electronic design automation industry.
+
+A company that purchases an IP core license usually receives everything that's required to design, test, and implement it in its product. They may also receive logic and test patterns, signal specifications, associated software, design notes, and other documentation and a list of known bugs or limitations.
+For best results, an IP core should be entirely portable, meaning it should be possible to easily insert it into any vendor technology or design methodology.
+
+%introduction for the examples
+Two IP Cores, two Chips, and one Software that perform MPEG1/2 layers I/II audio encoding are presented in the following subsections.
+
+\section{IP CORE: CWda74 MPEG-1/2 – Layer I/II Audio Encoder}
+
+The MPEG-1/2 – Layer I/II Audio Encoder ($CWda74$) is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks SA}.
+
+This IP core contains the MPEG-1/2 – Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform ($CWda1011$).
+The software is compiled into an image file (.bin) which can be automatically boot-loaded through one of the control interfaces (parallel AMBA APB or serial SPI) and run on the audio engine platform, with simple parameters setting.
+The program can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as I2S/TDM and SPDIF, are also available.
+The Memory Interface can be AMBA AXI (for ASICs or Xilinx FPGAs), Avalon (for Altera FPGAs), or MIG (for Xilinx FPGAs).
+
+In practice, the $CWda74$ IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.
+As advantages, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
+Table \ref{coreworks} describes the main features.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{Features}} \\
+        \hline
+         ISO/IEC 11172-3 and 13818-3 audio standards & Fraunhofer IIS high-quality software \\
+         \hline
+         Mono, dual mono, stereo, and joint stereo channel modes & 16, 22.05, 24, 32, 44.1, and 48 kHz sampling rates \\
+         \hline
+         16 to 24-bit input audio resolution & 300 kB external memory requirement\\
+         \hline
+         Configurable output latency & 1 frame minimum latency\\
+         \hline
+         Control, configuration and monitoring protocol & Real-time operation @75 MHz \\
+         \hline
+    \end{tabular}
+    \caption{Table of $CWda74$ features.}
+    \label{coreworks}
+\end{table}
+
+\section{IP CORE: IPB-MPEG-SE MPEG-1/2 – LAYER I/II AUDIO ENCODER}
+
+The MPEG-1/2 – Layer I/II Audio Encoder (IPB-MPEG-SE) is an audio IP core for encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq}.
+
+This IP core is designed to run on the IPB-PLAT audio engine platform, which can support the encoding and decoding of multiple streams in multiple formats on a single device.
+
+The IPB-MPEG-SE software requires an instance of the IPB-PLAT audio engine platform named IPB-PLAT-10, which contains only one processor. 
+The IPB-MPEG-SE program can be uploaded using a hardware interface, being configured, run, and monitored through a configuration, control, and status register file, accessed by the same Control Interface.
+The Audio Input and Output Interfaces include a native parallel interface. Other interfaces, such as I2S/TDM and SPDIF/AES3, are also available.
+
+In practice, the IPB-MPEG-SE IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.
+As benefits, it presents Low operation frequency, Low power consumption, and a compact hardware implementation, fitting economically in FPGAs and ASICs.
+Table \ref{ipbloq} describes the main features.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{Features}} \\
+        \hline
+         ISO/IEC 11172-3 and 13818-3 audio standards & Fraunhofer IIS high-quality software \\
+         \hline
+         Mono, dual mono, stereo, and joint stereo channel modes & 16, 22.05, 24, 32, 44.1, and 48 kHz sampling rates \\
+         \hline
+         16 to 24-bit input audio resolution & 300 kB external memory requirement\\
+         \hline
+         Configurable output latency & 1 frame minimum latency\\
+         \hline
+         Control, configuration, and monitoring protocol & Real-time operation @150 MHz for two audio streams\\
+         \hline
+    \end{tabular}
+    \caption{Table of IPB-MPEG-SE features.}
+    \label{ipbloq}
+\end{table}
+
+\section{CHIP: CX23415 MPEG-2 Codec}
+
+The CX23415 MPEG-2 Codec is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several ICs in a single device, provided by Conexant Systems, Inc.
+
+This chip was the industry's first device to integrate MPEG-2 audio/video encoding and decoding, Transport stream generation, and on-screen display control in a single chip. Incorporating the functionality of up to five different chips, the CX23415 allowed for reducing the cost of designing and manufacturing the next-generation digital video products at the time.
+
+Looking at the specifications, Prefiltering improvements in the chip included built-in linear filters that dynamically change or soften images in the pre-processing stage. As a result, users obtain the best possible picture, even as the data rate is reduced and the recording time is lengthened. Other video quality improvements included an increased motion search range, the decoupling of motion estimation from encoders, and an adaptive quantization scheme. 
+
+%The CX23415 incorporates an OSD for graphics control and advanced GUI acceleration to support user interfaces and the display containing broadcast and service information from electronic program guides. The controller includes a BITBLT acceleration engine and Deflicker filter, supporting a variety of pixel formats, including an 8-bit color index and 32-bit RGBA 8:8:8:8.
+
+For audio encoding and decoding, the CX23415 supports MPEG-1 Layer II, with sampling rates of 32 kHz, 44.1 kHz, and 48 kHz and compressed bit rates up to 448 kbit/sec. The encode supports 16-bit samples, while the decode supports 16-, 18-, or 20-bit output.
+As MPEG input and output, it supports one of the following: PCI DMA master or PCI slave, 8-bit parallel program data, 8-bit parallel SPI transport data, or 1-bit serial transport data.
+Table \ref{cx} describes the main features.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{Features}} \\
+        \hline
+         High-quality real-time encoding & Supports MPEG-2 and MPEG-1 \\
+         \hline
+         Programmable GOP lengths & Increased motion search range \\
+         \hline
+         Reduced data rate and lengthened recording time & 452-ball PBGA \\
+         \hline
+    \end{tabular}
+    \caption{Table of \textit{CX23415} features.}
+    \label{cx}
+\end{table}
+
+\section{CHIP: Futura II ASI+IP™}
+
+The Futura II ASI+IP™ is an affordable Broadcast oriented MPEG-2/H.264 encoder that supports all of the standard broadcast formats used throughout the world, including all North American standards. 
+
+This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Computer Modules, Inc.}, delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
+As analog audio input, it supports one Stereo (two channels) with a frequency range of 20Hz to 20KHz. As digital audio input, it supports AES-EBU and SDI/HDMI (2 stereo pairs, H.264 only), with a sampling rate of 32, 44.1, or 48 kHz.
+
+The Futura II chip audio support includes Dolby Digital (AC-3), MPEG-1 Layer II and MPEG-4 AAC-LC, and HE-AAC.
+Table \ref{futura} describes the main features.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{Features}} \\
+        \hline
+         Analog/HDMI/HD/SD-SDI video to ASI/IP encoding & 800 milliseconds latency \\
+         \hline
+          EIA-708 closed caption insertion support & Auto-detection of video resolution \\
+         \hline
+         Simultaneous outputting of mirrored ASI, UDP/IP or RTP/IP streams & CBR/VBR outputs \\
+         \hline
+         User selectable resolution and bit rate & Chroma format 4:2:0 \\
+         \hline
+         Resolutions 480i, 480p, 576i, 576p, 720p, 1080i 25, 29.97/30, 50, 59.94/60 & Closed captioning with CEA-708 \\
+         \hline
+    \end{tabular}
+    \caption{Table of Futura II ASI+IP™ features.}
+    \label{futura}
+\end{table}
+
+\section{SOFTWARE: Twolame/Toolame/Lame}
+
+Considered the best MP3 encoder at mid-high and variable bitrates, LAME is a high-quality MPEG Audio Layer III encoder licensed under the LGPL.
+
+The main features of the Lame encoder are better quality compared to all other encoders at most bitrates, faster encoding compared to PII 266 at the highest quality mode, better in quality and speed compared to ISO reference software, CBR (constant bitrate) and two types of variable bitrate (VBR and ABR). This encoder is also free format and compilable as a shared library (Linux/UNIX), DLL, Directshow filter, or ACM codec (Windows).
+
+Based on portions of LAME and ISO dist10 code, TooLAME was developed as a free software MPEG-1 Layer II (MP2) audio encoder, written primarily by Mike Cheng.
+TooLAME became well-known and widely used for its particularly high audio quality, despite existing many MP2 encoders.
+
+It has been unmaintained since 2003 but is directly succeeded by the TwoLAME code fork, which is the focus of this work.
+TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder based on TooLAME, with the latest version, TwoLAME 0.4.0, being released in 2019.
+Table \ref{twolame} describes the additional features not provided in the original TooLame.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{Features}} \\
+        \hline
+         Fully thread-safe & Static and shared library (\textit{libtwolame}) \\
+         \hline
+         API similar to LAME's (for easy porting) & Frontend supports wider range of input files (using \textit{libsndfile}) \\
+         \hline
+         \textit{automake}/\textit{libtool}/\textit{pkgconfig} based build system & Written in Standard C (ISO C99 compliant)\\
+         \hline
+    \end{tabular}
+    \caption{Table of $TwoLame$ features.}
+    \label{ipbloq}
+\end{table}
