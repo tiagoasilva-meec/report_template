@@ -3,7 +3,7 @@
 %This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
 %Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic and reference them in this document. An example citation is given in this sentence [1].
 
-\section{MPEG1/2 layers I/II}
+\subsection{MPEG1/2 layers I/II}
 
 MPEG-1 audio standardizes three different coding schemes for digitized sound waves called Layers I, II, and III. It does not standardize the encoder but rather standardizes the type of information that an encoder has to produce and write to a MPEG-1 conformant bitstream, as well as how the decoder has to parse, decompress, and resynthesize the information to regain the encoded sound.
 
@@ -37,13 +37,13 @@ Within the professional and consumer market, four fields of applications can be 
 %what is the work?
 Knowing the MPEG standards have an extremely wide range of customers belonging to all industries, who need digital audio and video package, the goal of this work is to develop an IP core to encode MPEG1/2 layers I/II, using a RISC-V processor and hardware accelerators.
 
-\section{IP core}
+\subsection{IP core}
 
-An IP core consists of a block of logic or data that is used in a semiconductor chip when making a field programmable gate array (FPGA) or application-specific integrated circuit (ASIC).
+An IP core consists of a block of logic or data that is used in a semiconductor chip when making a FPGA \cite{fpga} or ASIC \cite{asic}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
 There are different categories for IP cores, including soft and hard IP cores.
-Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog or VHDL, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
+Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog \cite{ieee:systemVerilog} or VHDL \cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
 Hard IP cores have logic and physical implementation, meaning that the physical layout of a hard IP is finished and fixed in a particular process technology.
 
 %Motivation of IP Core to do the encoder
@@ -57,12 +57,12 @@ Two IP Cores, two Chips, and one Software that perform MPEG1/2 layers I/II audio
 
 \section{IP CORE: CWda74 MPEG-1/2 – Layer I/II Audio Encoder}
 
-The MPEG-1/2 – Layer I/II Audio Encoder ($CWda74$) is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks SA}.
+The \textit{CWda74} \cite{CWda74} is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.} \cite{coreworks}.
 
 This IP core contains the MPEG-1/2 – Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform ($CWda1011$).
 The software is compiled into an image file (.bin) which can be automatically boot-loaded through one of the control interfaces (parallel AMBA APB or serial SPI) and run on the audio engine platform, with simple parameters setting.
 The program can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as I2S/TDM and SPDIF, are also available.
-The Memory Interface can be AMBA AXI (for ASICs or Xilinx FPGAs), Avalon (for Altera FPGAs), or MIG (for Xilinx FPGAs).
+The Memory Interface can be AMBA AXI (for ASIC or Xilinx \cite{xilinx} FPGAs), Avalon (for Altera \cite{intel} FPGAs), or MIG (for Xilinx FPGAs).
 
 In practice, the $CWda74$ IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.
 As advantages, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
@@ -89,17 +89,17 @@ Table \ref{coreworks} describes the main features.
     \label{coreworks}
 \end{table}
 
-\section{IP CORE: IPB-MPEG-SE MPEG-1/2 – LAYER I/II AUDIO ENCODER}
+\subsection{IP CORE: IPB-MPEG-SE MPEG-1/2 – LAYER I/II AUDIO ENCODER}
 
-The MPEG-1/2 – Layer I/II Audio Encoder (IPB-MPEG-SE) is an audio IP core for encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq}.
+The \textit{IPB-MPEG-SE} \cite{ipb-mpeg-se} is an audio IP core for encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq} \cite{ipbloq}.
 
-This IP core is designed to run on the IPB-PLAT audio engine platform, which can support the encoding and decoding of multiple streams in multiple formats on a single device.
+This IP core is designed to run on the \textit{IPB-PLAT} audio engine platform, which can support the encoding and decoding of multiple streams in multiple formats on a single device.
 
-The IPB-MPEG-SE software requires an instance of the IPB-PLAT audio engine platform named IPB-PLAT-10, which contains only one processor. 
-The IPB-MPEG-SE program can be uploaded using a hardware interface, being configured, run, and monitored through a configuration, control, and status register file, accessed by the same Control Interface.
+The \textit{IPB-MPEG-SE} software requires an instance of the \textit{IPB-PLAT} audio engine platform named \textit{IPB-PLAT-10}, which contains only one processor. 
+The \textit{IPB-MPEG-SE} program can be uploaded using a hardware interface, being configured, run, and monitored through a configuration, control, and status register file, accessed by the same Control Interface.
 The Audio Input and Output Interfaces include a native parallel interface. Other interfaces, such as I2S/TDM and SPDIF/AES3, are also available.
 
-In practice, the IPB-MPEG-SE IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.
+In practice, the \textit{IPB-MPEG-SE} IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.
 As benefits, it presents Low operation frequency, Low power consumption, and a compact hardware implementation, fitting economically in FPGAs and ASICs.
 Table \ref{ipbloq} describes the main features.
 
@@ -120,13 +120,13 @@ Table \ref{ipbloq} describes the main features.
          Control, configuration, and monitoring protocol & Real-time operation @150 MHz for two audio streams\\
          \hline
     \end{tabular}
-    \caption{Table of IPB-MPEG-SE features.}
+    \caption{Table of \textit{IPB-MPEG-SE} features.}
     \label{ipbloq}
 \end{table}
 
-\section{CHIP: CX23415 MPEG-2 Codec}
+\subsection{CHIP: CX23415 MPEG-2 Codec}
 
-The CX23415 MPEG-2 Codec is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several ICs in a single device, provided by Conexant Systems, Inc.
+The CX23415 \cite{cx23415} is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several ICs in a single device, provided by Conexant Systems, Inc \cite{conexant}.
 
 This chip was the industry's first device to integrate MPEG-2 audio/video encoding and decoding, Transport stream generation, and on-screen display control in a single chip. Incorporating the functionality of up to five different chips, the CX23415 allowed for reducing the cost of designing and manufacturing the next-generation digital video products at the time.
 
@@ -155,11 +155,11 @@ Table \ref{cx} describes the main features.
     \label{cx}
 \end{table}
 
-\section{CHIP: Futura II ASI+IP™}
+\subsection{CHIP: Futura II ASI+IP™}
 
-The Futura II ASI+IP™ is an affordable Broadcast oriented MPEG-2/H.264 encoder that supports all of the standard broadcast formats used throughout the world, including all North American standards. 
+The Futura II \cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all of the standard broadcast formats used throughout the world, including all North American standards. 
 
-This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Computer Modules, Inc.}, delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
+This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Computer Modules, Inc.} \cite{computermodules}, delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
 As analog audio input, it supports one Stereo (two channels) with a frequency range of 20Hz to 20KHz. As digital audio input, it supports AES-EBU and SDI/HDMI (2 stereo pairs, H.264 only), with a sampling rate of 32, 44.1, or 48 kHz.
 
 The Futura II chip audio support includes Dolby Digital (AC-3), MPEG-1 Layer II and MPEG-4 AAC-LC, and HE-AAC.
@@ -186,16 +186,16 @@ Table \ref{futura} describes the main features.
     \label{futura}
 \end{table}
 
-\section{SOFTWARE: Twolame/Toolame/Lame}
+\subsection{SOFTWARE: Twolame/Toolame/Lame}
 
-Considered the best MP3 encoder at mid-high and variable bitrates, LAME is a high-quality MPEG Audio Layer III encoder licensed under the LGPL.
+Considered the best MP3 encoder at mid-high and variable bitrates, LAME \cite{lame} is a high-quality MPEG Audio Layer III encoder licensed under the LGPL.
 
 The main features of the Lame encoder are better quality compared to all other encoders at most bitrates, faster encoding compared to PII 266 at the highest quality mode, better in quality and speed compared to ISO reference software, CBR (constant bitrate) and two types of variable bitrate (VBR and ABR). This encoder is also free format and compilable as a shared library (Linux/UNIX), DLL, Directshow filter, or ACM codec (Windows).
 
-Based on portions of LAME and ISO dist10 code, TooLAME was developed as a free software MPEG-1 Layer II (MP2) audio encoder, written primarily by Mike Cheng.
+Based on portions of LAME and ISO dist10 code, TooLAME \cite{toolame} was developed as a free software MPEG-1 Layer II (MP2) audio encoder, written primarily by Mike Cheng.
 TooLAME became well-known and widely used for its particularly high audio quality, despite existing many MP2 encoders.
 
-It has been unmaintained since 2003 but is directly succeeded by the TwoLAME code fork, which is the focus of this work.
+It has been unmaintained since 2003 but is directly succeeded by the TwoLAME \cite{twolame} code fork, which is the focus of this work.
 TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder based on TooLAME, with the latest version, TwoLAME 0.4.0, being released in 2019.
 Table \ref{twolame} describes the additional features not provided in the original TooLame.
 
