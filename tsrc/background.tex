@@ -66,7 +66,7 @@ The Memory Interface can be AMBA AXI (for ASIC or Xilinx \cite{xilinx} FPGAs), A
 
 In practice, the $CWda74$ IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.
 As advantages, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
-Table \ref{coreworks} describes the main features.
+Table \ref{tab:coreworks} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -85,8 +85,8 @@ Table \ref{coreworks} describes the main features.
          Control, configuration and monitoring protocol & Real-time operation @75 MHz \\
          \hline
     \end{tabular}
-    \caption{Table of $CWda74$ features.}
-    \label{coreworks}
+    \caption{Table of CWda74 features.}
+    \label{tab:coreworks}
 \end{table}
 
 \subsection{IP CORE: IPB-MPEG-SE MPEG-1/2 – LAYER I/II AUDIO ENCODER}
@@ -101,7 +101,7 @@ The Audio Input and Output Interfaces include a native parallel interface. Other
 
 In practice, the \textit{IPB-MPEG-SE} IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.
 As benefits, it presents Low operation frequency, Low power consumption, and a compact hardware implementation, fitting economically in FPGAs and ASICs.
-Table \ref{ipbloq} describes the main features.
+Table~\ref{tab:ipbloq} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -121,7 +121,7 @@ Table \ref{ipbloq} describes the main features.
          \hline
     \end{tabular}
     \caption{Table of \textit{IPB-MPEG-SE} features.}
-    \label{ipbloq}
+    \label{tab:ipbloq}
 \end{table}
 
 \subsection{CHIP: CX23415 MPEG-2 Codec}
@@ -136,7 +136,7 @@ Looking at the specifications, Prefiltering improvements in the chip included bu
 
 For audio encoding and decoding, the CX23415 supports MPEG-1 Layer II, with sampling rates of 32 kHz, 44.1 kHz, and 48 kHz and compressed bit rates up to 448 kbit/sec. The encode supports 16-bit samples, while the decode supports 16-, 18-, or 20-bit output.
 As MPEG input and output, it supports one of the following: PCI DMA master or PCI slave, 8-bit parallel program data, 8-bit parallel SPI transport data, or 1-bit serial transport data.
-Table \ref{cx} describes the main features.
+Table \ref{tab:cx} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -152,7 +152,7 @@ Table \ref{cx} describes the main features.
          \hline
     \end{tabular}
     \caption{Table of \textit{CX23415} features.}
-    \label{cx}
+    \label{tab:cx}
 \end{table}
 
 \subsection{CHIP: Futura II ASI+IP™}
@@ -163,7 +163,7 @@ This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Compu
 As analog audio input, it supports one Stereo (two channels) with a frequency range of 20Hz to 20KHz. As digital audio input, it supports AES-EBU and SDI/HDMI (2 stereo pairs, H.264 only), with a sampling rate of 32, 44.1, or 48 kHz.
 
 The Futura II chip audio support includes Dolby Digital (AC-3), MPEG-1 Layer II and MPEG-4 AAC-LC, and HE-AAC.
-Table \ref{futura} describes the main features.
+Table \ref{tab:futura} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -183,7 +183,7 @@ Table \ref{futura} describes the main features.
          \hline
     \end{tabular}
     \caption{Table of Futura II ASI+IP™ features.}
-    \label{futura}
+    \label{tab:futura}
 \end{table}
 
 \subsection{SOFTWARE: Twolame/Toolame/Lame}
@@ -197,7 +197,7 @@ TooLAME became well-known and widely used for its particularly high audio qualit
 
 It has been unmaintained since 2003 but is directly succeeded by the TwoLAME \cite{twolame} code fork, which is the focus of this work.
 TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder based on TooLAME, with the latest version, TwoLAME 0.4.0, being released in 2019.
-Table \ref{twolame} describes the additional features not provided in the original TooLame.
+Table \ref{tab:twolame} describes the additional features not provided in the original TooLame.
 
 \begin{table}[h]
     \centering
@@ -213,5 +213,5 @@ Table \ref{twolame} describes the additional features not provided in the origin
          \hline
     \end{tabular}
     \caption{Table of $TwoLame$ features.}
-    \label{ipbloq}
+    \label{tab:twolame}
 \end{table}
