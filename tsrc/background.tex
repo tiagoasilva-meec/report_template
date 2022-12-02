@@ -39,11 +39,11 @@ Knowing the MPEG standards have an extremely wide range of customers belonging t
 
 \subsection{IP core}
 
-An IP core consists of a block of logic or data that is used in a semiconductor chip when making a FPGA \cite{fpga} or ASIC \cite{asic}.
+An IP core consists of a block of logic or data that is used in a semiconductor chip when making a FPGA~\cite{fpga} or ASIC~\cite{asic}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
 There are different categories for IP cores, including soft and hard IP cores.
-Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog \cite{ieee:systemVerilog} or VHDL \cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
+Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog~\cite{ieee:systemVerilog} or VHDL~\cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
 Hard IP cores have logic and physical implementation, meaning that the physical layout of a hard IP is finished and fixed in a particular process technology.
 
 %Motivation of IP Core to do the encoder
@@ -57,16 +57,16 @@ Two IP Cores, two Chips, and one Software that perform MPEG1/2 layers I/II audio
 
 \subsection{IP CORE: CWda74 MPEG-1/2 – Layer I/II Audio Encoder}
 
-The \textit{CWda74} \cite{CWda74} is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.} \cite{coreworks}.
+The \textit{CWda74}~\cite{CWda74} is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.}~\cite{coreworks}.
 
 This IP core contains the MPEG-1/2 – Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform ($CWda1011$).
 The software is compiled into an image file (.bin) which can be automatically boot-loaded through one of the control interfaces (parallel AMBA APB or serial SPI) and run on the audio engine platform, with simple parameters setting.
 The program can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as I2S/TDM and SPDIF, are also available.
-The Memory Interface can be AMBA AXI (for ASIC or Xilinx \cite{xilinx} FPGAs), Avalon (for Altera \cite{intel} FPGAs), or MIG (for Xilinx FPGAs).
+The Memory Interface can be AMBA AXI (for ASIC or Xilinx~\cite{xilinx} FPGAs), Avalon (for Altera~\cite{intel} FPGAs), or MIG (for Xilinx FPGAs).
 
 In practice, the $CWda74$ IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.
 As advantages, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
-Table \ref{tab:coreworks} describes the main features.
+Table~\ref{tab:coreworks} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -91,7 +91,7 @@ Table \ref{tab:coreworks} describes the main features.
 
 \subsection{IP CORE: IPB-MPEG-SE MPEG-1/2 – LAYER I/II AUDIO ENCODER}
 
-The \textit{IPB-MPEG-SE} \cite{ipb-mpeg-se} is an audio IP core for encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq} \cite{ipbloq}.
+The \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se} is an audio IP core for encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq}~\cite{ipbloq}.
 
 This IP core is designed to run on the \textit{IPB-PLAT} audio engine platform, which can support the encoding and decoding of multiple streams in multiple formats on a single device.
 
@@ -126,7 +126,7 @@ Table~\ref{tab:ipbloq} describes the main features.
 
 \subsection{CHIP: CX23415 MPEG-2 Codec}
 
-The CX23415 \cite{cx23415} is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several ICs in a single device, provided by Conexant Systems, Inc \cite{conexant}.
+The CX23415~\cite{cx23415} is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several ICs in a single device, provided by Conexant Systems, Inc~\cite{conexant}.
 
 This chip was the industry's first device to integrate MPEG-2 audio/video encoding and decoding, Transport stream generation, and on-screen display control in a single chip. Incorporating the functionality of up to five different chips, the CX23415 allowed for reducing the cost of designing and manufacturing the next-generation digital video products at the time.
 
@@ -136,7 +136,7 @@ Looking at the specifications, Prefiltering improvements in the chip included bu
 
 For audio encoding and decoding, the CX23415 supports MPEG-1 Layer II, with sampling rates of 32 kHz, 44.1 kHz, and 48 kHz and compressed bit rates up to 448 kbit/sec. The encode supports 16-bit samples, while the decode supports 16-, 18-, or 20-bit output.
 As MPEG input and output, it supports one of the following: PCI DMA master or PCI slave, 8-bit parallel program data, 8-bit parallel SPI transport data, or 1-bit serial transport data.
-Table \ref{tab:cx} describes the main features.
+Table~\ref{tab:cx} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -157,13 +157,13 @@ Table \ref{tab:cx} describes the main features.
 
 \subsection{CHIP: Futura II ASI+IP™}
 
-The Futura II \cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all of the standard broadcast formats used throughout the world, including all North American standards. 
+The Futura II~\cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all of the standard broadcast formats used throughout the world, including all North American standards. 
 
-This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Computer Modules, Inc.} \cite{computermodules}, delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
+This chip, a \textit{Magnum Semiconductor} chip based developed by \textit{Computer Modules, Inc.}, delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
 As analog audio input, it supports one Stereo (two channels) with a frequency range of 20Hz to 20KHz. As digital audio input, it supports AES-EBU and SDI/HDMI (2 stereo pairs, H.264 only), with a sampling rate of 32, 44.1, or 48 kHz.
 
 The Futura II chip audio support includes Dolby Digital (AC-3), MPEG-1 Layer II and MPEG-4 AAC-LC, and HE-AAC.
-Table \ref{tab:futura} describes the main features.
+Table~\ref{tab:futura} describes the main features.
 
 \begin{table}[h]
     \centering
@@ -188,16 +188,16 @@ Table \ref{tab:futura} describes the main features.
 
 \subsection{SOFTWARE: Twolame/Toolame/Lame}
 
-Considered the best MP3 encoder at mid-high and variable bitrates, LAME \cite{lame} is a high-quality MPEG Audio Layer III encoder licensed under the LGPL.
+Considered the best MP3 encoder at mid-high and variable bitrates, LAME~\cite{lame} is a high-quality MPEG Audio Layer III encoder licensed under the LGPL.
 
 The main features of the Lame encoder are better quality compared to all other encoders at most bitrates, faster encoding compared to PII 266 at the highest quality mode, better in quality and speed compared to ISO reference software, CBR (constant bitrate) and two types of variable bitrate (VBR and ABR). This encoder is also free format and compilable as a shared library (Linux/UNIX), DLL, Directshow filter, or ACM codec (Windows).
 
-Based on portions of LAME and ISO dist10 code, TooLAME \cite{toolame} was developed as a free software MPEG-1 Layer II (MP2) audio encoder, written primarily by Mike Cheng.
+Based on portions of LAME and ISO dist10 code, TooLAME~\cite{toolame} was developed as a free software MPEG-1 Layer II (MP2) audio encoder, written primarily by Mike Cheng.
 TooLAME became well-known and widely used for its particularly high audio quality, despite existing many MP2 encoders.
 
-It has been unmaintained since 2003 but is directly succeeded by the TwoLAME \cite{twolame} code fork, which is the focus of this work.
+It has been unmaintained since 2003 but is directly succeeded by the TwoLAME~\cite{twolame} code fork, which is the focus of this work.
 TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder based on TooLAME, with the latest version, TwoLAME 0.4.0, being released in 2019.
-Table \ref{tab:twolame} describes the additional features not provided in the original TooLame.
+Table~\ref{tab:twolame} describes the additional features not provided in the original TooLame.
 
 \begin{table}[h]
     \centering
