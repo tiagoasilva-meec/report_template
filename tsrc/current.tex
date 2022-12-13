@@ -26,7 +26,7 @@ As \textbf{Memory} subsystem, this SoC includes three main components. The \text
 
 The communication between the CPU and the system’s components (master and slaves) occurs through two buses. The \textbf{Memory bus} allows the CPU to communicate with the memory subsystem, while the \textbf{Peripheral bus} allows the CPU to communicate with system peripherals.
 
-In addition, the IOb-Interconnect component is a bus switch responsible for the valid-ready handshake protocol between the CPU and all the peripherals. 
+In addition, the \textbf{IOb-Interconnect} component is a bus switch responsible for the valid-ready handshake protocol between the CPU and all the peripherals. 
 Based on the peripheral prefix from the address bus, this component selects which peripheral-specific bus connects to the CPU bus. By multiplexing/demultiplexing (depending on the direction) the CPU bus signals (\textit{valid}, \textit{ready} and \textit{rdata}), this component creates enough signals to ensure that there is one of each signal for each of the peripherals. Optionally, two peripherals connected to the peripheral bus can communicate directly without CPU intervention, allowing for faster data transfers between peripherals.
 
 There is also a \textbf{Native to AXI adapter}, which allows communication between peripherals and memory controllers that use the AXI4 protocol. Since the CPU only contains the native bus, the IOb-SoC uses this component to convert the signals from one bus to the other, with each peripheral that uses the AXI4-Lite port containing one \textbf{Native to AXI adapter}.
