@@ -1,6 +1,16 @@
-In this section, one should summarize the work: the problem, the current work,
-the proposed solution, the results obtained, and why they improve the
-state-of-art. Repeating what is written in the introduction is not a problem and
-is desirable, but one should try to use different and complementary explanations
-to help the user. Another vital part of this section is to explain the future
-work that can be done as a follow-up to this work.
+%In this section, one should summarize the work: the problem, the current work, the proposed solution, the results obtained, and why they improve the state-of-art. Repeating what is written in the introduction is not a problem and is desirable, but one should try to use different and complementary explanations to help the user. 
+%Another vital part of this section is to explain the future work that can be done as a follow-up to this work.
+
+MPEG audio standardizes the type of information that an encoder has to produce and write to MPEG conformant bitstream, as well as how the decoder has to parse, decompress, and resynthesize the information to regain the encoded sound.
+
+%Mostly due to its excellent audio quality performance and the various configurations allowed, the MPEG brand is universally recognized. Within the professional and consumer market, four fields of applications can be identified: broadcasting, storage, multimedia, and telecommunication.
+
+Knowing the MPEG standards have an extremely wide range of customers belonging to all industries, who need digital audio and video package, the goal of this work is to develop an IP core to encode MPEG1/2 layer II, using a RISC-V processor and hardware accelerators.
+
+An IP core consists of a block of logic or data that is used in a semiconductor chip when making an FPGA or ASIC.
+Nowadays, Electronics engineers and designers use IP cores to implement components of unique logic and Integrated Circuits faster than they could otherwise, contributing to the electronic design automation industry. The fact that there are a few IP cores for encoding MP2 is a strong motivation for this work, with higher possibilities of designing the best IP core on the market for this purpose.
+
+The work will be developed using the IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor, provided by \textit{IObundle Lda}. 
+With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media and the method for decoding high-quality audio signals. The TwoLAME repository, an optimized MPEG Audio Layer 2 encoder based on the ISO/IEC 11172 and portions of LAME, provides the algorithm for the encoder, responsible for processing the digital audio signal and producing the compressed bitstream for storage. 
+
+The last stage of development will be hardware acceleration. After having the program running on IOb-SoC, part of the algorithm will be adapted and executed in specialized hardware components, increasing efficiency and performance.

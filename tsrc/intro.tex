@@ -1,38 +1,18 @@
-This section should be written {\em after} the main sections are concluded. The suggested order for writing this document is the following:
+%• Motivation: explain the problem one is trying to solve and why it is important. Describe the main existing works on this topic (summarize from the Background section).
+%• Objective: Explain this work’s goal and how it tackled the problem to achieve it. (summarize from the Present Work section).
+%• Document outline: Describe in one paragraph the contents of each main section of the document.
 
-\begin{enumerate}
-\item The Background knowledge section: this section is mandatory for both PIC2 and the dissertation, which can reuse and improve it.
-\item The Present Work description section: if this is the PIC2 report, this section may not exist if one still has not done any work. In the dissertation, this section is mandatory.
-\item The Experimental Results section: if this is the PIC2 report, this section may not exist if one still has not done any work. In the dissertation, this section is mandatory.
-\item The Introduction section: this section.
-\item Write the Conclusion section.
-\item Write the Abstract section.
-\end{enumerate}
+MPEG audio standardizes the type of information that an encoder has to produce and write to MPEG conformant bitstream, as well as how the decoder has to parse, decompress, and resynthesize the information to regain the encoded sound.
 
-In this section, one should write the following:
-\begin{itemize}
-\item Motivation: explain the problem one is trying to solve and why it is
-important. Describe the main existing works on this topic (summarize from the
-Background section).
-\item Objective: Explain this work's goal and how it tackled the problem to
-achieve it. (summarize from the Present Work section).
-\item Document outline: Describe in one paragraph the contents of each main section of
-the document.
-\end{itemize}
+%Mostly due to its excellent audio quality performance and the various configurations allowed, the MPEG brand is universally recognized. Within the professional and consumer market, four fields of applications can be identified: broadcasting, storage, multimedia, and telecommunication.
 
-This document should include tables and figures to ease the explanation. All
-tables and figures must have a caption, and a label to be referenced in the
-document and further explained. The reference to the table or figure is
-mandatory and unreferenced tables or figures should be removed. An example is
-shown in Table~\ref{tab:ex}.
+Knowing the MPEG standards have an extremely wide range of customers belonging to all industries, who need digital audio and video package, the goal of this work is to develop an IP core to encode MPEG1/2 layer II, using a RISC-V processor and hardware accelerators.
 
-\begin{longtable}{|l|c|c|p{6.4cm}|}
-    \caption{Example table}\label{tab:ex}\\ \hline
-    \rowcolor{iob-green}
-    \multicolumn{1}{|c|}{\bf Name} & \multicolumn{1}{c|}{\bf Direction} & \multicolumn{1}{c|}{\bf Width} & \multicolumn{1}{c|}{\bf Description}  \\ \hline \hline
-    clk & INPUT & 1 & System clock input.
- \\ \hline
-\rowcolor{iob-blue}
-rst & INPUT & 1 & System reset, asynchronous and active high.
- \\ \hline
-\end{longtable}
+An IP core consists of a block of logic or data that is used in a semiconductor chip when making an FPGA or ASIC.
+Nowadays, Electronics engineers and designers use IP cores to implement components of unique logic and Integrated Circuits faster than they could otherwise, contributing to the electronic design automation industry. The fact that there are a few IP cores for encoding MP2 is a strong motivation for this work.
+
+The work will be developed using the IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor, provided by \textit{IObundle Lda}. 
+With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media and the method for decoding high-quality audio signals. The TwoLAME repository, an optimized MPEG Audio Layer 2 encoder based on the ISO/IEC 11172, provides the algorithm for the encoder, responsible for processing the digital audio signal and producing the compressed bitstream for storage.
+
+%describe the contents of each section
+This document contains: \textit{Background} section, which explains the MPEG audio encoding and describes two IP cores, two Chips, and one Software capable of encoding MPEG Layer II; \textit{RISC-V-based MPEG1/2 Layer II Encoder} section, which describes the IOb-Soc and its repository and explains the fundamentals of the ISO/IEC 11172 international standard.
