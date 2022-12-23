@@ -1,0 +1,47 @@
+%10kLUTs, 100MHz, 500kB RAM em Xilinx Kintex Ultra scale
+%fazer um IP: etapas
+
+The goal of this work is to develop an IP core to encode the MPEG layer II. Due to its complexity, planning the project development is essential to both achieve the goal and deliver good results. 
+
+Before describing the work phases, we can define the working space, a fork of the \textit{iob-mp2-e} repository. 
+This repository is similar to the original \textit{iob-soc}, containing four submodules: \textit{iob-cache}, a high-performance Verilog cache; \textit{iob-picorv32}, a RISC-V processor; \textit{twolame}, an optimized MP2 encoder (explained in \textit{Background} section); \textit{iob-uart}, a UART core.
+In a Linux Operating System, the repository is first cloned, allowing to efficiently implement the \textit{twolame} using the IOb-SoC. Once the project is completed, a pull request is submitted, changing the upstream repository.
+
+The work planning is described below, considering \textbf{October 31} as the submission deadline.
+
+\begin{itemize}
+\item \textbf{Emulation on PC} (March 31)\\
+This phase consists in emulating the system on PC, using the command \textit{make pc-emul}, which allows easier debugging.
+
+\item \textbf{Profiling} (April 15)\\
+This phase consists in analyzing and gaining a better understanding of raw data, by measuring the execution time of the different algorithm parts. This information is useful to understand where the hardware acceleration should be applied on.
+%queres real time a 48k samples / s
+%stereo
+
+\item \textbf{Hardware implementation} (June 31)\\
+This phase consists in the register-transfer level design, which models the digital circuit in terms of the data flow between hardware registers and the logical operations performed on those signals.
+%VHDL Structural Modeling
+
+\item \textbf{Simulation} (July 31)\\
+This phase consists in simulating the system, using test benches to exercise and verify the IP core.
+
+\item \textbf{FPGA Synthesis and Implementation} (August 15)\\
+This phase consists in compiling and translating the Verilog code into a netlist, followed by the mapping of the synthesized design onto the FPGA.
+
+\item \textbf{Testing} (September 15)\\
+This phase consists in testing the system in the FPGA board, allowing evaluation of the IP-core quality and documentation.
+
+\item \textbf{Ethernet} (September 31)\\
+This phase consists in implementing the Ethernet standard, which allows hardware communication (transmission of binary data).
+
+\item \textbf{Linting} (October 15)\\
+%linting do Verilog
+This phase consists in linting the Verilog code. Using a linting tool, the code is checked for programmatic and stylistic errors, in an automated way.
+
+%avaliaçao de simulation coverage
+%(quantas linhas e nós do circuito sao exercitados pela simulação)
+%(se nao sao vãop falhar)
+\end{itemize}
+
+
+
