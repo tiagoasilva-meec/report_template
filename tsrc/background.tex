@@ -12,7 +12,7 @@ Coding all types of sound signals, this standard performs perceptual audio codin
 %layers
 MPEG-1 contains several layers, with the first two layers being the relevant ones in this work.
 Layer I has the lowest complexity and is specifically suitable for applications where also the encoder complexity plays an important role.
-Layer II requires a more complex encoder and a slightly more complex decoder, being directed towards one-to-many applications, i.e. one encoder serves many decoders. Compared to Layer I, Layer II can remove more of the signal redundancy and apply the psychoacoustic threshold more efficiently. Therefore, this project is focused on Layer II.
+Layer II requires a more complex encoder and a slightly more complex decoder, being directed towards one-to-many applications, i.e. one encoder serves many decoders. Compared to Layer I, Layer II can remove more of the signal redundancy and apply the psychoacoustic threshold more efficiently. Therefore, this work centers on Layer II.
 
 %working principle
 Focusing on the encoding process, the primary psychoacoustic effect that the perceptual MPEG-1 audio coder uses is called 'auditory masking', where parts of a signal are not audible due to the function of the human auditory system. For example, if there is a sound that consists mainly of one frequency, all other sounds that consist of a close frequency but are much quieter will not be heard. The parts of the signal that are masked are commonly called 'irrelevant', as opposed to the 'redundant' parts of the signal, which are removed by a lossless coding operation.
@@ -42,14 +42,14 @@ Knowing the MPEG standards have an extremely wide range of customers belonging t
 An IP core consists of a block of logic or data that is used in a semiconductor chip when making a FPGA~\cite{fpga} or ASIC~\cite{asic}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
-There are different categories for IP cores, including soft and hard IP cores.
-Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog~\cite{ieee:systemVerilog} or VHDL~\cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.
+There are different categories for IP cores, including soft and hard IP cores.\\
+Soft IP cores are generally offered as synthesizable RTL models. These are developed in a hardware description language like SystemVerilog~\cite{ieee:systemVerilog} or VHDL~\cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage is that this type of IP can be customized during the physical design phase and mapped to any process technology.\\
 Hard IP cores have logic and physical implementation, meaning that the physical layout of a hard IP is finished and fixed in a particular process technology.
 
 %Motivation of IP Core to do the encoder
 Electronics engineers and designers use IP cores to implement components of unique logic and Integrated Circuits faster than they could otherwise. Since they accommodate the repeated reuse of previously designed components, they contribute to the electronic design automation industry.
 
-A company that purchases an IP core license usually receives everything that's required to design, test, and implement it in its product. They may also receive logic and test patterns, signal specifications, associated software, design notes, and other documentation and a list of known bugs or limitations.
+A company that purchases an IP core license usually receives everything that's required to design, test, and implement it in its product. It may also receive logic and test patterns, signal specifications, associated software, design notes, and other documentation and a list of known bugs or limitations.
 For best results, an IP core should be entirely portable, meaning it should be possible to easily insert it into any vendor technology or design methodology.
 
 %introduction for the examples
@@ -59,13 +59,13 @@ Two IP Cores, two Chips, and one Software that perform MPEG1/2 layers I/II audio
 
 The \textit{CWda74}~\cite{CWda74} is an audio IP core for encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.}~\cite{coreworks}.
 
-This IP core contains the MPEG-1/2 – Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform ($CWda1011$).
+This IP core contains the MPEG-1/2 – Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform (\textit{CWda1011}).
 The software is compiled into an image file (.bin) which can be automatically boot-loaded through one of the control interfaces (parallel AMBA APB or serial SPI) and run on the audio engine platform, with simple parameters setting.
 The program can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as I2S/TDM and SPDIF, are also available.
 The Memory Interface can be AMBA AXI (for ASIC or Xilinx~\cite{xilinx} FPGAs), Avalon (for Altera~\cite{intel} FPGAs), or MIG (for Xilinx FPGAs).
 
-In practice, the $CWda74$ IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.
-As advantages, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
+In practice, the \textit{CWda74} IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.\\
+As benefits, it presents Low operation frequency and Low power consumption, with the possibility of being optimized to fulfill different design specifications.
 Table~\ref{tab:coreworks} describes the main features.
 
 \begin{table}[h]
@@ -99,7 +99,7 @@ The \textit{IPB-MPEG-SE} software requires an instance of the \textit{IPB-PLAT} 
 The \textit{IPB-MPEG-SE} program can be uploaded using a hardware interface, being configured, run, and monitored through a configuration, control, and status register file, accessed by the same Control Interface.
 The Audio Input and Output Interfaces include a native parallel interface. Other interfaces, such as I2S/TDM and SPDIF/AES3, are also available.
 
-In practice, the \textit{IPB-MPEG-SE} IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.
+In practice, the \textit{IPB-MPEG-SE} IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.\\
 As benefits, it presents Low operation frequency, Low power consumption, and a compact hardware implementation, fitting economically in FPGAs and ASICs.
 Table~\ref{tab:ipbloq} describes the main features.
 
@@ -134,7 +134,7 @@ Looking at the specifications, Prefiltering improvements in the chip included bu
 
 %The CX23415 incorporates an OSD for graphics control and advanced GUI acceleration to support user interfaces and the display containing broadcast and service information from electronic program guides. The controller includes a BITBLT acceleration engine and Deflicker filter, supporting a variety of pixel formats, including an 8-bit color index and 32-bit RGBA 8:8:8:8.
 
-For audio encoding and decoding, the CX23415 supports MPEG-1 Layer II, with sampling rates of 32 kHz, 44.1 kHz, and 48 kHz and compressed bit rates up to 448 kbit/sec. The encode supports 16-bit samples, while the decode supports 16-, 18-, or 20-bit output.
+For audio encoding and decoding, the CX23415 supports MPEG-1 Layer II, with sampling rates of 32 kHz, 44.1 kHz, and 48 kHz and compressed bit rates up to 448 kbit/sec. The encoder supports 16-bit samples, while the decoder supports 16-, 18-, or 20-bit output.
 As MPEG input and output, it supports one of the following: PCI DMA master or PCI slave, 8-bit parallel program data, 8-bit parallel SPI transport data, or 1-bit serial transport data.
 Table~\ref{tab:cx} describes the main features.
 
