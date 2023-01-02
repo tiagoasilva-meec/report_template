@@ -1,17 +1,18 @@
 %10kLUTs, 100MHz, 500kB RAM em Xilinx Kintex Ultra scale
 %fazer um IP: etapas
 
-The goal of this work is to develop an IP core to encode the MPEG layer II. Due to its complexity, planning the project development is essential to both achieve the goal and deliver good results. 
+This work proposes to develop an IP core capable of encoding the MPEG1/2 Layer II. Due to its complexity, planning the different working phases is essential to both achieve the goal and deliver good results. 
 
-Before describing the work phases, we can define the working space, a fork of the \textbf{\textit{iob-mp2-e}} repository. 
-This repository is similar to the original \textit{iob-soc}, containing four submodules: \textbf{\textit{iob-cache}}, a high-performance Verilog cache; \textbf{\textit{iob-picorv32}}, a RISC-V processor; \textbf{\textit{twolame}}, an optimized MP2 encoder (explained in \textit{Background} section); \textbf{\textit{iob-uart}}, a UART core.\\
-In a Linux Operating System, the repository is first cloned, allowing to efficiently implement the \textit{twolame} using the IOb-SoC. Once the project is completed, a pull request is submitted, changing the upstream repository.
+The IP core development will be tracked by a \textit{GitHub} repository, a fork of \textbf{\textit{iob-mp2-e}}. This repository is similar to the original \textit{iob-soc}, containing four submodules: \textbf{\textit{iob-cache}}, a high-performance Verilog cache; \textbf{\textit{iob-picorv32}}, a RISC-V processor; \textbf{\textit{twolame}}, an optimized MP2 encoding software (explained in \textit{Background} section); \textbf{\textit{iob-uart}}, a UART core.\\
+In a Linux Operating System, the repository is first cloned, allowing to efficiently implement the \textit{twolame} using the IOb-SoC. Once the project is completed, a pull request is submitted to change the upstream repository.
 
 The work planning is described below, considering \textbf{October 31} as the submission deadline.
+Each work phase defines its expected deadline, followed by a brief explanation.
+
 
 \begin{itemize}
 \item \textbf{Emulation on PC} (March 31)\\
-This phase consists in emulating the system on PC, using the command \textit{make pc-emul}, which allows easier debugging.
+This phase consists in emulating the system on PC (\textit{make pc-emul}), which allows easier debugging.
 
 \item \textbf{Profiling} (April 15)\\
 This phase consists in analyzing and gaining a better understanding of raw data, by measuring the execution time of the different algorithm parts. This information is useful to understand where the hardware acceleration should be applied on.

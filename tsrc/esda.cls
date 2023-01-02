@@ -1,12 +1,12 @@
-\LoadClass[twoside,a4paper]{article}
+\LoadClass[10pt,twoside,a4paper]{article}
 \NeedsTeXFormat{LaTeX2e}
 
 \RequirePackage{graphicx}
 \RequirePackage{helvet}
 \RequirePackage{fancyhdr}
 %\RequirePackage{fancyvrb}
-%\RequirePackage[includehead,includefoot,top=50pt,bottom=50pt,headheight=24pt,margin=1in]{geometry}
-\RequirePackage[includehead,includefoot,top=50pt,bottom=50pt,headheight=24pt]{geometry}
+%\RequirePackage[includehead,includefoot,top=50pt,bottom=50pt,headheight=20pt,margin=1in]{geometry}
+\RequirePackage[includefoot, lmargin=2.5cm, rmargin=2.5cm, tmargin=2.5cm, bmargin=2.5cm]{geometry}
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{multirow}
 \RequirePackage{verbatim}
@@ -40,8 +40,9 @@
 \geometry{
  a4paper,
  total={170mm,257mm},
- left=20mm,
- top=20mm,
+ %left=20mm,
+ %top=15mm,
+ margin=2.5cm,
 }
 
 \pagestyle{fancy}
@@ -49,16 +50,16 @@
 \setlength{\parskip}{\baselineskip}
 
 
-\renewcommand{\headrulewidth}{.4pt}
+\renewcommand{\headrulewidth}{0pt}
 \fancyhead{}
-\fancyhead[RO,LE]{\textbf{\@header}}
-\fancyhead[RE,LO]{\textsc{\small{\@category}}}
+\fancyhead[CO,CE]{\textbf{\@header}}
+%\fancyhead[RE,LO]{\textsc{\small{\@category}}}
 
 \renewcommand{\footruleskip}{10pt}
-\renewcommand{\footrulewidth}{.4pt}
+\renewcommand{\footrulewidth}{.0pt}
 
 \fancyfoot{}
-\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[CE,CO]{\thepage}
 
 \newcommand{\category}[1]{\def\@category{#1}}
 \newcommand{\header}[1]{\def\@header{#1}}

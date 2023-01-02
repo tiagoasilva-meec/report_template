@@ -1,50 +1,72 @@
-\documentclass{esda}
+\documentclass[10pt]{esda}
 \font\titlefont=cmss12 at 40pt
-\font\authorfont=cmr12 at 30pt
+\font\authorfont=cmr10 at 30pt
 
-\title{\bf \titlefont RISC-V-based MPEG1/2 Layer II Encoder}
-\author{\bf \authorfont Tiago Silva}
+\title{}
+\author{}
+\date{}
 
-\header{\@title}
+\header{}
 
 \category{PIC2 Report}
 %\category{Master Thesis}
 
-\date{\today}
-
 \input{color}
 
+%\usepackage{setspace}
+%\doublespacing
+
+\raggedbottom
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{setspace}
+\setstretch{1.5}
 
 \begin{document}
 
+%\begin{singlespace}
+%\vspace{-1cm}
 \includegraphics[bb=9.5cm 11cm 0cm 0cm,scale=0.29]{ist_logo.pdf}
-\vspace{2.5cm}
+%\vspace{2.5cm}
 
-{\let\newpage\relax\maketitle}
-\pagenumbering{gobble}
+%{\let\newpage\relax\maketitle}
+%\pagenumbering{gobble}
+\thispagestyle{empty}
 
-\vspace{1.5cm}
+\begin{onehalfspace}
+
 \begin{center}
 \begin{Large}
-  {\bf Project Report (PIC2)}\\
-  %or\\
-  %{\bf Master's Dissertation}\\
-  \vspace{1cm}
-  {\bf Department of Electrical and Computer Engineering}\\
-  \vspace{1cm}
-  Supervisors:\\
-  \vspace{0.5cm}
-  {\bf José Teixeira de Sousa}\\
-  \vspace{1cm}
-  Examiners:\\
-  \vspace{0.5cm}
-  {\bf Pedro Lima}\\
+  \vspace{3cm}
+  {\bf \Large {RISC-V-based MPEG1/2 Layer II Encoder}}\\
+  \vspace{2.5cm}
+  {\bf \Large Tiago Alves da Silva}\\
+  \vspace{2cm}
+  \large {Project Report (PIC2)}\\
+  \vspace{2mm}
+  {\bf \Large {Electrical and Computer Engineering}}\\
+  \vspace{1.5cm}
+  \large {Supervisor: Prof. José João Henriques Teixeira de Sousa}\\
+  \vspace{1.5cm}
+  {\bf \Large Examination Committee}\\
+  \vspace{1mm}
+  \large {Examiner: Prof. Pedro Urbano Lima}\\
+  \large {Supervisor: Prof. José João Henriques Teixeira de Sousa}\\
+  \vspace{2cm}
+  %{\bf \date{\today} }
+  {\bf \Large January 2022 }
 \end{Large}
 \end{center}
 
-\cleardoublepage
+\end{onehalfspace}
+%\linespread{1.25}
+%\begin{doublespacing}
+
+
 \pagenumbering{roman}
-\setcounter{page}{1}
+\cleardoublepage
 
 \section*{Abstract}
 \input{abstract}
@@ -55,8 +77,8 @@
 \listoffigures
 
 \cleardoublepage
+
 \pagenumbering{arabic}
-\setcounter{page}{1}
 
 \cleardoublepage
 \section{Introduction}
@@ -74,7 +96,7 @@
 \input{current}
 
 \cleardoublepage
-\section{Plan}
+\section{Work plan}
 \label{sec:plan}
 \input{plan}
 
@@ -88,5 +110,6 @@
 \bibliographystyle{abbrvunsrtnat} % <<<<< SELECT IF USING REFERENCES BY NUMBER (CITATION ORDER)
 \bibliography{citations.bib}
 
+%\end{doublespacing}
 
 \end{document}
