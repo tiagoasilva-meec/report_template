@@ -15,12 +15,12 @@ Each work phase defines its expected deadline, followed by a brief explanation.
 This phase consists in emulating the system on PC (\textit{make pc-emul}), which allows easier debugging.
 
 \item \textbf{Profiling} (April 15)\\
-This phase consists in analyzing and gaining a better understanding of raw data, by measuring the execution time of the different algorithm parts. This information is useful to understand where the hardware acceleration should be applied on.
+This phase consists in analyzing and gaining a better understanding of raw data, by measuring the execution time of the different algorithm parts. This information is useful to understand where the hardware acceleration should be applied (where the bottlenecks are).
 %queres real time a 48k samples / s
 %stereo
 
 \item \textbf{Hardware implementation} (June 31)\\
-This phase consists in the register-transfer level design, which models the digital circuit in terms of the data flow between hardware registers and the logical operations performed on those signals.
+This phase consists in the RTL design, which models the digital circuit in terms of the data flow between hardware registers and the logical operations performed. In other words, this phase develops the hardware, which corresponds to the accelerator.
 %VHDL Structural Modeling
 
 \item \textbf{Simulation} (July 31)\\

@@ -7,8 +7,8 @@
 The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}.
 
 Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product.
-Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS), Digital Audio Broadcast (DAB), and Digital Video Broadcast (DVB).
-%Certainly, no one could doubt the incredible value that video codecs created by MPEG has played during the COVID-19 crisis in entertainment and commerce.
+Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}.
+%Certainly, no one could doubt the incredible value that video codecs created by MPEG have played during the COVID-19 crisis in entertainment and commerce.
 
 %MPEG, 1 e 2, audio
 The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.
@@ -18,25 +18,25 @@ Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lowe
 The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.
 The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications.
 
-Knowing the wide range of customers that need digital audio, belonging to all industries, this work proposes an intellectual property (IP) core capable of encoding MPEG-1/2 Layer I/II. 
+Knowing the wide range of customers that need digital audio, and with the MPEG Layer II (MP2) audio being the base of DAB (a digital radio standard), this work proposes an intellectual property (IP) core capable of encoding MPEG-1/2 Layer I/II. 
 
 The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
 With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.
 
-%motivation)
 \subsection{Motivation}
-Apart from chips, like the \textit{CX23415 MPEG-2 Codec} and the \textit{Futura II ASI+IP}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}.\\
 %and from the \textit{Twolame} software,
-This is, by itself, a strong motivation to develop the work. However, the preference for an IP core over a software or dedicated chip is based on three main reasons.
+Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}.\\
+This is, by itself, a strong motivation to develop the work. However, the preference for an IP core over software or a dedicated chip becomes clear when the three options are analyzed.
 
-First, the importance of IP design is growing, as consumer demands require quick product development. Reusing IP has long been touted as the fastest way to increase productivity, also contributing to the electronic design automation industry.
+One option would be to develop an encoder chip. For the customer, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the use of the encoder chip or even the circuit board.
 
-Second, an IP design is usually proven in a fully-tested product before being licensed. This is convenient because IP cores are critical to the overall SoC design, meaning no risks should be taken when managing, configuring, and integrating IPs.
+Another option would be developing an encoder software. This would require a Central Processing Unit (CPU), licensed by Advanced RISC Machines (ARM)~\cite{arm} for example. The CPU would theoretically run the implemented software, but it is not an easy task. For the customer, this would also mean an additional chip in the board, increasing the restrictions.
 
-Third and last, an IP design is provided in a hardware description language, analogous to a computer software program. This portability allows for easier implementation in both field-programmable gate array (FPGA)~\cite{fpga} and application-specific integrated circuit (ASIC)~\cite{asic}.
+Therefore, the best option is to develop an IP Core. This puts the developer in a privileged position since it gives the possibility to design a top-notch encoder, with less area/volume, weight, and power consumption than the ones available on the market.
 
-%The work will be developed using \textit{IObundle, Lda}'s IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
-%With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard. The TwoLAME repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.
+%First, the importance of IP design is growing, as consumer demands require quick product development. Reusing IP has long been touted as the fastest way to increase productivity, also contributing to the electronic design automation industry.
+%Second, an IP design is usually proven in a fully-tested product before being licensed. This is convenient because IP cores are critical to the overall SoC design, meaning no risks should be taken when managing, configuring, and integrating IPs.
+%Third and last, an IP design is provided in a hardware description language, analogous to a computer software program. This portability allows for easier implementation in both field-programmable gate array (FPGA)~\cite{fpga} and application-specific integrated circuit (ASIC)~\cite{asic}.
 
 %expected results
 
@@ -45,7 +45,7 @@ Third and last, an IP design is provided in a hardware description language, ana
 
 This document contains three more sections.
 
-The \textbf{Background} section details the MPEG standard, including its variations, layers and encoding process. This section also describes two IP cores, two Chips, and one Software capable of encoding MPEG Layer II.
+The \textbf{Background} section details the MPEG standard, including its variations, layers, and encoding process. This section also describes two IP cores, two Chips, and one Software capable of encoding MPEG Layer II.
 
 The \textbf{RISC-V-based MPEG-1/2 Layer II Encoder} section describes the IOb-Soc and its repository, which will support the work development. This section also explains the fundamentals of the ISO/IEC 11172 international standard.
 

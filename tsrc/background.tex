@@ -82,7 +82,7 @@ Table~\ref{tab:coreworks} describes the main features.
         \hline
         \textbf{Features} \\
         \hline
-         ISO/IEC 11172-3 and 13818-3 audio standards \\
+         ISO/IEC 11172-3 and 13818-3 standards \\
          \hline
          Fraunhofer IIS high-quality software\\
          \hline
@@ -119,7 +119,7 @@ Initially, the program is uploaded using a hardware interface. Then, the system 
 The Audio Input and Output Interfaces include a native parallel interface. Other interfaces, such as I2S/TDM and SPDIF/Audio Engineering Society 3 (AES3), are also available.
 
 The \textit{IPB-MPEG-SE} IP core delivers Program binary, Software manual, RTL of FPGA netlist, Implementation constraints, and Hardware datasheet.\\
-As attributes, it presents low operation frequency, low power consumption, and a compact hardware implementation, fitting economically in FPGAs and ASICs.
+As attributes, it presents low operation frequency, low power consumption, and compact hardware implementation, fitting economically in FPGAs and ASICs.
 Table~\ref{tab:ipbloq} describes the main features.
 
 \vspace{0.5cm}
@@ -130,7 +130,7 @@ Table~\ref{tab:ipbloq} describes the main features.
         \hline
         \textbf{Features} \\
         \hline
-         ISO/IEC 11172-3 and 13818-3 audio standards\\
+         ISO/IEC 11172-3 and 13818-3 standards\\
          \hline
          Fraunhofer IIS high-quality software \\
          \hline
@@ -175,12 +175,24 @@ As audio input and output, this chip supports Stereo Sony I2S. As MPEG input and
 
 The \textit{CX23415} most relevant features are high-quality real-time encoding and MPEG-1 and MPEG-2 support.
 
+\subsection{CHIP: MPEG-2 Encoder CW-4888}
+
+The \textit{CW-4888}~\cite{cw4888} is a MPEG-2 encoder that feeds video signals of analog program sources, like cameras and broadcasters, to digital broadcast networks.
+
+Initially, this device receives the standard composite video and the associated sound signals. Then, it digitizes and compresses the input according to the MPEG-2 standard, outputting the result as Asynchronous Serial Interface (ASI)~\cite{asi} or Internet Protocol (IP)~\cite{ip} streams.
+
+For audio, this device supports mono, dual, stereo, and joint stereo sound modes. The audio input signal is converted by a dual-channel encoder, which performs MPEG-1 layer I/II compression based on ISO/IEC 11172-3. 
+The bit rate can be set between 32 and 448 kbit/s, with sampling frequencies of 33 kHz, 44.1 kHz, and 48 kHz.
+
+The \textit{CW-4888}'s most relevant features are FPGA circuitry and the option for 2 or 4 independent encoder units in one frame.
+As attributes, it presents extremely low power consumption, high reliability, and a long lifespan.
+
 \subsection{CHIP: Futura II ASI+IP™}
 
 The \textit{Futura II}~\cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all standard broadcast formats, including North American standards. 
 
 %delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
-This chip, developed by \textit{Magnum Semiconductor Inc.}, is capable of encoding MPEG-1 Layer II at 192, 224, 256, 320, and 384 Kbps, with sampling rates of 32, 44.1, and 48 kHz. It can also encode Dolby Digital-3 (AC-3), MPEG-4 Advanced Audio Codec – Low Complexity (AAC-LC), and High-Efficiency Advanced Audio Coding (HE-AAC).
+This device, developed by \textit{Magnum Semiconductor Inc.}, is capable of encoding MPEG-1 Layer II at 192, 224, 256, 320, and 384 Kbps, with sampling rates of 32, 44.1, and 48 kHz. It can also encode Dolby Digital-3 (AC-3), MPEG-4 Advanced Audio Codec – Low Complexity (AAC-LC), and High-Efficiency Advanced Audio Coding (HE-AAC).
 
 As analog audio input, it supports one Stereo (two channels) with a frequency range from 20Hz to 20KHz. As digital audio input, it supports Audio Engineering Society-European Broadcasting Union (AES-EBU) and Serial digital interface/High-Definition Multimedia Interface (SDI/HDMI) (H.264 only).
 As output, both ASI and IP ports deliver MPEG-2 with a bit rate from 3.4 to 19.39 Mbps.
@@ -189,8 +201,8 @@ The \textit{Futura II}'s most relevant features are 800 milliseconds latency, us
 
 \subsection{SOFTWARE: Twolame/Toolame/Lame}
 
-The \textit{LAME}~\cite{lame} is a high-quality MPEG Layer III audio encoder, licensed under the Lesser General Public License (LGPL) and considered the best MP3 encoding software at mid-high and variable bitrates.\\
-As attributes, this software delivers better quality compared to all other encoders at most bitrates, better quality and speed compared to ISO reference software, and three different encoding modes (CBR, VBR, and Average Bit Rate (ABR)). This encoder is also free format and compilable as a shared library (on Linux/Unix) and Dynamic link library (DLL) (on Windows).
+The \textit{LAME}~\cite{lame} is a high-quality MPEG Layer III audio encoder, licensed under the Lesser General Public License (LGPL)~\cite{lgpl} and considered the best MP3 encoding software at mid-high and variable bitrates.\\
+As attributes, this software delivers better quality compared to all other encoders at most bitrates, better quality and speed compared to ISO reference software, and three different encoding modes (CBR, VBR, and Average Bit Rate (ABR)). This encoder is also free format and compilable as a shared library (on Linux/Unix) and Dynamic link library (DLL)~\cite{dll} (on Windows).
 
 Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\cite{toolame} was developed as a free software MPEG-1 Layer II audio encoder, written primarily by Mike Cheng. \textit{TooLAME} became well-known and widely used for its particularly high audio quality, despite existing many MP2 encoders.
 
@@ -198,7 +210,7 @@ Despite being unmaintained since 2003, this software was directly succeeded by t
 \textit{TwoLAME} is an optimized MPEG Layer 2 audio encoder, based on \textit{TooLAME}, with its latest version released in 2019.
 Table~\ref{tab:twolame} describes the additional features not provided in the original \textit{TooLame}.
 
-%\vspace{0.5cm}
+\vspace{0.5cm}
 
 \begin{table}[H]
     \centering

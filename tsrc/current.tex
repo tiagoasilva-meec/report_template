@@ -4,7 +4,7 @@
 
 %SoC
 \subsection{System-on-Chip}
-A System-on-Chip (SoC) is an integrated circuit that combines components of an electronic system. These components usually include a central processing unit (CPU), memory interfaces, on-chip input/output devices, input/output interfaces, and secondary storage interfaces.\\
+A System-on-Chip (SoC) is an integrated circuit that combines components of an electronic system. These components usually include a Central Processing Unit (CPU), memory interfaces, on-chip input/output devices, input/output interfaces, and secondary storage interfaces.\\
 Putting many elements of a computer system on a single piece of silicon has some advantages, such as low power requirements, reduced cost, increased performance, and reduced physical size.
 \vspace*{-0.05cm}
 \subsection{IOb-SoC}
@@ -194,3 +194,10 @@ Figure \ref{fig:flow-encoder} shows a more detailed Layer II Encoder flow chart.
 \caption{Layer II encoder flow chart.}
 \label{fig:flow-encoder}
 \end{figure}
+
+\subsection{Hardware/Software}
+
+The \textit{TwoLAME} software will be ported to IOb-SoC's CPU (PicoRV32). However, when encoding at the sampling frequency, the system may not finish execution in real-time. If this is the case, a peripheral will be developed to accelerate the process bottlenecks.
+
+In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} would be plausible.
+In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) would also be required.
