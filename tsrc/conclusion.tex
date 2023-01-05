@@ -12,13 +12,13 @@ The first two layers are the most relevant ones. Layer I has the lowest complexi
 
 Knowing the wide range of customers that need digital audio, and with the MP2 audio being the base of DAB, this work proposed an IP core capable of encoding MPEG-1/2 Layer I/II. 
 
-When developing a system that requires a MPEG encoder, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.
+When developing a system that requires a MPEG encoder, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.\\
 One option would be buying or developing an encoder chip. For the user, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the operation of the encoder chip or even the circuit board.\\
 Another option would be adopting, buying, or developing an encoder software. This would require a CPU, either one available for the user, or an additional IP core or chip. The CPU would theoretically run the encoder software, but it would not be an easy task.\\
 The last option would be buying or developing an IP Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.\\
 Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}. This also motivates the preference for an IP core.
 
 The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
-With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.
+With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.\\
 A hardware accelerator may also be developed and integrated with the IOb-Soc (as a peripheral), allowing system execution in real-time.
 
