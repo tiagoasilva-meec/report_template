@@ -24,15 +24,17 @@ The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-So
 With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.
 
 \subsection{Motivation}
+
+In case a system that requires a MPEG encoder is being developed, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.
+
+One option would be buying or developing an encoder chip. For the user, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the operation of the encoder chip or even the circuit board.
+
+Another option would be adopting, buying, or developing an encoder software. This would require a Central Processing Unit (CPU), either one available for the user, or an additional (licensed) IP core or chip (worst case). The CPU would theoretically run the encoder software, but it would not be an easy task.
+
+The last option would be buying or developing an IP Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.
 %and from the \textit{Twolame} software,
-Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}.\\
-This is, by itself, a strong motivation to develop the work. However, the preference for an IP core over software or a dedicated chip becomes clear when the three options are analyzed.
 
-One option would be to develop an encoder chip. For the customer, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the use of the encoder chip or even the circuit board.
-
-Another option would be developing an encoder software. This would require a Central Processing Unit (CPU), licensed by Advanced RISC Machines (ARM)~\cite{arm} for example. The CPU would theoretically run the implemented software, but it is not an easy task. For the customer, this would also mean an additional chip in the board, increasing the restrictions.
-
-Therefore, the best option is to develop an IP Core. This puts the developer in a privileged position since it gives the possibility to design a top-notch encoder, with less area/volume, weight, and power consumption than the ones available on the market.
+Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}. This also motivates the preference for an IP core.
 
 %First, the importance of IP design is growing, as consumer demands require quick product development. Reusing IP has long been touted as the fastest way to increase productivity, also contributing to the electronic design automation industry.
 %Second, an IP design is usually proven in a fully-tested product before being licensed. This is convenient because IP cores are critical to the overall SoC design, meaning no risks should be taken when managing, configuring, and integrating IPs.
@@ -45,7 +47,7 @@ Therefore, the best option is to develop an IP Core. This puts the developer in 
 
 This document contains three more sections.
 
-The \textbf{Background} section details the MPEG standard, including its variations, layers, and encoding process. This section also describes two IP cores, three Chips, and one Software capable of encoding MPEG Layer II.
+The \textbf{Background} section details the MPEG standard, including its variations, layers, and encoding process. This section also describes two IP cores, three Chips, and one Software capable of encoding MPEG Layer I/II.
 
 The \textbf{RISC-V-based MPEG-1/2 Layer II Encoder} section describes the IOb-Soc and its repository, which will support the work development. This section also explains the fundamentals of the ISO/IEC 11172 international standard and the Hardware/Software for the proposed IP core.
 
