@@ -1,27 +1,61 @@
 %In this section, one should summarize the work: the problem, the current work, the proposed solution, the results obtained, and why they improve the state-of-art. Repeating what is written in the introduction is not a problem and is desirable, but one should try to use different and complementary explanations to help the user. 
 
 %Background
-This work starts by describing the MPEG, a working group that sets standards for media coding, established by ISO~\cite{iso} and IEC~\cite{iec}. Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as DSS~\cite{dss}, DAB~\cite{dab}, and DVB~\cite{dvb}.
+This work starts by describing the MPEG working group, who creates standards for
+media coding, established by the ISO~\cite{iso} and IEC~\cite{iec}. Since its
+formation in 1988, the MPEG working group has made an indelible mark on the
+transition from analog to digital video. In particular, an increasing number of
+broadcasting applications are based on MPEG technology, such as DSS~\cite{dss},
+DAB~\cite{dab}, and DVB~\cite{dvb}.
+
 %MPEG, 1 e 2, audio
-The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression. Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. \\
-The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.
-The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications.
+The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering
+audio and video compression. Today, MPEG-1 Audio is the most widely compatible
+lossy audio format in the world. The MPEG standard also differentiates three
+coding schemes, called Layer I, Layer II, and Layer III.  The first two layers
+are the most relevant ones. Layer I has the lowest complexity, while Layer II
+requires a more complex encoder and decoder, being directed towards one-to-many
+applications.
 
 %Motivation
-When developing a system that requires a MPEG encoder, the user's options are quite limited.\\
-One option would be buying or developing an encoder chip, which would increase area/volume, weight, and power consumption restrictions. 
-Another option would be adopting, buying, or developing an encoder software, which would require a Central Processing Unit (CPU), either one available for the user, or an additional IP core or chip. 
-The last option would be buying or developing an IP Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.\\
-%Background
-Therefore, this work also describes three chips (\textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}), two IP cores (\textit{CWda74} and \textit{IPB-MPEG-SE}) and one software (TwoLAME~\cite{twolame}) capable of encoding MPEG.
+When developing SoCs, the developer faces tough performance-cost trade-offs and
+must attempt to save on any of the components. For an audio encoder, one option
+is buying an encoder chip, which increases area/volume, weight, and power
+consumption. Example chips are the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415},
+or the \textit{Futura II ASI+IP}~\cite{futura}). Another option is using an
+encoder software such as TwoLAME~\cite{twolame}. The software requires a Central
+Processing Unit (CPU), either one already available, or an additional CPU IP
+chip or IP core. The software also needs to be ported to the CPU. The last
+option is licensing an IP Core. This reduces reduce area/volume, weight, and
+power consumption, allowing the user to develop a top-notch system, beating the
+competition. However, this research only found one commercial MPEG-1/2 Layer II
+IP core in the market, the \textit{CWda74}, later
+re-branded \textit{IPB-MPEG-SE}, which used fixed-point computations.
 
 %RISC-V-based MPEG1/2 Layer II Encoder
-Considering the development of an IP core to encode MPEG-1/2 Layer II Audio, this work analyses the \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. The IOb-SoC components, deliverables, FPGA resources, and repository are also analyzed. 
-In addition, this work studies the ISO/IEC 11172 standard, an international standard under the title \textit{Information technology - Coding of moving pictures and associated audio for digital storage media at up to about 1,5 Mbit/s}. The standard includes an audio part, which specifies the coded representation of high-quality audio for storage media, as well as the working principle of a generic audio encoder and a Psychoacoustic encoder.\\
-This work also analyses the porting of the \textit{TwoLAME} software to IOb-SoC's CPU (PicoRV32), which would require an accelerator (a peripheral) and two hardware converters (from floating-point/fixed-point to fixed-point/floating-point), to allow execution in real-time.
+This work proposes a floating-point MPEG-1/2 Layer II Audio encoder, beatint the
+CWda74 in terms of accuracy, but inevitably consuming more silicon area and
+burning more power. This provides a new and interesting trade-off in a market
+dominated by a singe product.
+ 
+This report analyses the \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a
+System-on-Chip template comprising an open-source RISC-V processor. The IOb-SoC
+components, deliverables, FPGA resources, and repository are also analyzed.  In
+addition, this work studies the ISO/IEC 11172 standard, an international
+standard under the title \textit{Information technology - Coding of moving
+pictures and associated audio for digital storage media at up to about 1,5
+Mbit/s}. The standard includes an audio part, which specifies the coded
+representation of high-quality audio for storage media, as well as the working
+principle of a generic audio encoder and a Psychoacoustic encoder. This work
+also analyses the porting of the \textit{TwoLAME} software to IOb-SoC's CPU
+(PicoRV32), which may require an accelerator to allow execution in real-time.
 
 %Work Plan
-Finally, this work plans the IP development, which will be tracked by a fork of \textit{iob-mp2-e} \textit{GitHub} repository, containing \textit{iob-cache}, \textit{iob-picorv32}, \textit{twolame}, and \textit{iob-uart} submodules.
-Considering October 31 as the submission deadline, the work phases are briefly described and scheduled, with the support of a Gantt chart. 
+Finally, this work plans the IP development, which will be carried on a fork of
+the \textit{iob-mp2-e} \textit{GitHub} repository,
+including \textit{iob-cache}, \textit{iob-picorv32}, \textit{twolame},
+and \textit{iob-uart} as git submodules. Targeting October 31 as the submission
+deadline, the work phases are briefly described and scheduled, with the support
+of a Gantt chart.
 
 %Another vital part of this section is to explain the future work that can be done as a follow-up to this work.
