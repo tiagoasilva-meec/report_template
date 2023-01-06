@@ -199,5 +199,5 @@ Figure \ref{fig:flow-encoder} shows a more detailed Layer II Encoder flow chart.
 
 The \textit{TwoLAME} software will be ported to IOb-SoC's CPU (PicoRV32). However, when encoding at the sampling frequency, the system may not finish execution in real-time. If this is the case, a peripheral will be developed to accelerate the process bottlenecks.
 
-In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} would be plausible.
-In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) would also be required.
+In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} is plausible.
+In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) are also required.

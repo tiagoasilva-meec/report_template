@@ -8,7 +8,7 @@
 The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Thus, the MPEG standard is a set of specifications for audio and video compression, containing two variations (among others), MPEG-1 and MPEG-2. Both variations cover audio and video, but since this work is focused on audio, the relevant standards are MPEG-1 Audio and MPEG-2 Audio.
 %is a working group of ISO/IEC with the mission to develop standards for coded representation of digital audio and video and related data.
 
-The MPEG-1 Audio, defined by ISO/IEC 11172-3 (explained in the next section), standardizes the information that an audio encoder must produce to write a bitstream conformant with the standard requirements. Moreover, it standardizes how an audio decoder has to parse, decompress, and resynthesize the information to reconstruct the original audio stream.
+The MPEG-1 Audio, defined by ISO/IEC 11172-3~\cite{11172} (explained in the next section), standardizes the information that an audio encoder must produce to write a bitstream conformant with the standard requirements. Moreover, it standardizes how an audio decoder has to parse, decompress, and resynthesize the information to reconstruct the original audio stream.
 
 This standard performs perceptual audio coding, which does not attempt to retain the input signal exactly after encoding and decoding. Instead, it ensures that the output signal sounds the same to a human listener. %, by eliminating the parts of the input signal that are irrelevant to the human ear 
 More precisely, an MPEG-1 audio encoder transforms the sound signal into the frequency domain, eliminates the frequency components that are masked by stronger frequency components, and packages the analyzed signal into a compressed audio bitstream.
@@ -177,18 +177,6 @@ As audio input and output, this chip supports Stereo Sony I2S. As MPEG input and
 
 The \textit{CX23415} most relevant features are high-quality real-time encoding and MPEG-1 and MPEG-2 support.
 
-\subsubsection{MPEG-2 Encoder CW-4888}
-
-The \textit{CW-4888}~\cite{cw4888} is a MPEG-2 encoder that feeds video signals of analog program sources, like cameras and broadcasters, to digital broadcast networks.
-
-Initially, this device receives the standard composite video and the associated sound signals. Then, it digitizes and compresses the input according to the MPEG-2 standard, outputting the result as Asynchronous Serial Interface (ASI)~\cite{asi} or Internet Protocol (IP)~\cite{ip} streams.
-
-For audio, this device supports mono, dual, stereo, and joint stereo sound modes. The audio input signal is converted by a dual-channel encoder, which performs MPEG-1 layer I/II compression based on ISO/IEC 11172-3. 
-The bit rate can be set between 32 and 448 kbit/s, with sampling frequencies of 33 kHz, 44.1 kHz, and 48 kHz.
-
-The \textit{CW-4888}'s most relevant features are FPGA circuitry and the option for two or four independent encoder units in one frame.
-As attributes, it presents extremely low power consumption, high reliability, and a long lifespan.
-
 \subsubsection{Futura II ASI+IP™}
 
 The \textit{Futura II}~\cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all standard broadcast formats, including North American standards. 
@@ -200,6 +188,20 @@ As analog audio input, it supports one Stereo (two channels) with a frequency ra
 As output, both ASI and IP ports deliver MPEG-2 with a bit rate from 3.4 to 19.39 Mbps.
 
 The \textit{Futura II}'s most relevant features are 800 milliseconds latency, user-selectable resolution and bit rate, and two encoding modes, Constant Bit Rate (CBR) and Variable Bitrate (VBR).
+
+\subsection{MPEG-1/2 Layers I/II Systems}
+
+\subsubsection{MPEG-2 Encoder CW-4888}
+
+The \textit{CW-4888}~\cite{cw4888} is a MPEG-2 encoder that feeds video signals of analog program sources, like cameras and broadcasters, to digital broadcast networks.
+
+Initially, this device receives the standard composite video and the associated sound signals. Then, it digitizes and compresses the input according to the MPEG-2 standard, outputting the result as Asynchronous Serial Interface (ASI)~\cite{asi} or Internet Protocol (IP)~\cite{ip} streams.
+
+For audio, this device supports mono, dual, stereo, and joint stereo sound modes. The audio input signal is converted by a dual-channel encoder, which performs MPEG-1 layer I/II compression based on ISO/IEC 11172-3~\cite{11172}. 
+The bit rate can be set between 32 and 448 kbit/s, with sampling frequencies of 33 kHz, 44.1 kHz, and 48 kHz.
+
+The \textit{CW-4888}'s most relevant features are FPGA circuitry and the option for two or four independent encoder units in one frame.
+As attributes, it presents extremely low power consumption, high reliability, and a long lifespan.
 
 \subsection{MPEG-1/2 Layers I/II Software}
 
