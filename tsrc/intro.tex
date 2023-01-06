@@ -5,9 +5,7 @@
 \subsection{Topic overview}
 %MPEG importance
 The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}.
-
-Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product.
-Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}.
+Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. 
 %Certainly, no one could doubt the incredible value that video codecs created by MPEG have played during the COVID-19 crisis in entertainment and commerce.
 
 %MPEG, 1 e 2, audio
@@ -18,29 +16,26 @@ Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lowe
 The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.
 The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications.
 
-Knowing the wide range of customers that need digital audio, and with the MPEG Layer II (MP2) audio being the base of DAB (a digital radio standard), this work proposes an intellectual property (IP) core capable of encoding MPEG-1/2 Layer I/II. 
-
-The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
-With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.
-
 \subsection{Motivation}
 
-In case a system that requires a MPEG encoder is being developed, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.
+Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product.
+
+An increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. However, for a user requiring a MPEG encoder in his system, the options are quite limited.
+%However, in case a system that requires a MPEG encoder is being developed, the user has limited options to fulfill the requirement.
 
 One option would be buying or developing an encoder chip. For the user, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the operation of the encoder chip or even the circuit board.
 
 Another option would be adopting, buying, or developing an encoder software. This would require a Central Processing Unit (CPU), either one available for the user, or an additional (licensed) IP core or chip (worst case). The CPU would theoretically run the encoder software, but it would not be an easy task.
 
-The last option would be buying or developing an IP Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.
-%and from the \textit{Twolame} software,
+\subsection{Objectives}
 
-Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}. This also motivates the preference for an IP core.
+For a system requiring a MPEG encoder, the last option would be buying or developing an intellectual property (IP) Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.
 
-%First, the importance of IP design is growing, as consumer demands require quick product development. Reusing IP has long been touted as the fastest way to increase productivity, also contributing to the electronic design automation industry.
-%Second, an IP design is usually proven in a fully-tested product before being licensed. This is convenient because IP cores are critical to the overall SoC design, meaning no risks should be taken when managing, configuring, and integrating IPs.
-%Third and last, an IP design is provided in a hardware description language, analogous to a computer software program. This portability allows for easier implementation in both field-programmable gate array (FPGA)~\cite{fpga} and application-specific integrated circuit (ASIC)~\cite{asic}.
+Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}.
+Therefore, knowing the wide range of customers that need digital audio, and with the MPEG Layer II (MP2) audio being the base of DAB, this work proposes an IP core capable of encoding MPEG-1/2 Layer II Audio. 
 
-%expected results
+The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
+With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer II encoding software based on the ISO/IEC 11172, will provide the algorithm.
 
 \subsection{Report outline}
 %describe the contents of each section

@@ -1,5 +1,5 @@
 %MPEG1/2 layers I/II encoder using a RISC-V processor and hardware accelerators
-
+ 
 %This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
 %Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic and reference them in this document. An example citation is given in this sentence [1].
 
@@ -37,7 +37,7 @@ In addition, there is a second variation, MPEG-2 Audio, which includes three mai
 The first point is the extension of MPEG-1 to lower sampling frequencies (16 kHz, 22.05 kHz, and 24 kHz), providing better sound quality at very low bit rates.
 The second point is the backward-compatible (BC) extension of MPEG-1 to multichannel sound, supporting up to 5 full bandwidth channels plus one low-frequency enhancement channel. The MPEG-2 BC stream adheres to the structure of a MPEG-1 bitstream, meaning that a MPEG-2 BC stream can be read and interpreted by a MPEG-1 audio decoder.
 The third and last point is a new coding scheme called Advanced Audio Coding (AAC), which is more efficient and presents higher quality.
-
+ 
 %applications
 Today, the MPEG-1 Audio standard is the most widely compatible lossy audio format in the world, thanks to technical merits and excellent audio quality performance.
 Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. %This variety of applications is possible because of the big range of bitrates and the numerous configurations allowed in MPEG-1. \\
@@ -45,8 +45,8 @@ Within the professional and consumer market, four fields of applications can be 
 
 \subsection{MPEG-1/2 Layers I/II IP cores}
 
-Knowing the wide range of customers that need digital audio, belonging to all industries, the goal of this work is to develop an IP core to encode MPEG-1/2 Layer I/II, using a RISC-V processor and hardware accelerators.
-
+Knowing the wide range of customers that need digital audio, belonging to all industries, this work proposes developing an IP core to encode MPEG-1/2 Layer II, using a RISC-V processor and hardware accelerators.
+ 
 An intellectual property core (IP core) consists in a block of logic or data that is used in a semiconductor chip when making a field-programmable gate array (FPGA)~\cite{fpga} or application-specific integrated circuit (ASIC)~\cite{asic}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
@@ -61,7 +61,7 @@ A company that purchases an IP core license usually receives everything that's r
 Two IP Cores, two Chips, and one Software that perform MPEG-1/2 Layer I/II audio encoding are presented in the following subsections.
 
 \subsubsection{CWda74 MPEG-1/2 – Layer I/II Audio Encoder}
-
+ 
 The \textit{CWda74}~\cite{CWda74} is an audio IP core capable of encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.}~\cite{coreworks}.
 
 This IP core contains the MPEG-1/2 Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform (\textit{CWda1011}).\\

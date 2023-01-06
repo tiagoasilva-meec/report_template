@@ -5,12 +5,13 @@
 Since its establishment in 1988, the Moving Picture Experts Group (MPEG) has made an indelible mark on the transition from analog to digital video, especially in broadcasting, storage, multimedia, and telecommunication fields.
 Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world, under the International Organization for Standardization/International Electrotechnical Commission (ISO/IEC) 11172-3 standard.
 
-When developing a system that requires a MPEG encoder, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.
+An increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. However, for a user requiring a MPEG encoder in his system, the options are quite limited.\\
 One option would be buying or developing an encoder chip, which would increase area/volume, weight, and power consumption restrictions. 
 Another option would be adopting, buying, or developing an encoder software, which would require a Central Processing Unit (CPU), either one available for the user, or an additional IP core or chip. 
-The last option would be buying or developing an IP Core, which would allow the user to decrease the restrictions and develop a top-notch system.
-Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74}~\cite{CWda74} and \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}. 
 
-This work proposes an intellectual property (IP) core capable of encoding MPEG-1/2 Layer I/II Audio. 
-The IP will be developed using \textit{IObundle, Lda}'s IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. The TwoLAME GitHub repository, an optimized MPEG Audio Layer 2 encoding software, will provide the algorithm.
+For a system requiring a MPEG encoder, the last option would be buying or developing an intellectual property (IP) Core, which would allow the user to decrease the restrictions and develop a top-notch system.
+Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}.
+
+Knowing the wide range of customers that need digital audio, and with the MPEG Layer II audio being the base of DAB, this work proposes an IP core capable of encoding MPEG-1/2 Layer II Audio. 
+The IP will be developed using \textit{IObundle, Lda}'s IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. The TwoLAME GitHub repository, an optimized MPEG Audio Layer II encoding software, will provide the algorithm.
 A hardware accelerator may also be developed and integrated with the IOb-Soc (as a peripheral), allowing system execution in real-time.

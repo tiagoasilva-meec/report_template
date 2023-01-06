@@ -1,24 +1,27 @@
 %In this section, one should summarize the work: the problem, the current work, the proposed solution, the results obtained, and why they improve the state-of-art. Repeating what is written in the introduction is not a problem and is desirable, but one should try to use different and complementary explanations to help the user. 
-%Another vital part of this section is to explain the future work that can be done as a follow-up to this work.
 
-The MPEG is a working group that sets standards for media coding, established by ISO~\cite{iso} and IEC~\cite{iec}. Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video.
-Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as DSS~\cite{dss}, DAB~\cite{dab}, and DVB~\cite{dvb}.
-
+%Background
+This work starts by describing the MPEG, a working group that sets standards for media coding, established by ISO~\cite{iso} and IEC~\cite{iec}. Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. In particular, an increasing number of broadcasting applications are based on MPEG technology, such as DSS~\cite{dss}, DAB~\cite{dab}, and DVB~\cite{dvb}.
 %MPEG, 1 e 2, audio
-The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.
-Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lower sampling frequencies, backward compatibility, and a more advanced coding scheme.\\
+The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression. Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. \\
 The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.
 The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications.
 
-Knowing the wide range of customers that need digital audio, and with the MP2 audio being the base of DAB, this work proposed an IP core capable of encoding MPEG-1/2 Layer I/II. 
-
-When developing a system that requires a MPEG encoder, the user's preference for an IP core over software or chip becomes clear after analyzing the three options.\\
-One option would be buying or developing an encoder chip. For the user, this would mean an additional chip in the board, increasing its area/volume, weight, and power consumption restrictions. Depending on the application, these factors could impact the operation of the encoder chip or even the circuit board.\\
-Another option would be adopting, buying, or developing an encoder software. This would require a CPU, either one available for the user, or an additional IP core or chip. The CPU would theoretically run the encoder software, but it would not be an easy task.\\
+%Motivation
+When developing a system that requires a MPEG encoder, the user's options are quite limited.\\
+One option would be buying or developing an encoder chip, which would increase area/volume, weight, and power consumption restrictions. 
+Another option would be adopting, buying, or developing an encoder software, which would require a Central Processing Unit (CPU), either one available for the user, or an additional IP core or chip. 
 The last option would be buying or developing an IP Core. This would reduce area/volume, weight, and power consumption, allowing the user to develop a top-notch system, better than the competition.\\
-Apart from chips, like \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}, there are only two IP cores specifically for MPEG-1/2 Layer I/II Audio on the market, namely the \textit{CWda74} and \textit{IPB-MPEG-SE}. This also motivates the preference for an IP core.
+%Background
+Therefore, this work also describes three chips (\textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888} and \textit{Futura II ASI+IP}~\cite{futura}), two IP cores (\textit{CWda74} and \textit{IPB-MPEG-SE}) and one software (TwoLAME~\cite{twolame}) capable of encoding MPEG.
 
-The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. 
-With this SoC, it will be possible to implement a MPEG encoder concerning the ISO/IEC 11172 international standard, which specifies the coded representation of high-quality audio for storage media. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer 2 encoding software based on the ISO/IEC 11172, will provide the algorithm.\\
-A hardware accelerator may also be developed and integrated with the IOb-Soc (as a peripheral), allowing system execution in real-time.
+%RISC-V-based MPEG1/2 Layer II Encoder
+Considering the development of an IP core to encode MPEG-1/2 Layer II Audio, this work analyses the \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. The IOb-SoC components, deliverables, FPGA resources, and repository are also analyzed. 
+In addition, this work studies the ISO/IEC 11172 standard, an international standard under the title \textit{Information technology - Coding of moving pictures and associated audio for digital storage media at up to about 1,5 Mbit/s}. The standard includes an audio part, which specifies the coded representation of high-quality audio for storage media, as well as the working principle of a generic audio encoder and a Psychoacoustic encoder.\\
+This work also analyses the porting of the \textit{TwoLAME} software to IOb-SoC's CPU (PicoRV32), which would require an accelerator (a peripheral) and two hardware converters (from floating-point/fixed-point to fixed-point/floating-point), to allow execution in real-time.
 
+%Work Plan
+Finally, this work plans the IP development, which will be tracked by a fork of \textit{iob-mp2-e} \textit{GitHub} repository, containing \textit{iob-cache}, \textit{iob-picorv32}, \textit{twolame}, and \textit{iob-uart} submodules.
+Considering October 31 as the submission deadline, the work phases are briefly described and scheduled, with the support of a Gantt chart. 
+
+%Another vital part of this section is to explain the future work that can be done as a follow-up to this work.
