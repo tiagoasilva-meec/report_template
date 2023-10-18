@@ -1,3 +1,46 @@
+\documentclass{article}
+\usepackage{diagbox}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\graphicspath{ {./images/} }
+\usepackage{textgreek}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{indentfirst}
+\usepackage{array}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{lineno}
+%\linenumbers
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\vrule width 1pt}}
+\makeatother
+
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm}
+
+\begin{document}
+\pagenumbering{gobble} 
+
 This chapter addresses the software architecture.
 It starts by setting up the IOb-Soc and configuring the firmware to allow execution of \textit{TwoLAME} encoding algorithm. Then, software optimizations are done in order to run \textit{TwoLAME} in FPGA. 
 At the end, a detailed profiling analysis defines which part of the \textit{TwoLAME} software requires hardware acceleration.
@@ -156,7 +199,7 @@ Table \ref{profiling1} shows the first phase of the profiling for all input file
     \centering
     \begin{tabular}{c|c|c|c|c|}
     \cline{2-5}
-    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
     \cline{2-5}
      & short.wav & long.wav & noise.wav & vivaldi.wav \\
     \hline
@@ -206,7 +249,7 @@ Table \ref{profiling2} shows the second phase of the profiling for all input fil
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
     \cline{3-6}
-    \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
     \cline{3-6}
     \multicolumn{2}{c|}{} & short.wav & long.wav & noise.wav & vivaldi.wav \\
     \cline{1-6}
@@ -276,7 +319,7 @@ Table \ref{profiling3} shows the third phase of the profiling for all input file
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
     \cline{3-6}
-    \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
     \cline{3-6}
     \multicolumn{2}{c|}{} & short.wav & long.wav & noise.wav & vivaldi.wav \\
     \cline{1-6}
@@ -319,3 +362,5 @@ The previous table shows interesting information. First, it is noticeable that s
 Therefore, \textit{psycho\_3\_threshold} should be the first function accelerated in Hardware.
 
 %These functions have more specific names as we are going lower in abstraction.
+
+\end{document}

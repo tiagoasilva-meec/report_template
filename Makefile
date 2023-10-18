@@ -42,6 +42,7 @@ clean:
 	@find . -maxdepth 1 -type f -not \( -name Makefile -o \
 	-name README.md -o -name LICENSE -o -name report.pdf -o -name .git \) -delete
 	@rm -f tsrc/*~
+	rm -f report.pdf
 
 debug:
 	@echo $(TSRC)

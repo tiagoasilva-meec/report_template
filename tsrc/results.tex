@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage{diagbox}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\graphicspath{ {./images/} }
+\usepackage{textgreek}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{indentfirst}
+\usepackage{array}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{lineno}
+%\linenumbers
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\vrule width 1pt}}
+\makeatother
+
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm}
+
+\begin{document}
+
+%In this section, one should explain in detail the experiments designed to show the applicability or superiority of the proposed approach and the results obtained. Use tables or figures to facilitate a rapid apprehension of the results.
+
+%For example, if the goal is to design a new platform to accelerate a software application, the execution times of the application running on the existing and new platforms should be presented.
+
+%The resources used should be detailed: the frequency of operation, memory size, power, energy consumption, and communication bandwidth are examples. For FPGA implementations, for example, the number of block RAMs, LUTs, and DSPs should be presented in a Table for the configurations studied.
+
+This chapter addresses the experimental results for the \textit{TwoLAME} encoder running on IOb-Soc, with and without \textit{Versat}.
+It starts by presenting the implementation results in FPGA. Then, the execution times are analysed. At the end, the results obtained are compared with the real-time encoding requirements.
+
+\subsection{FPGA implementation}
+This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration.\\
+Here, the \textit{Xilinx XCKU040-1FBVA676 FPGA} is the only FPGA in use. Tables \ref{implementation1} and \ref{implementation2} show the implementation results of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{1-5}
+    \multicolumn{1}{|c|}{\textbf{Metric}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{Total LUTs} &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{Logic LUTs}  &  &  &   &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{LUTRAMs}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{SRLs}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{Flip-Flops (FFs)}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{RAMB36}  &  &  &  &   \\ 
+    \hline
+    \multicolumn{1}{|c|}{RAMB18}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{URAM}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{DSP Blocks}  &  &  &  &  \\ 
+    \hline
+    \end{tabular}
+    \caption{FPGA implementation results without \textit{Versat}.}
+    \label{implementation1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{1-5}
+    \multicolumn{1}{|c|}{\textbf{Metric}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{Total LUTs} & 26192 & 26192 & 26198 & 26198 \\ 
+    \hline
+    \multicolumn{1}{|c|}{Logic LUTs}  & 21340 & 21340 & 21346  & 21346 \\ 
+    \hline
+    \multicolumn{1}{|c|}{LUTRAMs}  & 4464 & 4464 & 4464 & 4464 \\ 
+    \hline
+    \multicolumn{1}{|c|}{SRLs}  & 388 & 388 & 388 & 388 \\ 
+    \hline
+    \multicolumn{1}{|c|}{Flip-Flops (FFs)}  & 27346 & 27346 & 27347 & 27347 \\ 
+    \hline
+    \multicolumn{1}{|c|}{RAMB36}  & 157 & 157 & 157 &  157 \\ 
+    \hline
+    \multicolumn{1}{|c|}{RAMB18}  & 5 & 5 & 5 & 5 \\ 
+    \hline
+    \multicolumn{1}{|c|}{URAM}  & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 10 & 10 & 10 \\ 
+    \hline
+    \end{tabular}
+    \caption{FPGA implementation results with \textit{Versat}.}
+    \label{implementation2}
+\end{table}
+
+%comment
+
+\subsection{Execution results}
+
+Tables \ref{time1} and \ref{time2} show the execution time of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \cline{2-5}
+     & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{\textit{psycho\_3\_threshold}}  &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{\textit{TwoLAME} total}  &  &  &  &  \\ 
+    \hline
+    \end{tabular}
+    \caption{Execution time for all input files without \textit{Versat} [ms].}
+    \label{time1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \cline{2-5}
+     & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{\textit{psycho\_3\_threshold}}  & 15 & 345 & 275 & 387 \\ 
+    \hline
+    \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1012 & 9755 & 7452 & 10062 \\ 
+    \hline
+    \end{tabular}
+    \caption{Execution time for all input files with \textit{Versat} [ms].}
+    \label{time2}
+\end{table}
+
+
+\subsection{Real-time requirements}
+
+%The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to others. Second, it is clear that \textit{psycho\_3 function 11}, which is \textit{psycho\_3\_threshold}, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
+
+The speedup is calculated using the formula
+
+\begin{equation}
+    Speedup = \frac{Execution time without acceleration}{Execution time with acceleration} 
+\end{equation}
+
+We compare the achieved speedup in percentage to the desired speedup based on the real-time requirements. Additionally, we apply Amdahl's Law to understand the limitations and scalability of the hardware acceleration in meeting the specified real-time constraints. \textit{Amdahl's Law} is formulated as:
+
+\begin{equation}
+    Speedup = \frac{1}{(1 - p) + \frac{p}{s}} 
+\end{equation}
+
+$s$ is the speedup of the part of the task that benefits from improved system resources, i.e. is the speedup achieved on the parallelizable portion;\\
+$p$ is the proportion of execution time that the part benefiting from improved resources originally occupied, i.e. is the proportion of the program that can be parallelized.
+
+\begin{equation}
+    \frac{\textit{number of frames} \times \textit{number of samples}}{sampling frequency} 
+\end{equation}
+
+\end{document}

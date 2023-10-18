@@ -1,3 +1,45 @@
+\documentclass{article}
+\usepackage{diagbox}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\graphicspath{ {./images/} }
+\usepackage{textgreek}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{indentfirst}
+\usepackage{array}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{lineno}
+%\linenumbers
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\vrule width 1pt}}
+\makeatother
+
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm}
+
+\begin{document}
+
 This chapter addresses the hardware architecture. It starts by setting up \textit{Versat} in the IOb-SoC. Then, it checks the \textit{Versat} Functional Units that are available in order to accelerate the \textit{psycho\_3\_threshold} function. At the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
 
 \subsection{Versat}
@@ -373,82 +415,8 @@ A brief description of each module is provided in the list below.
 \vspace{0.5cm}
 
 \textbf{\textit{start}}
-%aThis is the main module, which controls all the previous modules.
 
-\begin{enumerate}
-
-\item Calculation of \textit{av\_tone}:
-\begin{itemize}
-\item Takes \textit{barkK}, \textit{Xtm}, \textit{const1\_av}, \textit{const2\_av} and \textit{const3\_av} to calculate \textit{av\_tone}.
-\end{itemize}
-
-\item Calculation of \textit{dz}:
-\begin{itemize}
-\item Calculates \textit{dz} based on the inputs \textit{freq\_subset}, \textit{bark} and \textit{barkK}.
-\end{itemize}
-
-\item Calculation of \textit{vf}:
-\begin{itemize}
-\item Takes the output of \textit{sub}, \textit{logic1} and \textit{Xtm} as inputs.
-\item Outputs \textit{vf}.
-\end{itemize}
-
-\item Float addition (\textit{add1}):
-\begin{itemize}
-\item Takes the output of \textit{mul1} and \textit{const1} as inputs.
-\item Adds \textit{mul1} and \textit{const1}.
-\end{itemize}
-
-\item Input multiplexing (\textit{mux2}):
-\begin{itemize}
-\item Uses a multiplexer to select one of the inputs (\textit{DBMIN}, \textit{LTtmR}).
-\end{itemize}
-
-\item Calculation of \textit{fdiff}:
-\begin{itemize}
-\item Subtracts input \textit{b} from the input \textit{a}.
-\item Multiplies the result by \textit{const1\_psycho\_3}.
-\end{itemize}
-
-\item Greater than comparison (\textit{gt\_psycho\_3:0}):
-\begin{itemize}
-\item Compares the input \textit{fdiff} with \textit{const2\_psycho\_3} for greater than condition.
-\end{itemize}
-
-\item Less than comparison (\textit{lt\_psycho\_3}):
-\begin{itemize}
-\item Compares the input \textit{fdiff} with \textit{const3\_psycho\_3} for less than condition.
-\end{itemize}
-
-\item Float to integer conversion (f2i\_psycho\_3):
-\begin{itemize}
-\item Converts the floating-point input \textit{fdiff} to an integer \textit{idiff}.
-\end{itemize}
-
-\item Greater or equal comparison (\textit{ge\_psycho\_3}):
-\begin{itemize}
-\item Compares the input \textit{idiff} with \textit{const4\_psycho\_3} for greater than or equal condition.
-\end{itemize}
-
-\item Float addition (\textit{add1\_psycho\_3}):
-\begin{itemize}
-\item Takes the output \textit{mux2} and \textit{mem} as inputs.
-\item Adds \textit{mux2} and \textit{mem}.
-\end{itemize}
-
-\item Float addition (\textit{add2\_psycho\_3}):
-\begin{itemize}
-\item Takes the output of \textit{add} and \textit{mem} as inputs.
-\item Adds \textit{add} and \textit{mem}.
-\end{itemize}
-
-\item Output \textit{LTtmR} (\textit{psycho\_3\_add\_db1}):
-\begin{itemize}
-\item Takes the outputs of \textit{mux2}, \textit{add}, \textit{add1\_psycho\_3}, \textit{add2\_psycho\_3}, \textit{sel} and \textit{dzRange1} as inputs.
-\item Takes the output of \textit{psycho\_3\_add\_db1} as the final output of this module. 
-\end{itemize}
-
-\end{enumerate}
+This is the main module, which is responsible for invoking all the other modules. It interconnects all modules by defining the correct inputs and outputs, apart from executing operations that are not included in any module but are required, like simple logical operations.
 
 
 \subsubsection{Firmware}
@@ -501,9 +469,10 @@ This section shows both control and data paths of the second accelerator, corres
 
 \textbf{\textit{start1}}
 
-This module has some similarity with the \textit{start} module of the first accelerator, since it contains most of the \textit{start} module description but duplicated. In addition, it excludes the initial part related to the inputs \textit{av}, \textit{dz} and \textit{vf}, and adds a new one related to conditional operation. 
+This module has some similarity with the \textit{start} module of the first accelerator, since it contains most of the \textit{start} module description but duplicated.
+It invokes and interconnects all the other modules, apart from executing operations like conditional operation.
 
-Therefore, a brief description of the conditional operation part is provided below.
+A brief description of the conditional operation part is provided below.
 
 \begin{enumerate}
 
@@ -532,3 +501,5 @@ As mentioned in the \textit{psycho\_3\_threshold} function section, the second a
 The configuration of this accelerator is done inside a single function, since it performs only one run. Therefore, all the configuration belongs to \textit{configureVersat1} function.
 
 In this function, the process is similar to the previous configuration function, since the second accelerator does not contain any functional unit that is not present in the first accelerator.
+
+\end{document}
