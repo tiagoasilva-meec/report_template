@@ -1,217 +1,14 @@
-\documentclass{article}
-\usepackage{diagbox}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx}
-\usepackage[english]{babel}
-\graphicspath{ {./images/} }
-\usepackage{textgreek}
-\usepackage{hyperref}
-\usepackage{geometry}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{float}
-\usepackage{amsmath}
-\usepackage{lmodern}
-\usepackage{textcomp}
-\usepackage{gensymb}
-\usepackage{indentfirst}
-\usepackage{array}
-\usepackage{mathtools}
-\usepackage{comment}
-\usepackage{tabularx}
-\usepackage{multirow}
-\usepackage{lineno}
-%\linenumbers
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
-\makeatletter
-\newcommand{\thickhline}{%
-    \noalign {\ifnum 0=`}\fi \hrule height 1pt
-    \futurelet \reserved@a \@xhline
-}
-\newcolumntype{"}{@{\vrule width 1pt}}
-\makeatother
-
-\geometry{
- a4paper,
- total={170mm,257mm},
- left=20mm,
- top=20mm}
-
-\begin{document}
-
-This chapter addresses the hardware architecture. It starts by setting up \textit{Versat} in the IOb-SoC. Then, it checks the \textit{Versat} Functional Units that are available in order to accelerate the \textit{psycho\_3\_threshold} function. At the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
+This chapter addresses the hardware architecture. It starts by setting up \textit{Versat} in the IOb-SoC. Then, it describes new Functional Units that are required in order to accelerate the \textit{psycho\_3\_threshold} function. At the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
 
 \subsection{Versat}
 
+%checks the \textit{Versat} Functional Units that are available
 After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility to reduce between 37\% to 64\% total execution time, depending on the audio input.
 At this stage, the IOb-SoC was comprising eight main components: \textbf{AXI}, \textbf{CACHE}, \textbf{LIB}, \textbf{MEM}, \textbf{VEXRISCV}, \textbf{TWOLAME}, \textbf{UART} and \textbf{TIMER}. Given \textit{Versat} being the optimal choice for accelerating the \textit{psycho\_3\_threshold} function, integration into IOb-SoC becomes imperative.
 Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-SoC. This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as submodule to IOb-SoC's repository, some paths were changed to allow correct compilation.
 The second step was more complex, consisting in adding an interconnection between \textit{Versat} and RAM. Iob-SoC usually contains a single AXI interface, used by both cache memory and CPU. Considering this, the solution was to double the size of the wires from the already existing AXI interface, providing an additional interface to \textit{Versat} while avoiding a new separate interface.
 %explain better
-
-\subsubsection{Functional units}
-In practical terms, \textit{Versat} is a reconfigurable hardware accelerator that contains several functional units in its source, all written in Verilog. Nonetheless, the user has the possibility of creating and adding new ones to the source.
-In this work, the hardware accelerators use a set of 14 functional units, of which 5 were specifically created to allow accelerating \textit{psycho\_3\_threshold} function (\textit{FloatLess}, \textit{FloatGreater}, \textit{FloatGreaterEqual}, \textit{Mux4} and \textit{Conditional1}). The remaining 9 units were already included in the units source.
-
-A brief description of each functional unit is provided in the list below.
-
-\vspace{0.5cm}
-
-\textbf{\textit{Const}}
-\begin{itemize}
-\item This module receives a 32-bit input and outputs the same 32-bit value.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatAdd}}
-\begin{itemize}
-\item This module receives two 32-bit floating-point inputs, adds them together, and outputs a 32-bit floating-point value.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatSub}}
-\begin{itemize}
-\item This module receives two 32-bit floating-point inputs, subtracts one from the other, and outputs a 32-bit floating-point value.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatMul}}
-\begin{itemize}
-\item  This module receives two 32-bit floating-point inputs, multiplies them together, and outputs a 32-bit floating-point value.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatNot}}
-\begin{itemize}
-\item  This module receives a 32-bit floating-point input, negates the most significant bit (MSB), and outputs a 32-bit floating-point value.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatLess}}
-\begin{itemize}
-\item  This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result result 32 times) indicating whether the first input is less than the second. It performs a comparison operation to determine if the first input is less than the second.
-If the first input is less than the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatGreater}}
-\begin{itemize}
-\item  This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result 32 times) indicating whether the first input is greater than the second. It performs a comparison operation to determine if the first input is greater than the second.
-If the first input is greater than the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{FloatGreaterEqual}}
-\begin{itemize}
-\item  This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result 32 times) indicating whether the first input is greater than or equal to the second. It performs a comparison operation to determine if the first input is greater than or equal to the second.
-If the first input is greater than or equal to the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{Float2Int}}
-\begin{itemize}
-\item  This module receives a 32-bit floating-point input and converts it to a 32-bit integer output. It performs a conversion operation that truncates the fractional part of the floating-point input, effectively extracting the integer component. The resulting 32-bit integer output represents the integer part of the input floating-point number. In cases where the input is negative, the output will represent the floor of the absolute value of the input.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{Mux2}}
-\begin{itemize}
-\item  This module receives two 32-bit inputs and one 1-bit control input. It operates as a 2-to-1 multiplexer, selecting one of the 32-bit inputs based on the 1-bit control input. 
-If the control input is zero, the output will be the first 32-bit input; otherwise, the output will be the second 32-bit input.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{Mux4}}
-\begin{itemize}
-\item  This module receives four 32-bit inputs and one 32-bit control input. It operates as a 4-to-1 multiplexer, selecting one of the 32-bit inputs based on the two least significant bits (LSB) of the control input. 
-The two LSB of the control input can be '00', '01', '10' or '11', selecting the first, the second, the third or the fourth input, respectively. The output will be the 32-bit input that was selected.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{Conditional1}}
-\begin{itemize}
-\item  This module receives two 32-bit inputs and one 32-bit control input. It operates as a 2-to-1 multiplexer, selecting one of the 32-bit inputs based on the 32-bit control input. 
-If the LSB of the control input is zero, the output will be the second 32-bit input; otherwise, the output will be the first 32-bit input.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{Mem}}
-\begin{itemize}
-\item  This module contains an internal memory with two input and two output ports (True dual-port synchronous RAM). It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
-Internally, this module contains two Address Generator Units (AGU) that generate the addresses used to access the memory, one for each port. The AGUs can be configured to output or to store data (only one type per port, the same port cannot be configured to output and store data at the same time in one run).
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{\textit{LookupTable}}
-\begin{itemize}
-\item This module contains an internal memory with two input and two output ports (Dual port synchronous RAM). It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
-Internally, this module acts like a lookup table since the output is the value stored in the address given by the input.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\subsubsection{Operators}
-\textit{Versat} also contains several operators defined in its specification source. The operators execute either over the right operand or between the left and right operands.
-In this work, the hardware accelerators use a set of 6 operators that were already included in the source.
-A brief description of each operator is provided in the list below.
-
-\vspace{0.5cm}
-
-\textbf{[$-$]}
-\begin{itemize}
-\item  This operator negates the right operand.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{[$\sim$]}
-\begin{itemize}
-\item  This operator negates the MSB of the right operand.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{[$\And$]}
-\begin{itemize}
-\item  This operator performs a logical AND between the left and right operands.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{[$\ll$]}
-\begin{itemize}
-\item  This operator shifts the bits of the left operand to the left by the number of positions defined by the right operand.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{[$\vert$]}
-\begin{itemize}
-\item This operator performs a logical OR between the left and right operands.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\textbf{[$\wedge$]}
-\begin{itemize}
-\item This operator performs a logical XOR between the left and right operands.
-\end{itemize}
-
-\vspace{0.5cm}
 
 Understanding the resources that \textit{Versat} offers, the subsequent step involves examining the \textit{psycho\_3\_threshold} function.
 This function contains three for loops, with the first one being a simple initialization process, setting each element of arrays \textit{LTtm} and \textit{LTnm} to a constant value (\textit{DBMIN}) within the range of 0 to 135 ($SUBSIZE-1$). Performing this initialization in hardware incurs unnecessary overhead, as the result remains constant for all iterations. Instead, in a hardware implementation, we can directly use the constant value DBMIN as an input for the subsequent hardware operations (the next for loops, in this case), optimizing efficiency and reducing the need for a dedicated initialization loop.
@@ -220,7 +17,36 @@ Therefore, only two accelerators should be developed in order to execute the sec
 The third for loop is simple as it just includes the \textit{psycho\_3\_add\_db} function. 
 On the opposite, the second for loop is not only complex but it is also more interesting. The main for loop (outer loop) contains two \textit{if} conditions and, inside each condition, there is another for loop (inner loop). Moreover, the inner loop is the same in both conditions, differing only on part of the input data. This means that it is only necessary to develop hardware that executes both inner loops, with the if conditions and the outer loop being handled by the CPU.
 
-\subsection{First accelerator}
+\subsubsection{Functional units}
+\textit{Versat} gives the user the possibility to create and add new Functional units to the source. In this work, five FUs were specifically designed to allow accelerating \textit{psycho\_3\_threshold} function, such as \textit{FloatLess}, \textit{FloatGreater}, \textit{FloatGreaterEqual}, \textit{Mux4} and \textit{Conditional1}.
+
+A brief description of each functional unit is provided in the table below.
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|p{0.8\linewidth}|}
+        \hline
+        \multicolumn{1}{|c|}{\textbf{FU}} & \multicolumn{1}{c|}{\textbf{Description}} \\
+        \hline
+        \multirow{6}{*}{\textit{FloatLess}} & This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result result 32 times) indicating whether the first input is less than the second. It performs a comparison operation to determine if the first input is less than the second. If the first input is less than the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0.  \\
+        \hline
+        \multirow{6}{*}{\textit{FloatGreater}} & This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result 32 times) indicating whether the first input is greater than the second. It performs a comparison operation to determine if the first input is greater than the second. If the first input is greater than the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0. \\
+        \hline
+        \multirow{6}{*}{\textit{FloatGreaterEqual}} & This module receives two 32-bit floating-point inputs and outputs a 32-bit value (repeated 1-bit result 32 times) indicating whether the first input is greater than or equal to the second. It performs a comparison operation to determine if the first input is greater than or equal to the second. If the first input is greater than or equal to the second, the output will be a 32-bit value with all bits set to 1; otherwise, the output will be a 32-bit value with all bits set to 0. \\
+        \hline
+        \multirow{5}{*}{\textit{Mux4}} & This module receives four 32-bit inputs and one 32-bit control input. It operates as a 4-to-1 multiplexer, selecting one of the 32-bit inputs based on the two least significant bits (LSB) of the control input.  The two LSB of the control input can be '00', '01', '10' or '11', selecting the first, the second, the third or the fourth input, respectively. The output will be the 32-bit input that was selected. \\
+        \hline
+        \multirow{4}{*}{\textit{Conditional1}} & This module receives two 32-bit inputs and one 32-bit control input. It operates as a 2-to-1 multiplexer, selecting one of the 32-bit inputs based on the 32-bit control input. If the LSB of the control input is zero, the output will be the second 32-bit input; otherwise, the output will be the first 32-bit input. \\
+        \hline
+    \end{tabular}
+    \caption{Table of functional units.}
+    \label{tab:fu}
+\end{table}
+
+\vspace{0.5cm}
+
 Concerning hardware acceleration, a crucial step is to determine the control and data paths of the software that is intended to be accelerated. In other words, the paths refers to the fundamental components that dictate how the software interacts with the hardware to achieve acceleration.
 
 The control path defines the flow and sequencing of operations within the software that needs to be accelerated. It includes decisions, branching, loops, and other control structures that determine the program's behavior. Determining the control path is vital for optimizing the hardware design to efficiently execute these operations.
@@ -228,12 +54,14 @@ The data path refers to the route through which data flows within the software d
 
 Considering this, optimizing both the control and data paths is essential to develop an efficient hardware design that aligns with the software's requirements.
 
+\subsection{\textit{spectrum\_search} accelerator}
+
 \subsubsection{Control and Data paths}
-This section shows both control and data paths of the first accelerator, corresponding to the second for loop in \textit{psycho\_3\_threshold} function.
+This section shows both control and data paths of the first accelerator, \textit{spectrum\_search}, corresponding to the second for loop in \textit{psycho\_3\_threshold} function.
 
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.90\linewidth]{first.pdf}}}
-\caption{Control and data paths of the first hardware accelerator.}
+\caption{Control and data paths of the \textit{spectrum\_search} hardware accelerator.}
 \label{data1}
 \end{figure}
 
@@ -416,7 +244,7 @@ A brief description of each module is provided in the list below.
 
 \textbf{\textit{start}}
 
-This is the main module, which is responsible for invoking all the other modules. It interconnects all modules by defining the correct inputs and outputs, apart from executing operations that are not included in any module but are required, like simple logical operations.
+This is the main module, which is responsible for invoking all the other modules. It interconnects all modules by defining the correct inputs and outputs, apart from executing simple logical operations.
 
 
 \subsubsection{Firmware}
@@ -434,14 +262,14 @@ In \textit{configureVersat} four constants are configured as they differ between
 At this point, all the input data is set for the hardware accelerator, and so it starts the execution through \textit{RunAccelerator} functions. This function receives as argument the number of times that the accelerator should run with the exact same configuration, which is 1.
 
 
-\subsection{Second accelerator}
+\subsection{\textit{masking\_threshold} accelerator}
 
 \subsubsection{Control and Data paths}
-This section shows both control and data paths of the second accelerator, corresponding to the third for loop in \textit{psycho\_3\_threshold} function.
+This section shows both control and data paths of the second accelerator, \textit{masking\_threshold}, corresponding to the third for loop in \textit{psycho\_3\_threshold} function.
 
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.90\linewidth]{second.pdf}}}
-\caption{Control and data paths of the second hardware accelerator.}
+\centerline{\fbox{\includegraphics[width=0.95\linewidth]{second.pdf}}}
+\caption{Control and data paths of the \textit{masking\_threshold} hardware accelerator.}
 \label{data2}
 \end{figure}
 
@@ -470,30 +298,7 @@ This section shows both control and data paths of the second accelerator, corres
 \textbf{\textit{start1}}
 
 This module has some similarity with the \textit{start} module of the first accelerator, since it contains most of the \textit{start} module description but duplicated.
-It invokes and interconnects all the other modules, apart from executing operations like conditional operation.
-
-A brief description of the conditional operation part is provided below.
-
-\begin{enumerate}
-
-\item Less than comparison (\textit{lt\_psycho\_31}):
-\begin{itemize}
-\item Compares the input \textit{bit\_rate} with \textit{const1} for less than condition.
-\end{itemize}
-
-\item Calculation of $ath - 12.0$ (\textit{sub1\_psycho\_31}):
-\begin{itemize}
-\item Subtracts the input \textit{const2} from \textit{ath}.
-\end{itemize}
-
-\item Conditional operation (\textit{conditional\_psycho\_3}):
-\begin{itemize}
-\item Takes the output of \textit{lt\_psycho\_31} and \textit{ath} as inputs.
-\item Takes the output of \textit{conditional\_psycho\_3} as output. The selected input is determined by the value of \textit{sub1\_psycho\_31}.
-
-\end{itemize}
-
-\end{enumerate}
+It invokes and interconnects all the other modules, apart from executing simple logical and conditional operations.
 
 \subsubsection{Firmware}
 
@@ -501,5 +306,3 @@ As mentioned in the \textit{psycho\_3\_threshold} function section, the second a
 The configuration of this accelerator is done inside a single function, since it performs only one run. Therefore, all the configuration belongs to \textit{configureVersat1} function.
 
 In this function, the process is similar to the previous configuration function, since the second accelerator does not contain any functional unit that is not present in the first accelerator.
-
-\end{document}

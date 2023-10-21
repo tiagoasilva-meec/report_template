@@ -1,46 +1,3 @@
-\documentclass{article}
-\usepackage{diagbox}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx}
-\usepackage[english]{babel}
-\graphicspath{ {./images/} }
-\usepackage{textgreek}
-\usepackage{hyperref}
-\usepackage{geometry}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{float}
-\usepackage{amsmath}
-\usepackage{lmodern}
-\usepackage{textcomp}
-\usepackage{gensymb}
-\usepackage{indentfirst}
-\usepackage{array}
-\usepackage{mathtools}
-\usepackage{comment}
-\usepackage{tabularx}
-\usepackage{multirow}
-\usepackage{lineno}
-%\linenumbers
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
-
-\makeatletter
-\newcommand{\thickhline}{%
-    \noalign {\ifnum 0=`}\fi \hrule height 1pt
-    \futurelet \reserved@a \@xhline
-}
-\newcolumntype{"}{@{\vrule width 1pt}}
-\makeatother
-
-\geometry{
- a4paper,
- total={170mm,257mm},
- left=20mm,
- top=20mm}
-
-\begin{document}
-\pagenumbering{gobble} 
-
 This chapter addresses the software architecture.
 It starts by setting up the IOb-Soc and configuring the firmware to allow execution of \textit{TwoLAME} encoding algorithm. Then, software optimizations are done in order to run \textit{TwoLAME} in FPGA. 
 At the end, a detailed profiling analysis defines which part of the \textit{TwoLAME} software requires hardware acceleration.
@@ -227,7 +184,7 @@ Table \ref{profiling1} shows the first phase of the profiling for all input file
     \hline
     \multicolumn{1}{|c|}{\textit{TwoLAME}\_close()}   & 0 & 0 & 0 & 1 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \multicolumn{1}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
     \hline
     \end{tabular}
     \caption{Execution time for all input files [ms].}
@@ -251,55 +208,55 @@ Table \ref{profiling2} shows the second phase of the profiling for all input fil
     \cline{3-6}
     \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
     \cline{3-6}
-    \multicolumn{2}{c|}{} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \multicolumn{2}{c|}{} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
     \cline{1-6}
-   \multirow{23}{*}{\parbox{2.5cm}{\centering \textbf{\textit{TwoLAME}} \\ \textbf{\_encode} \\ \textbf{\_buffer} \\ \textbf{\_interleaved()}}}  & \multicolumn{1}{c|}{\textit{TwoLAME} function 1}  & 0 & 9 & 5 & 3 \\ 
+   \multirow{23}{*}{\parbox{2.5cm}{\centering \textbf{\textit{TwoLAME}} \\ \textbf{\_encode} \\ \textbf{\_buffer} \\ \textbf{\_interleaved()}}}  & \multicolumn{1}{c|}{\textit{scale\_and\_mix\_samples}}  & 0 & 9 & 5 & 3 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 2} & 3 & 139 & 52 & 78 \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_buffer\_sstell}} & 3 & 139 & 52 & 78 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 3} & 0 & 16 & 7 & 8  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_available\_bits}} & 0 & 16 & 7 & 8  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 4} & 141  & 3487 & 2590 & 3662  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_window\_filter\_subband}} & 141  & 3487 & 2590 & 3662  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 5} & 7 & 172 & 142 &  201  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_scalefactor\_calc}} & 7 & 172 & 142 &  201  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 6} & 0  & 13 & 3 & 6   \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_find\_sf\_max}} & 0  & 13 & 3 & 6   \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 7} & 0  & 5 & 6 & 4  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_scalefactor\_calc}} & 0  & 5 & 6 & 4  \\ 
     \cline{2-6}
-     & \multicolumn{1}{c|}{\textit{TwoLAME} function 8} & 1377  & 19062 & 16222 &  20829 \\ 
+     & \multicolumn{1}{c|}{\textit{twolame\_psycho\_3}} & 1377  & 19062 & 16222 &  20829 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 9} & 0 & 17 & 8 &  10 \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_sf\_transmission\_pattern}} & 0 & 17 & 8 &  10 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 10} & 16  & 424 & 343 & 485  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_main\_bit\_allocation}} & 16  & 424 & 343 & 485  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 11} & 2 & 12 & 7 &  7 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_write\_header}} & 2 & 12 & 7 &  7 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 12} & 0 & 4 & 1 & 4  \\
+    & \multicolumn{1}{c|}{\textit{buffer\_putbits}} & 0 & 4 & 1 & 4  \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 13} & 0 & 11 & 11 &  17 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_write\_bit\_alloc}} & 0 & 11 & 11 &  17 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 14} & 1 & 22 & 20 & 27 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_write\_scalefactors}} & 1 & 22 & 20 & 27 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 15} & 21 & 503 & 346 & 488 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_subband\_quantization}} & 21 & 503 & 346 & 488 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 16} & 12 & 306 & 149 & 210 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_write\_samples}} & 12 & 306 & 149 & 210 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 17} & 0 & 10 & 4 & 2 \\
+    & \multicolumn{1}{c|}{\textit{buffer\_put1bit}} & 0 & 10 & 4 & 2 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 18} & 0 & 5 & 4 & 2 \\
+    & \multicolumn{1}{c|}{\textit{buffer\_putbits}} & 0 & 5 & 4 & 2 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 19} & 0 & 9 & 3 &  3 \\
+    & \multicolumn{1}{c|}{\textit{twolame\_dab\_crc\_calc}} & 0 & 9 & 3 &  3 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 20} & 0 & 3 & 0 &  0 \\
+    & \multicolumn{1}{c|}{\textit{buffer\_put1bit}} & 0 & 3 & 0 &  0 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 21} & 0 & 1 & 0 & 1  \\
+    & \multicolumn{1}{c|}{\textit{twolame\_buffer\_sstell}} & 0 & 1 & 0 & 1  \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 22} & 0 & 7 & 1 & 3  \\
+    & \multicolumn{1}{c|}{\textit{twolame\_do\_energy\_levels}} & 0 & 7 & 1 & 3  \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{\textit{TwoLAME} function 23} & 0 & 3 & 1 &  2  \\ 
+    & \multicolumn{1}{c|}{\textit{twolame\_crc\_writeheader}} & 0 & 3 & 1 &  2  \\ 
     \hline
-    \multicolumn{2}{|c|}{\textit{TwoLAME} total}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \multicolumn{2}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
     \hline
     \end{tabular}
     \caption{Execution time for all input files [ms].}
@@ -323,33 +280,33 @@ Table \ref{profiling3} shows the third phase of the profiling for all input file
     \cline{3-6}
     \multicolumn{2}{c|}{} & short.wav & long.wav & noise.wav & vivaldi.wav \\
     \cline{1-6}
-   \multirow{13}{*}{\parbox{2.3cm}{\centering \textbf{\textit{TwoLAME}} \\ \textbf{function 8}}}  & \multicolumn{1}{c|}{psycho\_3 function 1}  & 635 & 642 & 635 & 635 \\ 
+   \multirow{13}{*}{\parbox{2.3cm}{\centering \textbf{\textit{twolame\_} \\ \textit{psycho\_3}}}}  & \multicolumn{1}{c|}{twolame\_psycho\_3\_init}  & 635 & 642 & 635 & 635 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 2} & 5 & 133 & 115 & 155 \\ 
+    & \multicolumn{1}{c|}{\textit{mem} $\rightarrow$ \textit{fft\_buf}} & 5 & 133 & 115 & 155 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 3} &  6 &  117& 77 &  120 \\ 
+    & \multicolumn{1}{c|}{\textit{mem} $\rightarrow$ \textit{fft\_buf}} &  6 &  117& 77 &  120 \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 4} & 47 & 1138 & 886 &  1253  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_fft}} & 47 & 1138 & 886 &  1253  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 5} & 40  & 1026 & 791 &  1115  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_powerdensityspectrum}} & 40  & 1026 & 791 &  1115  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 6} &  7 & 170 & 148 & 204  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_spl}} &  7 & 170 & 148 & 204  \\ 
     \cline{2-6}
-     & \multicolumn{1}{c|}{psycho\_3 function 7} &  7 & 153 & 258 & 173  \\ 
+     & \multicolumn{1}{c|}{\textit{psycho\_3\_tonal\_label}} &  7 & 153 & 258 & 173  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 8} & 8 & 220 & 167 & 235  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_noise\_label}} & 8 & 220 & 167 & 235  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 9} &  0 & 4 & 2 & 4  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_dump}} &  0 & 4 & 2 & 4  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 10} & 3 & 45 & 38 & 67   \\
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_decimation}} & 3 & 45 & 38 & 67   \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 11} & 611 & 15168  & 12975 &  16684 \\
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_threshold}} & 611 & 15168  & 12975 &  16684 \\
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 12} & 0 & 23 & 14 & 29  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_minimummasking}} & 0 & 23 & 14 & 29  \\ 
     \cline{2-6}
-    & \multicolumn{1}{c|}{psycho\_3 function 13} & 0 & 9 & 6 & 13  \\ 
+    & \multicolumn{1}{c|}{\textit{psycho\_3\_smr}} & 0 & 9 & 6 & 13  \\ 
     \hline
-    \multicolumn{2}{|c|}{\textit{TwoLAME} total}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \multicolumn{2}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
     \hline
     \end{tabular}
     \caption{Execution time for all input files [ms].}
@@ -362,5 +319,3 @@ The previous table shows interesting information. First, it is noticeable that s
 Therefore, \textit{psycho\_3\_threshold} should be the first function accelerated in Hardware.
 
 %These functions have more specific names as we are going lower in abstraction.
-
-\end{document}

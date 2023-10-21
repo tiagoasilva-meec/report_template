@@ -297,12 +297,10 @@ The \textit{fwrite} is used once again to write the remaining encoded data in th
 %Definição e proposta de metodologias a usar, com vista à consecução dos objetivos da Dissertação
 %Resultados esperados e eventuais resultados preliminares
 
-%SoC
 \subsection{System-on-Chip}
 A System-on-Chip (SoC) is an integrated circuit that combines components of an electronic system. These components usually include a Central Processing Unit (CPU), memory interfaces, on-chip input/output devices, input/output interfaces, and secondary storage interfaces.\\
 Putting many elements of a computer system on a single piece of silicon has some advantages, such as low power requirements, reduced cost, increased performance, and reduced physical size.
-\vspace*{-0.05cm}
-\subsection{IOb-SoC}
+
 %iob-soc (%components, fpga resources, repository, accelerators)
 The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V processor, which users can modify, simulate and implement in ASICs and FPGAs.
 This SoC, provided by \textit{IObundle, Lda}, supports stand-alone and boot-loading modes. It also allows an internal RAM or an external DDR controller via an L1/L2 cache system. 
@@ -512,3 +510,91 @@ Furthermore, \textit{Versat} integrates a Direct Memory Access (DMA) module, ena
 
 Facilitating communication with the host processor, \textit{Versat} is equipped with a shared Control Register File (CRF). The CRF incorporates two host interfaces, selectable during compilation: a Serial Peripheral Interface (SPI) and a parallel bus interface. The SPI slave interface is employed when the host system is an off-chip master device, primarily for debug and testing purposes. On the other hand, the parallel bus interface is utilized when the host is an embedded processor and may adhere to the AXI4 Lite format.
 
+\textit{Versat} is compatible with IOb-Soc. Figure \ref{fig:iobversat} shows the high-level block diagram of IOb-SoC and \textit{Versat}.
+
+\vspace{0.1cm}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.85\linewidth]{iob-soc-versat.pdf}}
+\caption{IOb-SoC and \textit{Versat} and high-level block diagram.}
+\label{fig:iobversat}
+\end{figure}
+
+\subsubsection{Functional units}
+In practical terms, \textit{Versat} is a reconfigurable hardware accelerator that contains several functional units (FUs) in its source, all written in Verilog. Nonetheless, the user has the possibility of creating and adding new ones to the source.
+
+
+A brief description of each functional unit is provided in the table below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|p{0.8\linewidth}|}
+        \hline
+        \multicolumn{1}{|c|}{\textbf{FU}} & \multicolumn{1}{c|}{\textbf{Description}} \\
+        \hline
+        \multirow{1}{*}{\textit{Const}} & This module receives a 32-bit input and outputs the same 32-bit value.  \\
+        \hline
+        \multirow{2}{*}{\textit{FloatAdd}} & This module receives two 32-bit floating-point inputs, adds them together, and outputs a 32-bit floating-point value. \\
+        \hline
+        \multirow{2}{*}{\textit{FloatSub}} & This module receives two 32-bit floating-point inputs, subtracts one from the other, and outputs a 32-bit floating-point value. \\
+        \hline
+        \multirow{2}{*}{\textit{FloatMul}} & This module receives two 32-bit floating-point inputs, multiplies them together, and outputs a 32-bit floating-point value. \\
+        \hline
+        \multirow{2}{*}{\textit{FloatNot}} & This module receives a 32-bit floating-point input, negates the most significant bit (MSB), and outputs a 32-bit floating-point value. \\
+        \hline
+        \multirow{6}{*}{\textit{Float2Int}} &  
+        This module receives a 32-bit floating-point input and converts it to a 32-bit integer output. 
+        It performs a conversion operation that truncates the fractional part of the floating-point input, effectively extracting the integer component. 
+        The resulting 32-bit integer output represents the integer part of the input floating-point number. 
+        In cases where the input is negative, the output will represent the floor of the absolute value of the input. \\
+        \hline
+        \multirow{4}{*}{\textit{Mux2}} & This module receives two 32-bit inputs and one 1-bit control input. 
+        It operates as a 2-to-1 multiplexer, selecting one of the 32-bit inputs based on the 1-bit control input. 
+        If the control input is zero, the output will be the first 32-bit input; otherwise, the output will be the second 32-bit input. \\
+        \hline
+        \multirow{7}{*}{\textit{Mem}} & This module contains an internal memory with two input and two output ports (True dual-port synchronous RAM). 
+        It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
+        Internally, this module contains two Address Generator Units (AGU) that generate the addresses used to access the memory, one for each port. 
+        The AGUs can be configured to output or to store data (only one type per port, the same port cannot be configured to output and store data at the same time in one run). \\
+        \hline
+        \multirow{5}{*}{\textit{LookupTable}} & This module contains an internal memory with two input and two output ports (Dual port synchronous RAM). 
+        It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
+        Internally, this module acts like a lookup table since the output is the value stored in the address given by the input. \\
+        \hline
+    \end{tabular}
+    \caption{Table of functional units.}
+    \label{tab:fu}
+    \end{table}
+    
+\vspace{0.5cm}
+
+\subsubsection{Operators}
+
+\textit{Versat} also contains a set of 6 operators defined in its specification source. The operators execute either over the right operand or between the left and right operands.
+
+A brief description of each operator is provided in the table below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|p{0.8\linewidth}|}
+        \hline
+        \multicolumn{1}{|c|}{\textbf{Operator}} & \multicolumn{1}{c|}{\textbf{Description}} \\
+        \hline
+        \multirow{1}{*}{\textbf{$-$}} & This operator negates the right operand.  \\
+        \hline
+        \multirow{1}{*}{\textbf{$\sim$}} & This operator negates the MSB of the right operand. \\
+        \hline
+        \multirow{1}{*}{\textbf{$\And$}} & This operator performs a logical AND between the left and right operands. \\
+        \hline
+        \multirow{2}{*}{\textbf{$\ll$}} & This operator shifts the bits of the left operand to the left by the number of positions defined by the right operand. \\
+        \hline
+        \multirow{1}{*}{\textbf{$\vert$}} & This operator performs a logical OR between the left and right operands. \\
+        \hline
+        \multirow{1}{*}{\textbf{$\wedge$}} & This operator performs a logical XOR between the left and right operands. \\
+        \hline
+    \end{tabular}
+    \caption{Table of operators.}
+    \label{tab:op}
+\end{table}
+
+\vspace{0.5cm}
