@@ -1,0 +1,493 @@
+\noindent module av(const1,const2,const3,bark,Xtm){ \\
+\hspace*{2em}FloatMul mul1; \\
+\hspace*{2em}FloatAdd add1; \\
+\hspace*{2em}FloatAdd add2; \\
+\hspace*{2em}FloatAdd add3; \\
+\# \\
+\hspace*{2em}const2 $\rightarrow$ mul1:0; \\
+\hspace*{2em}bark $\rightarrow$ mul1:1; \\
+   \\
+   \hspace*{2em}mul1 $\rightarrow$ add1:0; \\
+   \hspace*{2em}const1 $\rightarrow$ add1:1; \\
+   \\
+   \hspace*{2em}add1 $\rightarrow$ add2:0; \\
+   \hspace*{2em}Xtm $\rightarrow$ add2:1; \\
+   \\
+   \hspace*{2em}add2 $\rightarrow$ add3:0; \\
+   \hspace*{2em}const3 $\rightarrow$ add3:1; \\
+   \\
+   \hspace*{2em}add3 $\rightarrow$ out; \\
+} \\
+\\
+\\
+module dzRange(dz){ \\
+\hspace*{2em}FloatGreaterEqual ge1\_dzRange; \\
+\hspace*{2em}FloatLess lt1\_dzRange; \\
+\hspace*{2em}Const const1\_dzRange; \\
+\hspace*{2em}Const const2\_dzRange; \\
+\# \\
+\hspace*{2em}////dz[j] $>$= $-$3.0 \\
+\hspace*{2em}dz $\rightarrow$ ge1\_dzRange:0; \\
+\hspace*{2em}const1\_dzRange $\rightarrow$ ge1\_dzRange:1; \\
+   \\
+   \hspace*{2em}////dz[j] $<$ 8.0 \\
+   \hspace*{2em}dz $\rightarrow$ lt1\_dzRange:0; \\
+   \hspace*{2em}const2\_dzRange $\rightarrow$ lt1\_dzRange:1; \\
+   \\
+   \hspace*{2em}////if (dz[j] $>$= $-$3.0 $\And$ dz[j] $<$ 8.0) \\
+   \hspace*{2em} and = ge1\_dzRange $\And$ lt1\_dzRange; \\
+   \hspace*{2em}and $\rightarrow$ out:0; \\
+} \\
+\\
+\\
+module Logic(dz){ \\
+\hspace*{2em}FloatLess lt1\_Logic; \\
+\hspace*{2em}FloatLess lt2\_Logic; \\
+\hspace*{2em}FloatLess lt3\_Logic; \\
+\hspace*{2em}Const const1\_Logic; \\
+\hspace*{2em}Const const2\_Logic; \\
+\hspace*{2em}Const const3\_Logic; \\
+\hspace*{2em}Const const4\_Logic; \\
+\# \\
+\hspace*{2em}////dz[j] $<$ $-$1 \\
+\hspace*{2em}dz $\rightarrow$ lt1\_Logic:0; \\
+\hspace*{2em}const1\_Logic $\rightarrow$ lt1\_Logic:1; \\
+   \\
+   \hspace*{2em}////dz[j] $<$ 0 \\
+   \hspace*{2em}dz $\rightarrow$ lt2\_Logic:0; \\
+   \hspace*{2em}const2\_Logic $\rightarrow$ lt2\_Logic:1; \\
+   \\
+   \hspace*{2em}////dz[j] $<$ 1 \\
+   \hspace*{2em}dz $\rightarrow$ lt3\_Logic:0; \\
+   \hspace*{2em}const3\_Logic $\rightarrow$ lt3\_Logic:1; \\
+   \\
+   \hspace*{2em}////sel(1) \\
+   \hspace*{2em}cond1\_not = $\sim$lt1\_Logic; \\
+   \hspace*{2em}cond2\_not = $\sim$lt2\_Logic; \\
+   \hspace*{2em}and1 = cond1\_not $\And$ cond2\_not; \\
+   \hspace*{2em}one = and1 $\ll$ const4\_Logic; \\
+   \\
+   \hspace*{2em}////sel(0) \\
+   \hspace*{2em}cond3\_not = $\sim$lt3\_Logic; \\
+   \hspace*{2em}and2 = cond2\_not $\And$ cond3\_not; \\
+   \hspace*{2em}or1 = lt2\_Logic $\vert$ and2; \\
+   \hspace*{2em}and3 = cond1\_not $\And$ or1; \\
+   \hspace*{2em}zero = and3; \\
+   \\
+   \hspace*{2em}////sel \\
+   \hspace*{2em}sel = zero $\wedge$ one; \\
+   \hspace*{2em}sel $\rightarrow$ out:0; \\
+} \\
+\\
+\\
+module vf4(dz,logic1,Xtm){ \\
+\hspace*{2em}FloatAdd add1\_vf4; \\
+\hspace*{2em}FloatAdd add2\_vf4; \\
+\hspace*{2em}FloatSub sub1\_vf4; \\
+\hspace*{2em}FloatSub sub2\_vf4; \\
+\hspace*{2em}FloatSub sub3\_vf4; \\
+\hspace*{2em}FloatSub sub4\_vf4; \\
+\hspace*{2em}FloatMul mul1\_vf4; \\
+\hspace*{2em}FloatMul mul2\_vf4; \\
+\hspace*{2em}FloatMul mul3\_vf4; \\
+\hspace*{2em}FloatMul mul4\_vf4; \\
+\hspace*{2em}FloatMul mul5\_vf4; \\
+\hspace*{2em}FloatMul mul6\_vf4; \\
+\hspace*{2em}Const const1\_vf4; \\
+\hspace*{2em}Const const2\_vf4; \\
+\hspace*{2em}Const const3\_vf4; \\
+\hspace*{2em}Const const4\_vf4; \\
+\hspace*{2em}Const const5\_vf4; \\
+\hspace*{2em}Const const6\_vf4; \\
+\hspace*{2em}Mux4 mux4\_vf4; \\
+\hspace*{2em}FloatNot not1\_vf4; \\
+\# \\
+\hspace*{2em}////(0.4 * Xtm[k] + 6) \\
+\hspace*{2em}const3\_vf4 $\rightarrow$ mul1\_vf4:0; \\
+\hspace*{2em}Xtm $\rightarrow$ mul1\_vf4:1; \\
+\hspace*{2em}mul1\_vf4 $\rightarrow$ add1\_vf4:0; \\
+\hspace*{2em}const4\_vf4 $\rightarrow$ add1\_vf4:1; \\
+   \\
+   \hspace*{2em}////vf = 17 * (dz[j] + 1) $-$ (0.4 * Xtm[k] + 6) \\
+   \hspace*{2em}dz $\rightarrow$ add2\_vf4:0; \\
+   \hspace*{2em}const2\_vf4 $\rightarrow$ add2\_vf4:1; \\
+   \hspace*{2em}const1\_vf4 $\rightarrow$ mul2\_vf4:0; \\
+   \hspace*{2em}add2\_vf4 $\rightarrow$ mul2\_vf4:1; \\
+   \hspace*{2em}mul2\_vf4 $\rightarrow$ sub1\_vf4:0; \\
+   \hspace*{2em}add1\_vf4 $\rightarrow$ sub1\_vf4:1; \\
+   \hspace*{2em}sub1\_vf4 $\rightarrow$ mux4\_vf4:0; \\
+   \\
+   \hspace*{2em}////vf = (0.4 * Xtm[k] + 6) * dz[j] \\
+   \hspace*{2em}add1\_vf4 $\rightarrow$ mul3\_vf4:0; \\
+   \hspace*{2em}dz $\rightarrow$ mul3\_vf4:1; \\
+   \hspace*{2em}mul3\_vf4 $\rightarrow$ mux4\_vf4:3; \\
+   \\
+   \hspace*{2em}////vf = ($-$17 * dz[j]) \\
+   \hspace*{2em}const5\_vf4 $\rightarrow$ mul4\_vf4:0; \\
+   \hspace*{2em}dz $\rightarrow$ mul4\_vf4:1; \\
+   \hspace*{2em}mul4\_vf4 $\rightarrow$ mux4\_vf4:2; \\
+   \\
+   \hspace*{2em}////vf = $-$(dz[j] $-$ 1) * (17 $-$ 0.15 * Xtm[k]) $-$ 17; \\
+   \hspace*{2em}dz $\rightarrow$ sub2\_vf4:0; \\
+   \hspace*{2em}const2\_vf4 $\rightarrow$ sub2\_vf4:1; \\
+   \hspace*{2em}sub2\_vf4 $\rightarrow$ not1\_vf4:0; \\
+   \hspace*{2em}const6\_vf4 $\rightarrow$ mul5\_vf4:0; \\
+   \hspace*{2em}Xtm $\rightarrow$ mul5\_vf4:1; \\
+   \hspace*{2em}const1\_vf4 $\rightarrow$ sub3\_vf4:0; \\
+   \hspace*{2em}mul5\_vf4 $\rightarrow$ sub3\_vf4:1; \\
+   \hspace*{2em}not1\_vf4 $\rightarrow$ mul6\_vf4:0; \\
+   \hspace*{2em}sub3\_vf4 $\rightarrow$ mul6\_vf4:1; \\
+   \hspace*{2em}mul6\_vf4 $\rightarrow$ sub4\_vf4:0; \\
+   \hspace*{2em}const1\_vf4 $\rightarrow$ sub4\_vf4:1; \\
+   \hspace*{2em}sub4\_vf4 $\rightarrow$ mux4\_vf4:1; \\
+   \\
+   \hspace*{2em}////sel \\
+   \hspace*{2em}logic1 $\rightarrow$ mux4\_vf4:4; \\
+   \\
+   \hspace*{2em}////vf \\
+   \hspace*{2em}mux4\_vf4 $\rightarrow$ out:0; \\
+} \\
+\\
+\\
+module psycho\_3\_add\_db(a,b,add1,add2,sel,if){ \\
+\hspace*{2em}Mux4 mux4\_psycho\_3; \\
+\hspace*{2em}Conditional1 conditional\_psycho\_3; \\
+\# \\
+\\
+\hspace*{2em}////return mux4 \\
+\hspace*{2em}a $\rightarrow$ mux4\_psycho\_3:0; \\
+\hspace*{2em}b $\rightarrow$ mux4\_psycho\_3:3; \\
+\hspace*{2em}add1 $\rightarrow$ mux4\_psycho\_3:2; \\
+\hspace*{2em} add2 $\rightarrow$ mux4\_psycho\_3:1; \\
+\hspace*{2em}sel $\rightarrow$ mux4\_psycho\_3:4; \\
+   \\
+   \hspace*{2em}////LTtm[j] = psycho\_3\_add\_db() \\
+   \hspace*{2em}if $\rightarrow$ conditional\_psycho\_3:0; \\
+   \hspace*{2em}mux4\_psycho\_3 $\rightarrow$ conditional\_psycho\_3:1; \\
+   \hspace*{2em}a $\rightarrow$ conditional\_psycho\_3:2; \\
+   \hspace*{2em}conditional\_psycho\_3 $\rightarrow$ out:0; \\
+} \\
+\\
+\\
+module start() { \\
+\hspace*{2em}DBMIN; \\
+\hspace*{2em}Const const1\_av; \\
+\hspace*{2em}Const const2\_av; \\
+\hspace*{2em}Const const3\_av; \\
+\hspace*{2em}Const barkK; \\
+\hspace*{2em}Const Xtm; \\
+\hspace*{2em}Const Xnm; \\
+\hspace*{2em}Mux2 mux2; \\
+\hspace*{2em}av av1; \\
+\hspace*{2em}Mem freq\_subset; \\
+\hspace*{2em}LookupTable bark; \\
+\hspace*{2em}dzRange dzRange1; \\
+\hspace*{2em}Logic logic1; \\
+\hspace*{2em}vf4 vf1; \\
+\hspace*{2em}FloatSub sub; \\
+\hspace*{2em}FloatAdd add; \\
+\hspace*{2em}psycho\_3\_add\_db psycho\_3\_add\_db1; \\
+\hspace*{2em}Mem LTtmR; \\
+\hspace*{2em}LookupTable mem; \\
+\hspace*{2em}Const const1\_psycho\_3;  \\
+\hspace*{2em}Const const2\_psycho\_3;  \\
+\hspace*{2em}Const const3\_psycho\_3;  \\
+\hspace*{2em}Const const4\_psycho\_3; \\
+\hspace*{2em}Const const5\_psycho\_3; \\
+\hspace*{2em}FloatSub sub1\_psycho\_3; \\
+\hspace*{2em}FloatAdd add1\_psycho\_3; \\
+\hspace*{2em}FloatAdd add2\_psycho\_3; \\
+\hspace*{2em}FloatMul mul\_psycho\_3; \\
+\hspace*{2em}FloatGreater gt\_psycho\_3; \\
+\hspace*{2em}FloatLess lt\_psycho\_3; \\
+\hspace*{2em}FloatGreaterEqual ge\_psycho\_3; \\
+\hspace*{2em}Float2Int f2i\_psycho\_3; \\
+\# \\
+\hspace*{2em}////FLOAT av\_tone = $-$1.525 $-$ 0.275 * bark[k] $-$ 4.5 + Xtm[k] \\
+\hspace*{2em}////FLOAT av\_noise = $-$1.525 $-$ 0.175 * bark[k] $-$ 0.5 + Xnm[k]; \\
+\hspace*{2em}const1\_av $\rightarrow$ av1:0; \\
+\hspace*{2em}const2\_av $\rightarrow$ av1:1; \\
+\hspace*{2em}const3\_av $\rightarrow$ av1:2; \\
+\hspace*{2em}barkK $\rightarrow$ av1:3; \\
+\hspace*{2em}Xtm $\rightarrow$ av1:4; \\
+   \\
+   \hspace*{2em}////dz[j] = bark[freq\_subset[j]] $-$ bark[k] \\
+   \hspace*{2em}freq\_subset $\rightarrow$ bark; \\
+   \hspace*{2em}bark $\rightarrow$ sub:0; \\
+   \hspace*{2em}barkK $\rightarrow$ sub:1; \\
+   \\
+   \hspace*{2em}////dz \\
+   \hspace*{2em}sub $\rightarrow$ dzRange1:0; \\
+   \\
+   \hspace*{2em}////dz \\
+   \hspace*{2em}sub $\rightarrow$ logic1:0; \\
+   \\
+   \hspace*{2em}////dz \\
+   \hspace*{2em}sub $\rightarrow$ vf1:0; \\
+   \hspace*{2em}logic1 $\rightarrow$ vf1:1; \\
+   \hspace*{2em}Xtm $\rightarrow$ vf1:2; \\
+   \\
+   \hspace*{2em}av1 $\rightarrow$ add:0; \\
+   \hspace*{2em}vf1 $\rightarrow$ add:1; \\
+   \\
+   \hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db operations \\
+   \\
+   \hspace*{2em}////DBMIN or LTtmR \\
+   \hspace*{2em}DBMIN $\rightarrow$ mux2:0; \\
+   \hspace*{2em}LTtmR:1 $\rightarrow$ mux2:1; \\
+   \\
+   \hspace*{2em}////fdiff = (10.0 * (a $-$ b)); \\
+   \hspace*{2em}mux2[3] $\rightarrow$ sub1\_psycho\_3:0; \\
+   \hspace*{2em}add $\rightarrow$ sub1\_psycho\_3:1; \\
+   \hspace*{2em}const1\_psycho\_3 $\rightarrow$ mul\_psycho\_3:0; \\
+   \hspace*{2em}sub1\_psycho\_3 $\rightarrow$ mul\_psycho\_3:1; \\
+   \hspace*{2em}fdiff = mul\_psycho\_3; \\
+   \\
+   \hspace*{2em}////fdiff $>$ 990.0 \\
+   \hspace*{2em}fdiff $\rightarrow$ gt\_psycho\_3:0; \\
+   \hspace*{2em}const2\_psycho\_3 $\rightarrow$ gt\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////fdiff $<$ $-$990.0 \\
+   \hspace*{2em}fdiff $\rightarrow$ lt\_psycho\_3:0; \\
+   \hspace*{2em}const3\_psycho\_3 $\rightarrow$ lt\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////idiff = (int) fdiff \\
+   \hspace*{2em}fdiff $\rightarrow$ f2i\_psycho\_3:0; \\
+   \hspace*{2em}idiff = f2i\_psycho\_3; \\
+   \\
+   \hspace*{2em}////idiff $>$= 0 \\
+   \hspace*{2em} $\rightarrow$ ge\_psycho\_3:0; \\
+   \hspace*{2em}const4\_psycho\_3 $\rightarrow$ ge\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////a + mem$\rightarrow$dbtable[idiff] \\
+   \hspace*{2em}mux2[3] $\rightarrow$ add1\_psycho\_3:0; \\
+   \hspace*{2em}idiff $\rightarrow$ mem; \\
+   \hspace*{2em}mem $\rightarrow$ add1\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////b + mem$\rightarrow$dbtable[$-$idiff] \\
+   \hspace*{2em}add $\rightarrow$ add2\_psycho\_3:0; \\
+   \hspace*{2em}\_idiff = $-$idiff; \\
+   \hspace*{2em}\_idiff $\rightarrow$ mem:1; \\
+   \hspace*{2em}mem:1 $\rightarrow$ add2\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////sel(1) \\
+   \hspace*{2em}cond1\_not = $\sim$gt\_psycho\_3; \\
+   \hspace*{2em}cond2\_not = $\sim$lt\_psycho\_3; \\
+   \hspace*{2em}and1 = cond1\_not $\And$ cond2\_not; \\
+   \hspace*{2em}one = and1 $\ll$ const5\_psycho\_3; \\
+   \\
+   \hspace*{2em}////sel(0) \\
+   \hspace*{2em}cond3\_not = $\sim$ge\_psycho\_3; \\
+   \hspace*{2em}and2 = cond2\_not $\And$ cond3\_not; \\
+   \hspace*{2em}or1 = lt\_psycho\_3 $\vert$ and2; \\
+   \hspace*{2em}and3 = cond1\_not $\And$ or1; \\
+   \hspace*{2em}zero = and3; \\
+   \\
+   \hspace*{2em}////sel mux4 \\
+   \hspace*{2em}sel = zero $\wedge$ one; \\
+   \\
+   \hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db inputs and output \\
+   \\
+   \hspace*{2em}mux2[3] $\rightarrow$ psycho\_3\_add\_db1:0; \\
+   \hspace*{2em}add $\rightarrow$ psycho\_3\_add\_db1:1; \\
+   \hspace*{2em}add1\_psycho\_3 $\rightarrow$ psycho\_3\_add\_db1:2; \\
+   \hspace*{2em}add2\_psycho\_3 $\rightarrow$ psycho\_3\_add\_db1:3; \\
+   \hspace*{2em}sel $\rightarrow$ psycho\_3\_add\_db1:4; \\
+   \hspace*{2em}dzRange1 $\rightarrow$ psycho\_3\_add\_db1:5; \\
+   \hspace*{2em}psycho\_3\_add\_db1 $\rightarrow$ LTtmR:0; \\
+} \\
+\\
+///////////////////////////////////////////////////////////////////////////// \\
+\\
+\\
+module psycho\_3\_add\_db\_V1(a,b,add1,add2,sel){ \\
+\hspace*{2em}Mux4 mux4\_psycho\_3; \\
+\# \\
+\hspace*{2em}////return mux4 \\
+\hspace*{2em}a $\rightarrow$ mux4\_psycho\_3:0; \\
+\hspace*{2em}b $\rightarrow$ mux4\_psycho\_3:3; \\
+\hspace*{2em}add1 $\rightarrow$ mux4\_psycho\_3:2; \\
+\hspace*{2em}add2 $\rightarrow$ mux4\_psycho\_3:1; \\
+\hspace*{2em}sel $\rightarrow$ mux4\_psycho\_3:4; \\
+\hspace*{2em}mux4\_psycho\_3 $\rightarrow$ out:0; \\
+} \\
+\\
+\\
+module start1() { \\
+\hspace*{2em}psycho\_3\_add\_db\_V1 psycho\_3\_add\_db1; \\
+\hspace*{2em}psycho\_3\_add\_db\_V1 psycho\_3\_add\_db2; \\
+\hspace*{2em}Const const1\_psycho\_3; \\
+\hspace*{2em}Const const2\_psycho\_3; \\
+\hspace*{2em}Const const3\_psycho\_3; \\
+\hspace*{2em}Const const4\_psycho\_3; \\
+\hspace*{2em}Const const5\_psycho\_3; \\
+\hspace*{2em}Mem LTtmR; \\
+\hspace*{2em}Mem LTnmR; \\
+\hspace*{2em}LookupTable mem; \\
+\hspace*{2em}LookupTable mem1; \\
+\hspace*{2em}Const bit\_rate; \\
+\hspace*{2em}Const const1; \\
+\hspace*{2em}Const const2; \\
+\hspace*{2em}FloatSub sub1\_psycho\_3; \\
+\hspace*{2em}FloatSub sub1\_psycho\_31; \\
+\hspace*{2em}FloatSub sub1\_psycho\_32; \\
+\hspace*{2em}FloatMul mul\_psycho\_3; \\
+\hspace*{2em}FloatMul mul\_psycho\_31; \\
+\hspace*{2em}FloatGreater gt\_psycho\_3; \\
+\hspace*{2em}FloatGreater gt\_psycho\_31; \\
+\hspace*{2em}FloatLess lt\_psycho\_3; \\
+\hspace*{2em}FloatLess lt\_psycho\_31; \\
+\hspace*{2em}FloatLess lt\_psycho\_32; \\
+\hspace*{2em}Float2Int f2i\_psycho\_3; \\
+\hspace*{2em}Float2Int f2i\_psycho\_31; \\
+\hspace*{2em}FloatGreaterEqual ge\_psycho\_3; \\
+\hspace*{2em}FloatGreaterEqual ge\_psycho\_31; \\
+\hspace*{2em}FloatAdd add1\_psycho\_3; \\
+\hspace*{2em}FloatAdd add1\_psycho\_31; \\
+\hspace*{2em}FloatAdd add2\_psycho\_3; \\
+\hspace*{2em}FloatAdd add2\_psycho\_31; \\
+\hspace*{2em}Conditional1 conditional\_psycho\_3; \\
+\hspace*{2em}Mem freq\_subset; \\
+\hspace*{2em}LookupTable ath; \\
+\hspace*{2em}Mem LTg; \\
+\# \\
+\hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db operations \\
+\hspace*{2em}///// mem,a,b \\
+   \\
+   \hspace*{2em}////fdiff = (10.0 * (a $-$ b)); \\
+   \hspace*{2em}LTnmR $\rightarrow$ sub1\_psycho\_3:0; \\
+   \hspace*{2em}LTtmR $\rightarrow$ sub1\_psycho\_3:1; \\
+   \hspace*{2em}const1\_psycho\_3 $\rightarrow$ mul\_psycho\_3:0; \\
+   \hspace*{2em}sub1\_psycho\_3 $\rightarrow$ mul\_psycho\_3:1; \\
+   \hspace*{2em}fdiff = mul\_psycho\_3; \\
+   \\
+   \hspace*{2em}////fdiff $>$ 990.0 \\
+   \hspace*{2em}fdiff $\rightarrow$ gt\_psycho\_3:0; \\
+   \hspace*{2em}const2\_psycho\_3 $\rightarrow$ gt\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////fdiff $<$ $-$990.0 \\
+   \hspace*{2em}fdiff $\rightarrow$ lt\_psycho\_3:0; \\
+   \hspace*{2em}const3\_psycho\_3 $\rightarrow$ lt\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////idiff = (int) fdiff \\
+   \hspace*{2em}fdiff $\rightarrow$ f2i\_psycho\_3:0; \\
+   \hspace*{2em}idiff = f2i\_psycho\_3; \\
+   \\
+   \hspace*{2em}////idiff $>$= 0 \\
+   \hspace*{2em}idiff $\rightarrow$ ge\_psycho\_3:0; \\
+   \hspace*{2em}const4\_psycho\_3 $\rightarrow$ ge\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////a + mem$\rightarrow$dbtable[idiff] \\
+   \hspace*{2em}LTnmR $\rightarrow$ add1\_psycho\_3:0; \\
+   \hspace*{2em}idiff $\rightarrow$ mem; \\
+   \hspace*{2em}mem $\rightarrow$ add1\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////b + mem$\rightarrow$dbtable[$-$idiff] \\
+   \hspace*{2em}LTtmR $\rightarrow$ add2\_psycho\_3:0; \\
+   \hspace*{2em}\_idiff = $-$idiff; \\
+   \hspace*{2em}\_idiff $\rightarrow$ mem:1; \\
+   \hspace*{2em}mem:1 $\rightarrow$ add2\_psycho\_3:1; \\
+   \\
+   \hspace*{2em}////sel(1) \\
+   \hspace*{2em}cond1\_not = $\sim$gt\_psycho\_3; \\
+   \hspace*{2em}cond2\_not = $\sim$lt\_psycho\_3; \\
+   \hspace*{2em}and1 = cond1\_not $\And$ cond2\_not; \\
+   \hspace*{2em}one = and1 $\ll$ const5\_psycho\_3; \\
+   \\
+   \hspace*{2em}////sel(0) \\
+   \hspace*{2em}cond3\_not = $\sim$ge\_psycho\_3; \\
+   \hspace*{2em}and2 = cond2\_not $\And$ cond3\_not; \\
+   \hspace*{2em}or1 = lt\_psycho\_3 $\vert$ and2; \\
+   \hspace*{2em}and3 = cond1\_not $\And$ or1; \\
+   \hspace*{2em}zero = and3; \\
+   \\
+   \hspace*{2em}////sel mux4 \\
+   \hspace*{2em}sel = zero $\wedge$ one; \\
+   \\
+   \hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db inputs and output \\
+   \\
+   \hspace*{2em}LTnmR $\rightarrow$ psycho\_3\_add\_db1:0; \\
+   \hspace*{2em}LTtmR $\rightarrow$ psycho\_3\_add\_db1:1; \\
+   \hspace*{2em}add1\_psycho\_3 $\rightarrow$ psycho\_3\_add\_db1:2; \\
+   \hspace*{2em}add2\_psycho\_3 $\rightarrow$ psycho\_3\_add\_db1:3; \\
+   \hspace*{2em}sel $\rightarrow$ psycho\_3\_add\_db1:4; \\
+   \\
+   \hspace*{2em}////////////////////////////////////////////////////////////////////////// \\
+   \hspace*{2em}////////////////////////////////////////////////////////////////////////// \\
+   \\
+   \\
+   \\
+   \hspace*{2em}bit\_rate $\rightarrow$ lt\_psycho\_31:0; \\
+   \hspace*{2em}const1 $\rightarrow$ lt\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}freq\_subset $\rightarrow$ ath; \\
+   \hspace*{2em}ath $\rightarrow$ sub1\_psycho\_31:0; \\
+   \hspace*{2em}const2 $\rightarrow$ sub1\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}lt\_psycho\_31 $\rightarrow$ conditional\_psycho\_3:0; \\
+   \hspace*{2em}ath $\rightarrow$ conditional\_psycho\_3:1; \\
+   \hspace*{2em}sub1\_psycho\_31 $\rightarrow$ conditional\_psycho\_3:2;  \\
+   \\
+   \hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db operations \\
+   \hspace*{2em}///// mem,a,b \\
+   \\
+   \hspace*{2em}////fdiff = (10.0 * (a $-$ b)); \\
+   \hspace*{2em}conditional\_psycho\_3 $\rightarrow$ sub1\_psycho\_32:0; \\
+   \hspace*{2em}psycho\_3\_add\_db1 $\rightarrow$ sub1\_psycho\_32:1; \\
+   \hspace*{2em}const1\_psycho\_3 $\rightarrow$ mul\_psycho\_31:0; \\
+   \hspace*{2em}sub1\_psycho\_32 $\rightarrow$ mul\_psycho\_31:1; \\
+   \hspace*{2em}fdiff1 = mul\_psycho\_31; \\
+   \\
+   \hspace*{2em}////fdiff $>$ 990.0 \\
+   \hspace*{2em}fdiff1 $\rightarrow$ gt\_psycho\_31:0; \\
+   \hspace*{2em}const2\_psycho\_3 $\rightarrow$ gt\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}////fdiff $<$ $-$990.0 \\
+   \hspace*{2em}fdiff1 $\rightarrow$ lt\_psycho\_32:0; \\
+   \hspace*{2em}const3\_psycho\_3 $\rightarrow$ lt\_psycho\_32:1; \\
+   \\
+   \hspace*{2em}////idiff = (int) fdiff \\
+   \hspace*{2em}fdiff1 $\rightarrow$ f2i\_psycho\_31:0; \\
+   \hspace*{2em}idiff1 = f2i\_psycho\_31; \\
+   \\
+   \hspace*{2em}////idiff $>$= 0 \\
+   \hspace*{2em}idiff1 $\rightarrow$ ge\_psycho\_31:0; \\
+   \hspace*{2em}const4\_psycho\_3 $\rightarrow$ ge\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}////a + mem$\rightarrow$dbtable[idiff] \\
+   \hspace*{2em}conditional\_psycho\_3 $\rightarrow$ add1\_psycho\_31:0; \\
+   \hspace*{2em}idiff1 $\rightarrow$ mem1; \\
+   \hspace*{2em}mem1 $\rightarrow$ add1\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}////b + mem$\rightarrow$dbtable[$-$idiff] \\
+   \hspace*{2em}psycho\_3\_add\_db1 $\rightarrow$ add2\_psycho\_31:0; \\
+   \hspace*{2em}\_idiff1 = $-$idiff1; \\
+   \hspace*{2em}\_idiff1 $\rightarrow$ mem1:1; \\
+   \hspace*{2em}mem1:1 $\rightarrow$ add2\_psycho\_31:1; \\
+   \\
+   \hspace*{2em}////sel(1) \\
+   \hspace*{2em}cond1\_not1 = $\sim$gt\_psycho\_31; \\
+   \hspace*{2em}cond2\_not1 = $\sim$lt\_psycho\_32; \\
+   \hspace*{2em}and11 = cond1\_not1 $\And$ cond2\_not1; \\
+   \hspace*{2em}one1 = and11 $\ll$ const5\_psycho\_3; \\
+   \\
+   \hspace*{2em}////sel(0) \\
+   \hspace*{2em}cond3\_not1 = $\sim$ge\_psycho\_31; \\
+   \hspace*{2em}and21 = cond2\_not1 $\And$ cond3\_not1; \\
+   \hspace*{2em}or11 = lt\_psycho\_32 $\vert$ and21; \\
+   \hspace*{2em}and31 = cond1\_not1 $\And$ or11; \\
+   \hspace*{2em}zero1 = and31; \\
+   \\
+   \hspace*{2em}////sel mux4 \\
+   \hspace*{2em}sel1 = zero1 $\wedge$ one1; \\
+   \\
+   \hspace*{2em}///////////////////////////////////////psycho\_3\_add\_db inputs and output \\
+   \\
+   \hspace*{2em}conditional\_psycho\_3 $\rightarrow$ psycho\_3\_add\_db2:0; \\
+   \hspace*{2em}psycho\_3\_add\_db1 $\rightarrow$ psycho\_3\_add\_db2:1; \\
+   \hspace*{2em}add1\_psycho\_31 $\rightarrow$ psycho\_3\_add\_db2:2; \\
+   \hspace*{2em}add2\_psycho\_31 $\rightarrow$ psycho\_3\_add\_db2:3; \\
+   \hspace*{2em}sel1 $\rightarrow$ psycho\_3\_add\_db2:4; \\
+   \hspace*{2em}psycho\_3\_add\_db2 $\rightarrow$ LTg:0; \\
+   \\
+} \\

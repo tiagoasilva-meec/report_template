@@ -1,11 +1,11 @@
 %MPEG1/2 layers I/II encoder using a RISC-V processor and hardware accelerators
  
 %This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
-%Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic and reference them in this document. An example citation is given in this sentence [1].
+%Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic, and reference them in this document. An example citation is given in this sentence [1].
 
 \subsection{MPEG-1/2 Layers I/II}
 
-The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Thus, the MPEG standard is a set of specifications for audio and video compression, containing two variations (among others), MPEG-1 and MPEG-2. Both variations cover audio and video, but since this work is focused on audio, the relevant standards are MPEG-1 Audio and MPEG-2 Audio.
+The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by the International Organization for Standardization (ISO)~\cite{iso} and the International Electrotechnical Commission (IEC)~\cite{iec}. Thus, the MPEG standard is a set of specifications for audio and video compression, containing two variations (among others), MPEG-1 and MPEG-2. Both variations cover audio and video, but since this work is focused on audio, the relevant standards are MPEG-1 Audio and MPEG-2 Audio.
 %is a working group of ISO/IEC with the mission to develop standards for coded representation of digital audio and video and related data.
 
 The MPEG-1 Audio, defined by ISO/IEC 11172-3~\cite{11172} (explained in the next section), standardizes the information that an audio encoder must produce to write a bitstream conformant with the standard requirements. Moreover, it standardizes how an audio decoder has to parse, decompress, and resynthesize the information to reconstruct the original audio stream.
@@ -16,7 +16,7 @@ More precisely, an MPEG-1 audio encoder transforms the sound signal into the fre
 %working principle
 Focusing on the encoding process, the primary psychoacoustic effect is called "auditory masking", where parts of a signal are not audible due to the function of the human auditory system. For example, if there is a sound that consists mainly of one frequency, all other sounds that consist of a close frequency but are much quieter will not be heard. \\
 %where exploiting the limitations of perception and removal of irrelevance is key to achieving a significant reduction in bitrate while preserving subjective audio quality.
-Considering this, the parts of the signal that are masked are commonly called irrelevant, as opposed to the redundant parts which are removed. % by a lossless coding operation 
+Considering this, the parts of the signal that are masked are commonly called irrelevant, as opposed to the redundant parts that are removed. % by a lossless coding operation 
 To eliminate this irrelevancy, the encoder contains a \textbf{psychoacoustic model} which analyzes the input signals within consecutive time blocks and determines, for each block, the spectral components of the input audio signal (by applying a \textbf{frequency transform}). Then, it models the masking properties of the human auditory system, and estimates the noise level for each frequency band, usually called "threshold of masking". 
 In parallel, the input signal is fed through a time-to-frequency mapping, resulting in spectrum components for subsequent coding. \\
 Finally, in the \textbf{quantization and coding} stage, the encoder tries to allocate the available number of data bits, meeting both the bitrate and masking requirements ("threshold of masking"). The information on how the bits are distributed over the spectrum is contained in the bitstream as side information.
@@ -28,26 +28,26 @@ Layer II requires a more complex encoder and decoder, being directed towards one
 
 Compared to Layer I, Layer II can remove more of the signal redundancy and apply the psychoacoustic threshold more efficiently.
 %bitstream
-In Layer II, the digitized audio signal is divided up into blocks of 1152 samples, with each block being encoded within one MPEG-1 audio frame.
+In Layer II, the digitized audio signal is divided into blocks of 1152 samples, with each block being encoded within one MPEG-1 audio frame.
 Therefore, an MPEG-1 audio stream consists of consecutive audio frames, each one containing a header and the encoded data. The header contains general information, such as MPEG Layer, sampling frequency, number of channels, etc. Although most of this information may be the same for all frames, MPEG decided to give each audio frame a header to simplify synchronization and bitstream editing.
 
 %MPEG-2
 All the previous information describes one variation of MPEG, MPEG-1 Audio. This variation represents the first phase of dealing with mono and two-channel stereo sound coding, at sampling frequencies commonly used for high-quality audio (48, 44.1, and 32 kHz).\\
 In addition, there is a second variation, MPEG-2 Audio, which includes three main points.
 The first point is the extension of MPEG-1 to lower sampling frequencies (16 kHz, 22.05 kHz, and 24 kHz), providing better sound quality at very low bit rates.
-The second point is the backward-compatible (BC) extension of MPEG-1 to multichannel sound, supporting up to 5 full bandwidth channels plus one low-frequency enhancement channel. The MPEG-2 BC stream adheres to the structure of a MPEG-1 bitstream, meaning that a MPEG-2 BC stream can be read and interpreted by a MPEG-1 audio decoder.
+The second point is the backward-compatible (BC) extension of MPEG-1 to multichannel sound, supporting up to 5 full bandwidth channels plus one low-frequency enhancement channel. The MPEG-2 BC stream adheres to the structure of an MPEG-1 bitstream, meaning that an MPEG-2 BC stream can be read and interpreted by an MPEG-1 audio decoder.
 The third and last point is a new coding scheme called Advanced Audio Coding (AAC), which is more efficient and presents higher quality.
  
 %applications
 Today, the MPEG-1 Audio standard is the most widely compatible lossy audio format in the world, thanks to technical merits and excellent audio quality performance.
-Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. %This variety of applications is possible because of the big range of bitrates and the numerous configurations allowed in MPEG-1. \\
-%what is the work? motivation?
+Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication. %This variety of applications is possible because of the wide range of bitrates and the numerous configurations allowed in MPEG-1. \\
+% What is the work? motivation?
 
 \subsection{MPEG-1/2 Layers I/II IP cores}
 
 Knowing the wide range of customers that need digital audio, belonging to all industries, this work proposes developing an IP core to encode MPEG-1/2 Layer II, using a RISC-V processor and hardware accelerators.
  
-An intellectual property core (IP core) consists in a block of logic or data that is used in a semiconductor chip when making a field-programmable gate array (FPGA)~\cite{fpga} or application-specific integrated circuit (ASIC)~\cite{asic}.
+An intellectual property core (IP core) consists of a block of logic or data that is used in a semiconductor chip when making a field-programmable gate array (FPGA)~\cite{fpga} or application-specific integrated circuit (ASIC)~\cite{asic}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
 Ideally, an IP core should be entirely portable, meaning it should be possible to insert it into any vendor technology or design methodology. However, this is not always the case, existing two main categories of IP cores, soft IP core, and hard IP core.\\
@@ -179,12 +179,12 @@ The \textit{CX23415} most relevant features are high-quality real-time encoding 
 
 \subsubsection{Futura II ASI+IP™}
 
-The \textit{Futura II}~\cite{futura} is a Broadcast oriented MPEG-2/H.264 encoder that supports all standard broadcast formats, including North American standards. 
+The \textit{Futura II}~\cite{futura} is a broadcast-oriented MPEG-2/H.264 encoder that supports all standard broadcast formats, including North American standards. 
 
 %delivers MPEG-2 video at bit rates of 3.4 to 19.39 Mbps and H.264 video at 2.5 to 19.39 Mbps.
 This device, developed by \textit{Magnum Semiconductor Inc.}, is capable of encoding MPEG-1 Layer II at 192, 224, 256, 320, and 384 Kbps, with sampling rates of 32, 44.1, and 48 kHz. It can also encode Dolby Digital-3 (AC-3), MPEG-4 Advanced Audio Codec – Low Complexity (AAC-LC), and High-Efficiency Advanced Audio Coding (HE-AAC).
 
-As analog audio input, it supports one Stereo (two channels) with a frequency range from 20Hz to 20KHz. As digital audio input, it supports Audio Engineering Society-European Broadcasting Union (AES-EBU) and Serial digital interface/High-Definition Multimedia Interface (SDI/HDMI) (H.264 only).
+As analog audio input, it supports one Stereo (two channels) with a frequency range from 20Hz to 20KHz. As digital audio input, it supports the Audio Engineering Society-European Broadcasting Union (AES-EBU) and Serial digital interface/High-Definition Multimedia Interface (SDI/HDMI) (H.264 only).
 As output, both ASI and IP ports deliver MPEG-2 with a bit rate from 3.4 to 19.39 Mbps.
 
 The \textit{Futura II}'s most relevant features are 800 milliseconds latency, user-selectable resolution and bit rate, and two encoding modes, Constant Bit Rate (CBR) and Variable Bitrate (VBR).
@@ -193,7 +193,7 @@ The \textit{Futura II}'s most relevant features are 800 milliseconds latency, us
 
 \subsubsection{MPEG-2 Encoder CW-4888}
 
-The \textit{CW-4888}~\cite{cw4888} is a MPEG-2 encoder that feeds video signals of analog program sources, like cameras and broadcasters, to digital broadcast networks.
+The \textit{CW-4888}~\cite{cw4888} is an MPEG-2 encoder that feeds video signals of analog program sources, like cameras and broadcasters, to digital broadcast networks.
 
 Initially, this device receives the standard composite video and the associated sound signals. Then, it digitizes and compresses the input according to the MPEG-2 standard, outputting the result as Asynchronous Serial Interface (ASI)~\cite{asi} or Internet Protocol (IP)~\cite{ip} streams.
 
@@ -210,7 +210,7 @@ As attributes, it presents extremely low power consumption, high reliability, an
 The \textit{LAME}~\cite{lame} is a high-quality MPEG Layer III audio encoder, licensed under the Lesser General Public License (LGPL)~\cite{lgpl} and considered the best MP3 encoding software at mid-high and variable bitrates.\\
 As attributes, this software delivers better quality compared to all other encoders at most bitrates, better quality and speed compared to ISO reference software, and three different encoding modes (CBR, VBR, and Average Bit Rate (ABR)). This encoder is also free format and compilable as a shared library (on Linux/Unix) and Dynamic link library (DLL)~\cite{dll} (on Windows).
 
-Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\cite{toolame} was developed as a free software MPEG-1 Layer II audio encoder, written primarily by Mike Cheng. \textit{TooLAME} became well-known and widely used for its particularly high audio quality, despite existing many MP2 encoders.
+Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\cite{toolame} was developed as a free software MPEG-1 Layer II audio encoder, written primarily by Mike Cheng. \textit{TooLAME} became well-known and widely used for its particularly high audio quality, despite the existence of many MP2 encoders.
 
 \subsubsection{TwoLAME}
 
@@ -301,8 +301,8 @@ The \textit{fwrite} is used once again to write the remaining encoded data in th
 A System-on-Chip (SoC) is an integrated circuit that combines components of an electronic system. These components usually include a Central Processing Unit (CPU), memory interfaces, on-chip input/output devices, input/output interfaces, and secondary storage interfaces.\\
 Putting many elements of a computer system on a single piece of silicon has some advantages, such as low power requirements, reduced cost, increased performance, and reduced physical size.
 
-%iob-soc (%components, fpga resources, repository, accelerators)
-The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V processor, which users can modify, simulate and implement in ASICs and FPGAs.
+%iob-soc (%components, FPGA resources, repository, accelerators)
+The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V processor, which users can modify, simulate, and implement in ASICs and FPGAs.
 This SoC, provided by \textit{IObundle, Lda}, supports stand-alone and boot-loading modes. It also allows an internal RAM or an external DDR controller via an L1/L2 cache system. 
 
 Figure \ref{fig:iob} shows the IOb-SoC high-level block diagram.
@@ -329,7 +329,7 @@ There is also a \textbf{Native to AXI adapter}, which allows communication betwe
 
 Finally, The Universal Asynchronous Receiver-Transmitter (\textbf{\textbf{UART}}) peripheral allows the SoC to communicate with external systems, through the RS-232 serial communication protocol. \\
 
-All these components are integrated in IOb-SoC as GitHub submodules. They belong to repositories tracked by GitHub and forked from \textit{IObundle, Lda}, but arranged in a different way and with specific names.
+All these components are integrated into IOb-SoC as GitHub submodules. They belong to repositories tracked by GitHub and forked from \textit{IObundle, Lda}, but arranged in a different way and with specific names.
 In this work, the IOb-SoC system comprises seven main components/submodules: \textbf{AXI}, an AXI interconnect protocol;
 \textbf{CACHE}, a high-performance Verilog cache; \textbf{LIB}, a set of Verilog macros; \textbf{MEM}, a set of memory Verilog descriptions; \textbf{PICORV32}, a RISC-V processor; \textbf{TWOLAME}, an optimized MP2 encoding software; \textbf{UART}, a UART core. 
 
@@ -396,7 +396,7 @@ V Devices.}
 %simulators and FPGA
 The IOb-SoC Repository is a \textit{GitHub} repository that allows the user to modify the system components easily. It contains specific directories and segments (Tool Command Language (TCL), Verilog, Makefile, etc), with the list below describing the main items.
 
-\textbf{document/} This directory supports all the documentation, from LaTeX code and scripts to generated pdfs, like the guide and product brief.
+\textbf{document/} This directory supports all the documentation, from LaTeX code and scripts to generated PDFs, like the guide and product brief.
 
 \textbf{hardware/} This directory supports the hardware layer, containing multiple subdirectories.
 
@@ -481,7 +481,7 @@ The final output of the model is a signal-to-mask ratio (SMR) for each band (Lay
 The \textbf{Bit or Noise Allocation} takes both the output samples from the \textit{Filter Bank} and the SMR from the \textit{Psychoacoustic Model} and adjusts the bit allocation, to meet the bitrate and masking requirements. At low bitrates, these methods attempt to spend bits in a way that is inoffensive when they cannot meet the psychoacoustic demand at the required bitrate.\\
 In Layer II, this method is a bit allocation process, where several bits are assigned to each sample (or group of samples) in each subband.
 
-The \textbf{Bitstream Formatting} takes the quantized filterbank outputs, together with the bit allocation and other required side information, and encodes and formats all that information in an efficient way.\\
+The \textbf{Bitstream Formatting} takes the quantized filterbank outputs, together with the bit allocation and other required side information, and encodes and efficiently formats all that information.\\
 In Layer II, a fixed Pulse code modulation (PCM) code is used for each subband sample, with the exception that quantized samples may be grouped.
 
 %figure page 79 iso
@@ -496,7 +496,7 @@ Figure \ref{fig:flow-encoder} shows a more detailed Layer II Encoder flow chart.
 
 \subsection{\textit{Versat}}
 
-\textit{Versat} constitutes a reconfigurable hardware accelerator tailored for integration within embedded systems. Operating on a Coarse Grained Reconfigurable Array (CGRA) architecture, \textit{Versat} exhibits compact dimensions and low power consumption. The design features a simplified controller unit, facilitating self and partial reconfiguration.
+\textit{Versat} constitutes a reconfigurable hardware accelerator tailored for integration within embedded systems. Operating on a Coarse-Grain Reconfigurable Array (CGRA) architecture, \textit{Versat} exhibits compact dimensions and low power consumption. The design features a simplified controller unit, facilitating self and partial reconfiguration.
 
 The architecture is characterized by a modest number of functional units interlinked in a comprehensive graph topology to ensure optimal adaptability. The reduced functional unit count is offset by the ease of configuration and dynamic reconfiguration during runtime. Distinguishing itself from conventional CGRAs, \textit{Versat} is proficient in mapping sequences of nested program loops rather than individual loops, with self and partial reconfiguration occurring between these nested loops.
 
@@ -504,19 +504,19 @@ Programming \textit{Versat} is achievable through assembly language and a specia
 Regarding practical utilization, \textit{Versat} can serve as an accelerator for host processors on the same chip, enabling certain procedures to run faster and consume less energy when executed on \textit{Versat}. To diminish dependency on the host Central Processing Unit (CPU), \textit{Versat} incorporates a straightforward Controller responsible for algorithmic control, self-reconfiguration, and data movement. This frees up the host for more productive tasks. The Controller is programmable and encompasses an instruction memory storing \textit{Versat} programs. Control over the various modules is administered through a Control Bus.
 
 Incorporated within \textit{Versat} is a dedicated Data Engine (DE) unit that conducts data computation. The DE unit comprises Functional Units (FUs) interconnected in a complete mesh, offering multiple configurations for a given datapath. This multiplicity aids in simplifying the compiler.
-The Configuration Module (CM) retains the DE's configuration, specifying the present datapath, and accommodates a register for preparing the subsequent configuration of the DE. Additionally, it possesses another register capable of temporarily storing numerous complete configurations, switchable during runtime. The Controller can write partial configurations to the CM and manage saving and restoring entire configurations from the configuration memory.
+The Configuration Module (CM) retains the DE's configuration, specifying the present datapath, and accommodates a register for preparing the subsequent configuration of the DE. Additionally, it possesses another register capable of temporarily storing numerous complete configurations, switchable during runtime. The Controller can write partial configurations to the CM and manage to save and restore entire configurations from the configuration memory.
 
 Furthermore, \textit{Versat} integrates a Direct Memory Access (DMA) module, enabling autonomous and efficient data, program, and configuration transfers in and out of the device. The DMA operates through a master Advanced Extensible Interface – AXI4, an interface stemming from the Advanced Microcontroller Bus Architecture (AMBA) and designed by ARM.
 
-Facilitating communication with the host processor, \textit{Versat} is equipped with a shared Control Register File (CRF). The CRF incorporates two host interfaces, selectable during compilation: a Serial Peripheral Interface (SPI) and a parallel bus interface. The SPI slave interface is employed when the host system is an off-chip master device, primarily for debug and testing purposes. On the other hand, the parallel bus interface is utilized when the host is an embedded processor and may adhere to the AXI4 Lite format.
+Facilitating communication with the host processor, \textit{Versat} is equipped with a shared Control Register File (CRF). The CRF incorporates two host interfaces, selectable during compilation: a Serial Peripheral Interface (SPI) and a parallel bus interface. The SPI slave interface is employed when the host system is an off-chip master device, primarily for debugging and testing purposes. On the other hand, the parallel bus interface is utilized when the host is an embedded processor and may adhere to the AXI4 Lite format.
 
-\textit{Versat} is compatible with IOb-Soc. Figure \ref{fig:iobversat} shows the high-level block diagram of IOb-SoC and \textit{Versat}.
+\textit{Versat} is compatible with IOb-Soc. It can be integrated as a peripheral, since it contains an internal AXI DMA that communicates with IOb-SoC's memory system, through an AXI-Interconnect. Figure \ref{fig:iobversat} shows the high-level block diagram of \textit{Versat} integrated into IOb-SoC.
 
 \vspace{0.1cm}
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.85\linewidth]{iob-soc-versat.pdf}}
-\caption{IOb-SoC and \textit{Versat} and high-level block diagram.}
+\caption{\textit{Versat} integrated in IOb-SoC high-level block diagram.}
 \label{fig:iobversat}
 \end{figure}
 
@@ -553,12 +553,12 @@ A brief description of each functional unit is provided in the table below.
         If the control input is zero, the output will be the first 32-bit input; otherwise, the output will be the second 32-bit input. \\
         \hline
         \multirow{7}{*}{\textit{Mem}} & This module contains an internal memory with two input and two output ports (True dual-port synchronous RAM). 
-        It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
+        It offers a memory-mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
         Internally, this module contains two Address Generator Units (AGU) that generate the addresses used to access the memory, one for each port. 
-        The AGUs can be configured to output or to store data (only one type per port, the same port cannot be configured to output and store data at the same time in one run). \\
+        The AGUs can be configured to output or store data (only one type per port, the same port cannot be configured to output and store data at the same time in one run). \\
         \hline
         \multirow{5}{*}{\textit{LookupTable}} & This module contains an internal memory with two input and two output ports (Dual port synchronous RAM). 
-        It offers a memory mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
+        It offers a memory-mapped interface that allows the CPU to store and read data from the memory while the \textit{Versat} accelerator is not running. 
         Internally, this module acts like a lookup table since the output is the value stored in the address given by the input. \\
         \hline
     \end{tabular}
@@ -598,3 +598,31 @@ A brief description of each operator is provided in the table below.
 \end{table}
 
 \vspace{0.5cm}
+
+\subsubsection{Syntax}
+
+Knowing the FUs and operators \textit{Versat} provides, it is convenient to understand how the hardware design can be developed using such resources.
+Figure \ref{versatspec} shows a coding example of \textit{versatSpec.txt}, the file where the \textit{Versat} accelerator should be described.
+
+\vspace{1cm}
+
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.60\linewidth]{versatspec.pdf}}}
+\caption{\textit{versatspec.txt} example.}
+\label{versatspec}
+\end{figure}
+
+Focusing on the syntax, the code is divided into two modules, \textit{Example} and \textit{top}, each representing a part of the hardware design.
+
+The \textit{Example} module is defined with two input ports, \textit{op1} and \textit{op2}, and a \textit{FloatMul} FU, \textit{mul}. 
+The code after the \# symbol specifies how data flows through the module. In this case, \textit{op1} and \textit{op2} are connected to input ports 0 and 1 of the \textit{mul} FU, respectively. \\
+Then, the output of the \textit{mul} FU is connected to the output port of the \textit{Example} module.
+
+The \textit{top} module is the starting module, i.e. it represents the overall design.
+This module is defined with two \textit{Const} FUs, \textit{A} and \textit{B}, and a \textit{Mem} FU, \textit{mem}. In addition, it also contains an instance of the \textit{Example} module called \textit{ex}.\\
+Once again, the code specifies how data flows through the modules. In this case, \textit{A} and \textit{B} are added together, and the result is stored in the \textit{add} signal. Then, \textit{add} is connected to input port 0 of the \textit{mem} FU.\\
+\textit{A} and \textit{B} are also subtracted, and the result is stored in the \textit{sub} signal. Then, \textit{sub} is connected to input port 1 of the \textit{mem} FU.
+Afterward, the output ports 0 and 1 of \textit{mem} are connected to the input ports 0 and 1 of \textit{ex} instance, respectively. 
+The \textit{ex} instance performs what was described previously for the \textit{Example} module, and its output is connected to the output port of the top module.
+
+In terms of functionality, this example starts by performing arithmetic operations on constants \textit{A} and \textit{B}. Then, it sends the results of those operations to a memory unit, which works as indices for each data array (in each input port). Based on these indices, the memory unit outputs one value in each output port, which is then used in the following module to perform a floating-point multiplication operation. The final result is accessible through the output port of the top module.

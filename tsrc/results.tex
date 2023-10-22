@@ -6,11 +6,15 @@
 %The resources used should be detailed: the frequency of operation, memory size, power, energy consumption, and communication bandwidth are examples. For FPGA implementations, for example, the number of block RAMs, LUTs, and DSPs should be presented in a Table for the configurations studied.
 
 This chapter addresses the experimental results for the \textit{TwoLAME} encoder running on IOb-Soc, with and without \textit{Versat}.
-It starts by presenting the implementation results in FPGA. Then, the execution times are analysed. At the end, the results obtained are compared with the real-time encoding requirements.
+It starts by presenting the implementation results in FPGA. Then, the execution times are analyzed. In the end, the results obtained are compared with the real-time encoding requirements.
 
 \subsection{FPGA implementation}
-This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration.\\
-Here, the \textit{Xilinx XCKU040-1FBVA676 FPGA} is the only FPGA in use. Tables \ref{implementation1} and \ref{implementation2} show the implementation results of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
+All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}. This device features 1,760K logic cells, making it capable of handling complex digital logic designs. It also boasts 7,560Kb of on-chip memory, which facilitates efficient data storage and manipulation. In addition, the FPGA offers 2,520 DSP slices, enabling high-performance signal processing tasks.  
+
+Tables \ref{implementation1} and \ref{implementation2} show the implementation results of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+
+\vspace{1cm}
 
 \begin{table}[H]
     \centering
@@ -80,6 +84,8 @@ Here, the \textit{Xilinx XCKU040-1FBVA676 FPGA} is the only FPGA in use. Tables 
 
 Tables \ref{time1} and \ref{time2} show the execution time of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
 
+\vspace{1cm}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c|}
@@ -119,21 +125,63 @@ Tables \ref{time1} and \ref{time2} show the execution time of \textit{TwoLAME} r
 
 %The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to others. Second, it is clear that \textit{psycho\_3 function 11}, which is \textit{psycho\_3\_threshold}, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
 
-The speedup is calculated using the formula
+After measuring the execution time of the original and the hardware-accelerated implementations in IOb-Soc, it is possible to calculate the speedup achieved for each input file, using the formula presented below.
 
 \begin{equation}
-    Speedup = \frac{Execution time without acceleration}{Execution time with acceleration} 
+    \textit{Speedup achieved} = \frac{\textit{Execution time without acceleration}}{\textit{Execution time with acceleration}} 
 \end{equation}
 
-We compare the achieved speedup in percentage to the desired speedup based on the real-time requirements. Additionally, we apply Amdahl's Law to understand the limitations and scalability of the hardware acceleration in meeting the specified real-time constraints. \textit{Amdahl's Law} is formulated as:
+Additionally, the \textit{Amdahl's Law} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
 
 \begin{equation}
-    Speedup = \frac{1}{(1 - p) + \frac{p}{s}} 
+    \textit{Speedup desired} = \frac{1}{(1 - p) + \frac{p}{s}} 
 \end{equation}
 
-$s$ is the speedup of the part of the task that benefits from improved system resources, i.e. is the speedup achieved on the parallelizable portion;\\
-$p$ is the proportion of execution time that the part benefiting from improved resources originally occupied, i.e. is the proportion of the program that can be parallelized.
+In the formula above, $s$ is the speedup of the part of the task that benefits from improved system resources, i.e. is the speedup achieved on the parallelizable portion; $p$ is the proportion of execution time that the part benefiting from improved resources originally occupied, i.e. is the proportion of the program that can be parallelized.
+
+In the ideal case where the parallelizable part ($p$) disappears or, in other words, where the speedup ($s$) becomes very high, the value of $s$ approaches infinity, and the formula simplifies accordingly.
 
 \begin{equation}
-    \frac{\textit{number of frames} \times \textit{number of samples}}{sampling frequency} 
+    \textit{Speedup desired} \approx \frac{1}{1 - p}
 \end{equation}
+
+%in meeting the specified real-time constraints.
+A more interesting point is to compare the achieved speedup with the desired speedup based on the real-time requirements, for each input file. 
+
+This involves a formula to estimate how long it would take to encode the audio file in real time, which is presented below.
+
+\begin{equation}
+    \textit{Real-time} = \frac{\textit{number of frames} \times \textit{number of samples}}{\textit{sampling frequency}} 
+\end{equation}
+
+In this case, the real-time is calculated from the number of frames, the number of samples, and the sampling frequency.
+The \textit{number of samples} refers to the total number of audio samples in the audio file, which are individual data points that represent the amplitude of the audio signal at a particular point in time. This value is multiplied by the \textit{number of frames} since each frame typically consists of a fixed number of audio samples to process audio data efficiently. The result of the product is then divided by the \textit{sampling frequency}, a fundamental parameter of digital audio that specifies how many samples are taken per second to represent the analog audio signal.
+
+Knowing the real-time, the speedup required can be determined by the following formula.
+
+\begin{equation}
+    \textit{Speedup required} = \frac{\textit{Execution time without acceleration}}{\textit{Real-time}} 
+\end{equation}
+
+Table \ref{speedup} shows the results of the calculations described previously.
+
+\vspace{1cm}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{1-5}
+    \multicolumn{1}{|c|}{\textbf{Speedup}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{Achieved} &  &  &  &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{Desired}  &  &  &   &  \\ 
+    \hline
+    \multicolumn{1}{|c|}{Required}  &  &  &  &  \\ 
+    \hline
+    \end{tabular}
+    \caption{Calculation results for all input files.}
+    \label{speedup}
+\end{table}
