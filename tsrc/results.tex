@@ -10,122 +10,114 @@ It starts by presenting the implementation results in FPGA. Then, the execution 
 
 \subsection{FPGA implementation}
 This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
-All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}. This device features 1,760K logic cells, making it capable of handling complex digital logic designs. It also boasts 7,560Kb of on-chip memory, which facilitates efficient data storage and manipulation. In addition, the FPGA offers 2,520 DSP slices, enabling high-performance signal processing tasks.  
+All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}. This device features 1,760K logic cells, making it capable of handling complex digital logic designs. It also boasts 7,560Kb of on-chip memory, which facilitates efficient data storage and manipulation. In addition, the FPGA offers 2,520 DSP slices, enabling high-performance signal processing tasks. \\ 
 
-Tables \ref{implementation1} and \ref{implementation2} show the implementation results of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+Table \ref{implementation} shows the implementation results of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat}, first using \textit{spectrum\_search} accelerator, then using \textit{masking\_threshold} accelerator.
 
 \vspace{1cm}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c|c|c|}
-    \cline{2-5}
-    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
-    \cline{1-5}
-    \multicolumn{1}{|c|}{\textbf{Metric}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \begin{tabular}{c|c|c|c|c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c|}{}  &  \multirow{2}{*}{\parbox{2.5cm}{\centering \textbf{without \textit{Versat}}}} & \multicolumn{2}{c|}{\textbf{with \textit{Versat}}} \\
+    \cline{1-1} \cline{3-4}
+    \multicolumn{1}{|c|}{\textbf{Metric}} & & \textit{spectrum\_search} & \textit{masking\_threshold} \\
     \hline
-    \multicolumn{1}{|c|}{Total LUTs} &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{Total LUTs}  & 24489 &  26198 & 26590\\ 
     \hline
-    \multicolumn{1}{|c|}{Logic LUTs}  &  &  &   &  \\ 
+    \multicolumn{1}{|c|}{Logic LUTs}  & 19818 &  21346 & 21738\\ 
     \hline
-    \multicolumn{1}{|c|}{LUTRAMs}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{LUTRAMs}  & 4288 & 4464 & 4464\\ 
     \hline
-    \multicolumn{1}{|c|}{SRLs}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{SRLs}  & 383 & 388 & 388\\ 
     \hline
-    \multicolumn{1}{|c|}{Flip-Flops (FFs)}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{Flip-Flops}  & 24888 & 27347 & 28027 \\ 
     \hline
-    \multicolumn{1}{|c|}{RAMB36}  &  &  &  &   \\ 
+    \multicolumn{1}{|c|}{RAMB36}  & 157 &  157 & 157 \\ 
     \hline
-    \multicolumn{1}{|c|}{RAMB18}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{RAMB18}  & 5 &  5 & 5\\ 
     \hline
-    \multicolumn{1}{|c|}{URAM}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{URAM}  & 0 &  0 & 0\\ 
     \hline
-    \multicolumn{1}{|c|}{DSP Blocks}  &  &  &  &  \\ 
-    \hline
-    \end{tabular}
-    \caption{FPGA implementation results without \textit{Versat}.}
-    \label{implementation1}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|c|c|c|c|}
-    \cline{2-5}
-    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
-    \cline{1-5}
-    \multicolumn{1}{|c|}{\textbf{Metric}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
-    \hline
-    \multicolumn{1}{|c|}{Total LUTs} & 26192 & 26192 & 26198 & 26198 \\ 
-    \hline
-    \multicolumn{1}{|c|}{Logic LUTs}  & 21340 & 21340 & 21346  & 21346 \\ 
-    \hline
-    \multicolumn{1}{|c|}{LUTRAMs}  & 4464 & 4464 & 4464 & 4464 \\ 
-    \hline
-    \multicolumn{1}{|c|}{SRLs}  & 388 & 388 & 388 & 388 \\ 
-    \hline
-    \multicolumn{1}{|c|}{Flip-Flops (FFs)}  & 27346 & 27346 & 27347 & 27347 \\ 
-    \hline
-    \multicolumn{1}{|c|}{RAMB36}  & 157 & 157 & 157 &  157 \\ 
-    \hline
-    \multicolumn{1}{|c|}{RAMB18}  & 5 & 5 & 5 & 5 \\ 
-    \hline
-    \multicolumn{1}{|c|}{URAM}  & 0 & 0 & 0 & 0 \\ 
-    \hline
-    \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 10 & 10 & 10 \\ 
+    \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 10 & 10\\ 
     \hline
     \end{tabular}
-    \caption{FPGA implementation results with \textit{Versat}.}
-    \label{implementation2}
+    \caption{FPGA implementation results in IOb-SoC with and without \textit{Versat}.}
+    \label{implementation}
 \end{table}
 
-%comment
+
+The previous information offers valuable insights into the influence of \textit{Versat} on various hardware utilization metrics, highlighting the potential advantages and trade-offs of its inclusion in the IOb-SoC. A brief description of each metric is presented below.
+
+\begin{itemize}
+    
+\item \textbf{Total LUTs} represent the overall utilization of combinational logic elements within an FPGA. LUTs are fundamental components for implementing digital logic circuits.
+
+\item \textbf{Logic LUTs} is a subset of LUTs used specifically for implementing logic operations in an FPGA. These LUTs store and compute logical functions and decisions.
+
+\item \textbf{LUTRAMs} are a specialized type of memory in an FPGA that allows data storage and retrieval within a LUT structure. They combine the functions of both LUTs and small memory units.
+
+\item \textbf{Shift Register LUTs} (SRLs) are LUTs configured for implementing shift register operations, where data is shifted bit by bit within a sequence. They are often used for tasks involving data serialization and deserialization.
+
+\item \textbf{Flip-Flops} (FFs) are sequential storage elements within an FPGA. They are used to store and transfer data over time and are essential for implementing memory elements, registers, and clocked logic circuits.
+
+\item \textbf{RAMB36} represents dedicated memory blocks within the FPGA that can store 36,000 bits of data. These blocks are typically used for larger data storage and retrieval tasks.
+
+\item \textbf{RAMB18} represents dedicated memory blocks within the FPGA that can store 18,000 bits of data. These are suitable for tasks requiring smaller memory storage.
+
+\item \textbf{URAM} (UltraRAM) is a type of high-capacity memory resource within some FPGAs. It offers significantly larger memory storage compared to regular RAM blocks and is used for high-performance memory-intensive applications.
+
+\item \textbf{DSP Blocks} (Digital Signal Processor Blocks) are specialized resources in an FPGA designed for accelerating digital signal processing tasks. They include dedicated hardware for tasks like multiplication, accumulation, and complex arithmetic operations.
+
+\end{itemize}
+
+Focusing on the measurement without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, the results show a modest increase from 24,489 Total LUTs without \textit{Versat} to 26,198 Total LUTs with \textit{Versat}. This suggests that \textit{Versat} consumes additional LUT resources within the FPGA, as expected.
+The inclusion of \textit{Versat} increases from 19,818 Logic LUTs to 21,346, affirming its impact on logic operations within the system. It also exhibits a change in LUTRAMs from 4,288 to 4,464, indicating the utilization of dedicated memory resources within the FPGA.
+The small difference between the two scenarios, from 383 SRLs to 388 SRLs, suggests that \textit{Versat} minimally affects this particular resource. On the opposite, the significant jump in Flip-Flops from 24,888 without \textit{Versat} to 27,347 with it is notable, indicating a requirement increase for sequential storage elements within the FPGA.
+Interestingly, there is no difference in the number of RAMB36, RAMB18, URAM, and DSP Blocks resources, suggesting that \textit{Versat} does not utilize this specific resource.
+
+The measurement results with \textit{Versat} using \textit{masking\_threshold} accelerator are similar to the \textit{spectrum\_search} accelerator ones. More precisely, the \textit{masking\_threshold} accelerator requires a few more Total LUTs, Logic LUTs, and Flip-Flops, compared to the other accelerator.
+
+% This information can guide system architects and designers in making informed decisions about hardware resource allocation within the FPGA.
 
 \subsection{Execution results}
 
-Tables \ref{time1} and \ref{time2} show the execution time of \textit{TwoLAME} running in IOb-SoC with and without \textit{Versat}, for all input files.
+Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, for all input files.
 
 \vspace{1cm}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c|c|c|}
-    \cline{2-5}
-    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
-    \cline{2-5}
-     & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \cline{3-6}
+    \multicolumn{2}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
+    \cline{3-6}
+    \multicolumn{2}{c|}{} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
     \hline
-    \multicolumn{1}{|c|}{\textit{psycho\_3\_threshold}}  &  &  &  &  \\ 
+   \multirow{2}{*}{\parbox{2.5cm}{\centering \textbf{without} \\ \textbf{\textit{Versat}}}}  & \multicolumn{1}{c|}{\textit{psycho\_3\_threshold}}  & 536 & 13365 & 11381 & 14694 \\ 
+    \cline{2-6}
+    & \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1509 & 22672 & 18520 & 24325\\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME} total}  &  &  &  &  \\ 
+    \multirow{2}{*}{\parbox{3.2cm}{\centering with \\ \textbf{\textit{spectrum\_search}}}}  & \multicolumn{1}{c|}{\textit{psycho\_3\_threshold}}  & 20 & 350 & 289 & 395 \\ 
+    \cline{2-6}
+    & \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 974 & 9391 & 7209 & 9729 \\ 
     \hline
     \end{tabular}
-    \caption{Execution time for all input files without \textit{Versat} [ms].}
-    \label{time1}
+    \caption{Execution time for all input files with and without \textit{Versat} [ms].}
+    \label{time}
 \end{table}
 
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|c|c|c|c|}
-    \cline{2-5}
-    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input files}} \\
-    \cline{2-5}
-     & short.wav & long.wav & noise.wav & vivaldi.wav \\
-    \hline
-    \multicolumn{1}{|c|}{\textit{psycho\_3\_threshold}}  & 15 & 345 & 275 & 387 \\ 
-    \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1012 & 9755 & 7452 & 10062 \\ 
-    \hline
-    \end{tabular}
-    \caption{Execution time for all input files with \textit{Versat} [ms].}
-    \label{time2}
-\end{table}
+The previous information shows that the \textit{spectrum\_search} \textit{Versat} accelerator can induce a substantial reduction in execution time. Specifically, the execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
+Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
+Therefore, the \textit{masking\_threshold} accelerator was not tested in FPGA, since it would hurt the execution times (mainly due to the switching between software and hardware). After being developed, this accelerator was only tested for correctness using emulation on a PC.
 
 
 \subsection{Real-time requirements}
 
 %The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to others. Second, it is clear that \textit{psycho\_3 function 11}, which is \textit{psycho\_3\_threshold}, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
 
-After measuring the execution time of the original and the hardware-accelerated implementations in IOb-Soc, it is possible to calculate the speedup achieved for each input file, using the formula presented below.
+After measuring the execution time of the original and the hardware-accelerated implementation in IOb-SoC, it is possible to calculate the speedup achieved for each input file, using the formula presented below.
 
 \begin{equation}
     \textit{Speedup achieved} = \frac{\textit{Execution time without acceleration}}{\textit{Execution time with acceleration}} 
@@ -163,25 +155,40 @@ Knowing the real-time, the speedup required can be determined by the following f
     \textit{Speedup required} = \frac{\textit{Execution time without acceleration}}{\textit{Real-time}} 
 \end{equation}
 
-Table \ref{speedup} shows the results of the calculations described previously.
+Table \ref{speedup} presents the outcomes of the previously discussed calculations.
 
 \vspace{1cm}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
     \cline{2-5}
     \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
     \cline{1-5}
-    \multicolumn{1}{|c|}{\textbf{Speedup}} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \multicolumn{1}{|c|}{\textbf{Speedup}} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
     \hline
-    \multicolumn{1}{|c|}{Achieved} &  &  &  &  \\ 
+    \multirow{2}{*}{\parbox{3.2cm}{\centering achieved with \\ \textbf{\textit{spectrum\_search}}}} & \multirow{2}{*}{\centering 1.549} & \multirow{2}{*}{\centering 2.414} & \multirow{2}{*}{\centering 2.569} & \multirow{2}{*}{\centering 2.5}  \\ 
+    & & & &  \\ 
     \hline
-    \multicolumn{1}{|c|}{Desired}  &  &  &   &  \\ 
+    \multicolumn{1}{|c|}{desired}  & 1.551 & 2.436 & 2.594  & 2.526 \\ 
     \hline
-    \multicolumn{1}{|c|}{Required}  &  &  &  &  \\ 
+    \multicolumn{1}{|c|}{required}  & 5.251 & 2.9321 & 6.219 & 5.748 \\ 
     \hline
     \end{tabular}
     \caption{Calculation results for all input files.}
     \label{speedup}
 \end{table}
+
+%real-time 287.3469   7732.2448   2977.9591   4231.8367
+
+In more detail, the achieved speedup is first calculated based on the \textit{TwoLAME total} execution times from table \ref{time}, showing the performance gain compared to the original \textit{TwoLAME} software in IOb-SoC.\\
+Then, the desired speedup is calculated taking into account the proportion of the \textit{TwoLAME} that can be parallelized, which is, in practice, the result of the division between \textit{psycho\_3\_threshold} and \textit{TwoLAME total} execution times without \textit{Versat}, also from table \ref{time}. \\
+Lastly, the required speedup is calculated with a \textit{sampling frequency} of $44100Hz$ and a \textit{number of samples} of $1152$, for all input files. It also considers the \textit{TwoLAME total} execution times without \textit{Versat}. The remaining variable, \textit{number of frames}, is different for each input file. In concrete, \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} contain $11$, $296$, $114$ and $162$ frames, respectively.
+
+Focusing on the results, it is noticeable that the \textit{spectrum\_search} \textit{Versat} accelerator provides a speedup very close to the desired one (which is the maximum possible speedup achievable by accelerating \textit{psycho\_3\_threshold} function).
+However, the required speedup indicates that the acceleration of \textit{psycho\_3\_threshold} is not enough to meet the real-time requirements. 
+In particular, the first two input files encoding is approximately at 3.39 and 1.21 speedup from meeting the real-time requirements, respectively. In the first case, the input file has a small number of frames, which doesn't potentiate \textit{Versat} acceleration and, consequently, the achieved speedup stays far from the required one.
+In the second case, the input file has a significant number of frames but the audio itself is simple, which implies a higher demand of \textit{psycho\_3\_threshold} function (executed by \textit{Versat}) compared to the other \textit{TwoLAME} functions, and so the achieved speedup gets close to the required one. \\
+The last two input files' encoding is approximately at 2.42 and 2.30 speedup from meeting the real-time requirements. These results give some guarantees about achieving the goal of this work since the third input file has a considerable number of frames and represents the worst-case scenario for real-time encoding (being a stereo white noise audio file). The fourth input file has a normal audio complexity since it is part of an existing soundtrack, and so the achieved and the required speedups are also not far away.
+
+%In the second case, the input file has a significant number of frames, but the audio is simple so it does not take advantage of \textit{Versat} acceleration, due to the low demand of \textit{psycho\_3\_threshold} function (in the original software).

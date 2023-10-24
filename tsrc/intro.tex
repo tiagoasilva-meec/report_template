@@ -1,0 +1,44 @@
+\subsection{Topic overview}
+
+The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication.
+
+%MPEG, 1 e 2, audio
+The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.  Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. It standardizes the information that an audio encoder must produce to write a bitstream conformant to the standard requirements.  Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lower sampling frequencies, backward compatibility, and a more advanced coding scheme.\\
+
+%layers
+The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.  The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications. These formats are regulated by the ISO/IEC 11172 international standard~\cite{11172}, which specifies the coded representation of high-quality audio for storage media.
+
+\subsection{Motivation}
+
+Since its formation in 1988, the MPEG has made an indelible mark on the transition from analog to digital video. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product.
+
+An increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. To integrate an MPEG-1/2 Layer II encoder in a system, there are two available options.
+
+One option is buying an encoder chip, like the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, the \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888}, or the \textit{Futura II ASI+IP}~\cite{futura}. For the user, this means an additional chip on the board, increasing its area/volume, weight, and power consumption. Another option is to use a software encoder, which requires a Central Processing Unit (CPU), either one already available, or an additional processor chip or Intellectual Property (IP) core. The cost of porting the software to the CPU cannot be ignored. Depending on the application, these factors may impact the system's viability.
+
+Another interesting option is to license a commercial MPEG-1/2 Layer II encoder an IP Core. This reduces area/volume, weight, and power consumption, allowing the user to develop a top-notch system and beat the competition. However, to the best of the author's knowledge, there is only one IP core specifically designed for MPEG-1/2 Layer I/II Audio in the market, namely the \textit{CWda74}~\cite{CWda74}, later re-branded \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}, which uses fixed-point calculations. Therefore, the market can greatly benefit from more diversity and competition.
+
+\subsection{Objectives}
+
+Addressing the need for digital audio integrated solutions, and with the MPEG Layer II (MP2) audio being the base of DAB, this work proposes an IP core capable of encoding MPEG-1/2 Layer II Audio using floating-point calculations.
+%, and beating the fixed-point CWda74 in terms of accuracy.
+The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC, a System-on-Chip template comprising an open-source RISC-V processor. The TwoLAME~\cite{twolame} repository, an optimized MPEG Audio Layer II encoding software based on the ISO/IEC 11172~\cite{11172}, will provide the algorithm.\\
+The objectives of this work are the following:
+
+\begin{itemize}
+    \item Port the \textit{TwoLAME} software to the IOb-SoC.
+    \item Do basic software optimizations.
+    \item Profile the \textit{TwoLAME} running on the IOb-SoC in FPGA.
+    \item Use \textit{Versat} hardware to accelerate \textit{TwoLAME} running on the IOb-SoC in FPGA, so that it meets the requirements for real-time encoding.
+\end{itemize}
+
+%Finally, a hardware accelerator will be developed and used as an IOb-SoC peripheral, in case real-time operation cannot be achieved with the CPU alone.
+
+%The \textit{TwoLAME} software will be ported to IOb-SoC's CPU (PicoRV32). However, when encoding at the sampling frequency, the system may not finish execution in real-time. If this is the case, a peripheral will be developed to accelerate the process bottlenecks.
+
+%In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} is plausible.
+%In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) are also required.
+
+\subsection{Thesis Outline}
+
+This thesis is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out and directions for future work are outlined.
