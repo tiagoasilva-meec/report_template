@@ -81,7 +81,7 @@ The measurement results with \textit{Versat} using \textit{masking\_threshold} a
 
 % This information can guide system architects and designers in making informed decisions about hardware resource allocation within the FPGA.
 
-\subsection{Execution results}
+\subsection{Execution time}
 
 Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, for all input files.
 
@@ -110,7 +110,7 @@ Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC
 
 The previous information shows that the \textit{spectrum\_search} \textit{Versat} accelerator can induce a substantial reduction in execution time. Specifically, the execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
 Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
-Therefore, the \textit{masking\_threshold} accelerator was not tested in FPGA, since it would hurt the execution times (mainly due to the switching between software and hardware). After being developed, this accelerator was only tested for correctness using emulation on a PC.
+Therefore, the \textit{masking\_threshold} accelerator was not tested in FPGA, since it would not reduce the execution times. After being developed, this accelerator was only tested for correctness using emulation on a PC.
 
 
 \subsection{Real-time requirements}
@@ -121,13 +121,13 @@ After measuring the execution time of the original and the hardware-accelerated 
 
 \begin{equation}
     \textit{Speedup achieved} = \frac{\textit{Execution time without acceleration}}{\textit{Execution time with acceleration}} 
-\end{equation}
+\end{equation}\\
 
 Additionally, the \textit{Amdahl's Law} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
 
 \begin{equation}
     \textit{Speedup desired} = \frac{1}{(1 - p) + \frac{p}{s}} 
-\end{equation}
+\end{equation}\\
 
 In the formula above, $s$ is the speedup of the part of the task that benefits from improved system resources, i.e. is the speedup achieved on the parallelizable portion; $p$ is the proportion of execution time that the part benefiting from improved resources originally occupied, i.e. is the proportion of the program that can be parallelized.
 
@@ -135,7 +135,7 @@ In the ideal case where the parallelizable part ($p$) disappears or, in other wo
 
 \begin{equation}
     \textit{Speedup desired} \approx \frac{1}{1 - p}
-\end{equation}
+\end{equation}\\
 
 %in meeting the specified real-time constraints.
 A more interesting point is to compare the achieved speedup with the desired speedup based on the real-time requirements, for each input file. 
@@ -144,7 +144,7 @@ This involves a formula to estimate how long it would take to encode the audio f
 
 \begin{equation}
     \textit{Real-time} = \frac{\textit{number of frames} \times \textit{number of samples}}{\textit{sampling frequency}} 
-\end{equation}
+\end{equation}\\
 
 In this case, the real-time is calculated from the number of frames, the number of samples, and the sampling frequency.
 The \textit{number of samples} refers to the total number of audio samples in the audio file, which are individual data points that represent the amplitude of the audio signal at a particular point in time. This value is multiplied by the \textit{number of frames} since each frame typically consists of a fixed number of audio samples to process audio data efficiently. The result of the product is then divided by the \textit{sampling frequency}, a fundamental parameter of digital audio that specifies how many samples are taken per second to represent the analog audio signal.
@@ -153,7 +153,7 @@ Knowing the real-time, the speedup required can be determined by the following f
 
 \begin{equation}
     \textit{Speedup required} = \frac{\textit{Execution time without acceleration}}{\textit{Real-time}} 
-\end{equation}
+\end{equation}\\
 
 Table \ref{speedup} presents the outcomes of the previously discussed calculations.
 

@@ -3,7 +3,7 @@
 The Moving Picture Experts Group (MPEG) is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication.
 
 %MPEG, 1 e 2, audio
-The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.  Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. It standardizes the information that an audio encoder must produce to write a bitstream conformant to the standard requirements.  Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lower sampling frequencies, backward compatibility, and a more advanced coding scheme.\\
+The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.  Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. It standardizes the information that an audio encoder must produce to write a bitstream conformant to the standard requirements.  Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lower sampling frequencies, backward compatibility, and a more advanced coding scheme.
 
 %layers
 The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III.  The first two layers are the most relevant ones. Layer I has the lowest complexity, while Layer II requires a more complex encoder and decoder, being directed towards one-to-many applications. These formats are regulated by the ISO/IEC 11172 international standard~\cite{11172}, which specifies the coded representation of high-quality audio for storage media.
@@ -30,6 +30,7 @@ The objectives of this work are the following:
     \item Do basic software optimizations.
     \item Profile the \textit{TwoLAME} running on the IOb-SoC in FPGA.
     \item Use \textit{Versat} hardware to accelerate \textit{TwoLAME} running on the IOb-SoC in FPGA, so that it meets the requirements for real-time encoding.
+    \item Beat the fixed-point \textit{CWda74} using floating-point precision.
 \end{itemize}
 
 %Finally, a hardware accelerator will be developed and used as an IOb-SoC peripheral, in case real-time operation cannot be achieved with the CPU alone.
@@ -39,6 +40,6 @@ The objectives of this work are the following:
 %In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} is plausible.
 %In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) are also required.
 
-\subsection{Thesis Outline}
+\subsection{Document Outline}
 
-This thesis is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out and directions for future work are outlined.
+This document is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out and directions for future work are outlined.
