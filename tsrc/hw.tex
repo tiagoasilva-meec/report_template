@@ -4,7 +4,7 @@ This chapter addresses the hardware architecture. It starts by implementing a Si
 \subsection{VexRiscv}
 After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
 
-The \textit{VexRiscv} is a robust RISC-V~\cite{bib:riscvmanual} CPU implemented via a 5-stage in-order pipeline, enhancing its functionality through various optional and complementary plugins~\cite{bib:iobvexriscv}. This unconventional strategy is made possible thanks to the use of meta hardware description languages, such as \textit{SpinalHDL}~\cite{bib:spinalhdl}, clearly evident in the \textit{VexRiscv} implementation. The user has the flexibility to swap, activate, or deactivate specific CPU components directly through the plugin system. The user can also introduce new functionalities and instructions without the need to make modifications to the CPU's source code.
+The \textit{VexRiscv} is a robust RISC-V~\cite{bib:riscvmanual} CPU implemented via a 5-stage in-order pipeline, enhancing its functionality through various optional and complementary plugins~\cite{vexriscv}. This unconventional strategy is made possible thanks to the use of meta hardware description languages, such as \textit{SpinalHDL}~\cite{bib:spinalhdl}, clearly evident in the \textit{VexRiscv} implementation. The user has the flexibility to swap, activate, or deactivate specific CPU components directly through the plugin system. The user can also introduce new functionalities and instructions without the need to make modifications to the CPU's source code.
 
 
 \subsubsection{Single Instruction, Multiple Data (SIMD) ADD instruction}
@@ -70,7 +70,7 @@ A brief description of each functional unit is provided in the table below.
         \multirow{4}{*}{\textit{Conditional1}} & This module receives two 32-bit inputs and one 32-bit control input. It operates as a 2-to-1 multiplexer, selecting one of the 32-bit inputs based on the 32-bit control input. If the LSB of the control input is zero, the output will be the second 32-bit input; otherwise, the output will be the first 32-bit input. \\
         \hline
     \end{tabular}
-    \caption{Table of functional units.}
+    \caption{New \textit{Versat} functional units.}
     \label{tab:fu}
 \end{table}
 
