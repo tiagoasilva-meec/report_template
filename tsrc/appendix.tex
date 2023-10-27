@@ -1,4 +1,4 @@
-\noindent module av(const1,const2,const3,bark,Xtm){ \\
+\noindent module av(const1,const2,const3,bark,Xtm)\{ \\
 \hspace*{2em}FloatMul mul1; \\
 \hspace*{2em}FloatAdd add1; \\
 \hspace*{2em}FloatAdd add2; \\
@@ -17,10 +17,10 @@
    \hspace*{2em}const3 $\rightarrow$ add3:1; \\
    \\
    \hspace*{2em}add3 $\rightarrow$ out; \\
-} \\
+\} \\
 \\
 \\
-module dzRange(dz){ \\
+module dzRange(dz)\{ \\
 \hspace*{2em}FloatGreaterEqual ge1\_dzRange; \\
 \hspace*{2em}FloatLess lt1\_dzRange; \\
 \hspace*{2em}Const const1\_dzRange; \\
@@ -37,10 +37,10 @@ module dzRange(dz){ \\
    \hspace*{2em}////if (dz[j] $>$= $-$3.0 $\And$ dz[j] $<$ 8.0) \\
    \hspace*{2em} and = ge1\_dzRange $\And$ lt1\_dzRange; \\
    \hspace*{2em}and $\rightarrow$ out:0; \\
-} \\
+\} \\
 \\
 \\
-module Logic(dz){ \\
+module Logic(dz)\{ \\
 \hspace*{2em}FloatLess lt1\_Logic; \\
 \hspace*{2em}FloatLess lt2\_Logic; \\
 \hspace*{2em}FloatLess lt3\_Logic; \\
@@ -77,10 +77,10 @@ module Logic(dz){ \\
    \hspace*{2em}////sel \\
    \hspace*{2em}sel = zero $\wedge$ one; \\
    \hspace*{2em}sel $\rightarrow$ out:0; \\
-} \\
+\} \\
 \\
 \\
-module vf4(dz,logic1,Xtm){ \\
+module vf4(dz,logic1,Xtm)\{ \\
 \hspace*{2em}FloatAdd add1\_vf4; \\
 \hspace*{2em}FloatAdd add2\_vf4; \\
 \hspace*{2em}FloatSub sub1\_vf4; \\
@@ -146,10 +146,10 @@ module vf4(dz,logic1,Xtm){ \\
    \\
    \hspace*{2em}////vf \\
    \hspace*{2em}mux4\_vf4 $\rightarrow$ out:0; \\
-} \\
+\} \\
 \\
 \\
-module psycho\_3\_add\_db(a,b,add1,add2,sel,if){ \\
+module psycho\_3\_add\_db(a,b,add1,add2,sel,if)\{ \\
 \hspace*{2em}Mux4 mux4\_psycho\_3; \\
 \hspace*{2em}Conditional1 conditional\_psycho\_3; \\
 \# \\
@@ -166,10 +166,10 @@ module psycho\_3\_add\_db(a,b,add1,add2,sel,if){ \\
    \hspace*{2em}mux4\_psycho\_3 $\rightarrow$ conditional\_psycho\_3:1; \\
    \hspace*{2em}a $\rightarrow$ conditional\_psycho\_3:2; \\
    \hspace*{2em}conditional\_psycho\_3 $\rightarrow$ out:0; \\
-} \\
+\} \\
 \\
 \\
-module start() { \\
+module start() \{ \\
 \hspace*{2em}DBMIN; \\
 \hspace*{2em}Const const1\_av; \\
 \hspace*{2em}Const const2\_av; \\
@@ -295,12 +295,12 @@ module start() { \\
    \hspace*{2em}sel $\rightarrow$ psycho\_3\_add\_db1:4; \\
    \hspace*{2em}dzRange1 $\rightarrow$ psycho\_3\_add\_db1:5; \\
    \hspace*{2em}psycho\_3\_add\_db1 $\rightarrow$ LTtmR:0; \\
-} \\
+\} \\
 \\
 ///////////////////////////////////////////////////////////////////////////// \\
 \\
 \\
-module psycho\_3\_add\_db\_V1(a,b,add1,add2,sel){ \\
+module psycho\_3\_add\_db\_V1(a,b,add1,add2,sel)\{ \\
 \hspace*{2em}Mux4 mux4\_psycho\_3; \\
 \# \\
 \hspace*{2em}////return mux4 \\
@@ -310,10 +310,10 @@ module psycho\_3\_add\_db\_V1(a,b,add1,add2,sel){ \\
 \hspace*{2em}add2 $\rightarrow$ mux4\_psycho\_3:1; \\
 \hspace*{2em}sel $\rightarrow$ mux4\_psycho\_3:4; \\
 \hspace*{2em}mux4\_psycho\_3 $\rightarrow$ out:0; \\
-} \\
+\} \\
 \\
 \\
-module start1() { \\
+module start1() \{ \\
 \hspace*{2em}psycho\_3\_add\_db\_V1 psycho\_3\_add\_db1; \\
 \hspace*{2em}psycho\_3\_add\_db\_V1 psycho\_3\_add\_db2; \\
 \hspace*{2em}Const const1\_psycho\_3; \\
@@ -490,4 +490,4 @@ module start1() { \\
    \hspace*{2em}sel1 $\rightarrow$ psycho\_3\_add\_db2:4; \\
    \hspace*{2em}psycho\_3\_add\_db2 $\rightarrow$ LTg:0; \\
    \\
-} \\
+\} \\
