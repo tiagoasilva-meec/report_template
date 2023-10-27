@@ -1,13 +1,42 @@
 
-This chapter addresses the hardware architecture. It starts by setting up \textit{Versat} in the IOb-SoC. Then, it describes new Functional Units that are required to accelerate the \textit{psycho\_3\_threshold} function. In the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
+This chapter addresses the hardware architecture. It starts by implementing a Single Instruction, Multiple Data (SIMD) addition instruction in the \textit{VexRiscv} CPU. Then, it sets up \textit{Versat} in the IOb-SoC. After, it describes new Functional Units that are required to accelerate the \textit{psycho\_3\_threshold} function. In the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
+
+\subsection{VexRiscv}
+After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
+
+The \textit{VexRiscv} is a robust RISC-V~\cite{bib:riscvmanual} CPU implemented via a 5-stage in-order pipeline, enhancing its functionality through various optional and complementary plugins~\cite{bib:iobvexriscv}. This unconventional strategy is made possible thanks to the use of meta hardware description languages, such as \textit{SpinalHDL}~\cite{bib:spinalhdl}, clearly evident in the \textit{VexRiscv} implementation. The user has the flexibility to swap, activate, or deactivate specific CPU components directly through the plugin system. The user can also introduce new functionalities and instructions without the need to make modifications to the CPU's source code.
+
+
+\subsubsection{Single Instruction, Multiple Data (SIMD) ADD instruction}
+Considering this, the first option to accelerate \textit{psycho\_3\_threshold} function was creating a custom instruction. In theory, this would accelerate all the operations not only present in the function but also in the whole \textit{TwoLAME} software, being executed as a custom instruction in the CPU. It would consist of a horizontal acceleration.\\
+To do so, a Single Instruction, Multiple Data instruction (SIMD)~\cite{simd} was first tested in \textit{VEXRISCV}, without any connection with the \textit{TwoLAME}, i.e., being simply evoked from firmware. The plugin responsible for the implementation of this instruction in the CPU was already present in the original repository. However, the execution of the instruction from the firmware required several modifications.
+
+First, the header file, \textit{firmware.h}, contains the function prototype for the \textit{simd\_add} function (the chosen name).
+Then, in the assembly code file \textit{firmware.S}, a label called \textit{simd\_add} is defined, which is expected to call the custom instruction implemented in the CPU (MAC was the chosen name), followed by a return from this assembly code back to the firmware.
+Lastly, in a \textit{custom\_ops.S} file, macros for encoding custom instructions are defined. 
+
+The \textit{SIMD\_ADD} macro, in this case, represents the custom instruction, corresponding to a RISC-V R-type instruction~\cite{bib:riscvmanual}. In RISC-V assembly language, R-type instructions are a category of instructions that operate on registers and have a common encoding format. 
+Therefore, the \textit{SIMD\_ADD} macro is a specific instruction encoding for a SIMD (Single Instruction, Multiple Data) addition operation. It uses a \textit{R\_TYPE\_INSTR} macro to generate the encoding for the operation. The arguments for \textit{SIMD\_ADD} match the fields expected by \textit{R\_TYPE\_INSTR}, but the values are specific to the \textit{SIMD ADD} operation.
+The macro takes the arguments presented below.
+
+\begin{itemize}
+    \item \textit{\_f7}: 7-bit field for a specific function code.
+    \item \textit{\_rs2}: 5-bit field for the source register 2.
+    \item \textit{\_rs1}: 5-bit field for the source register 1.
+    \item \textit{\_f3}: 3-bit field for a specific function code (within the \_opc field).
+    \item \textit{\_rd}: 5-bit field for the destination register.
+    \item \textit{\_opc}: 7-bit field for the primary operation code.
+\end{itemize}
+
+With all these arguments, the \textit{.word} assembler directive generates a 32-bit instruction word by \textit{bitwise OR}-ing together the shifted values of these fields, according to the RISC-V instruction encoding format. The 32-bit matches the instruction decoding of the plugin, making the CPU execution the intended instruction.
+
+The whole process related to the inclusion of a new instruction in the CPU was not that complex, since the plugin was already available in the original \textit{VEXRISCV} repository. However, implementing custom instructions with several operations and input registers seemed difficult due to the unfamiliarity with the base CPU plugins and also with the \textit{SpinalHDL} language. For this reason, the custom instruction option was discarded and the option of using \textit{Versat} was considered.
 
 \subsection{Versat}
-
-%checks the \textit{Versat} Functional Units that are available
-After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
+%After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
 At this stage, the IOb-SoC was comprised of eight main components: \textbf{AXI}, \textbf{CACHE}, \textbf{LIB}, \textbf{MEM}, \textbf{VEXRISCV}, \textbf{TWOLAME}, \textbf{UART} and \textbf{TIMER}. Given \textit{Versat} being the optimal choice for accelerating the \textit{psycho\_3\_threshold} function, integration into IOb-SoC becomes imperative.
 Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-SoC. This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as a submodule to IOb-SoC's repository, some paths were changed to allow correct compilation.
-The second step was more complex, consisting of adding an interconnection between \textit{Versat} and RAM. Iob-SoC usually contains a single AXI interface, used by both cache memory and CPU. Considering this, the solution was to double the size of the wires from the already existing AXI interface, providing an additional interface to \textit{Versat} while avoiding a new separate interface.
+The second step was more complex, consisting of adding an interconnection between \textit{Versat} and RAM. Iob-SoC usually contains a single AXI~\cite{bib:axi_xilinx} instance, used by both cache memory and CPU. Considering this, the solution was to double the size of the wires from the already existing AXI, providing an additional interface to \textit{Versat} while avoiding a new separate interface.
 %explain better
 
 Understanding the resources that \textit{Versat} offers, the subsequent step involves examining the \textit{psycho\_3\_threshold} function.
@@ -49,7 +78,7 @@ A brief description of each functional unit is provided in the table below.
 
 Concerning hardware acceleration, a crucial step is to determine the control and data paths of the software that is intended to be accelerated. In other words, the paths refer to the fundamental components that dictate how the software interacts with the hardware to achieve acceleration.
 
-The control path defines the flow and sequencing of operations within the software that need to be accelerated. It includes decisions, branching, loops, and other control structures that determine the program's behavior. Determining the control path is vital for optimizing the hardware design to efficiently execute these operations.
+The control path defines the flow and sequencing of operations within the software that need to be accelerated. It includes decisions, branching, loops, and other control structures that determine the program's behavior~\cite{datacontrolpath}. Determining the control path is vital for optimizing the hardware design to efficiently execute these operations.
 The data path refers to the route through which data flows within the software during its execution. It involves operations and transformations applied to the input data to produce the desired output. Understanding the data path is crucial for designing hardware components that can process and manipulate the data effectively to accelerate the software's performance.
 
 Considering this, optimizing both the control and data paths is essential to developing an efficient hardware design that aligns with the software's requirements.

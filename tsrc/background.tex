@@ -3,7 +3,7 @@
 %This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
 %Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic, and reference them in this document. An example citation is given in this sentence [1].
 
-This chapter addresses the state-of-the-art. It starts by presenting the ISO/IEC 11172-3 standard. Then, it describes the MPEG-1/2 Layers I/II encoders available in the market. At the end, it presents the tools used in this work, IOb-Soc and \textit{Versat}.
+This chapter addresses the state-of-the-art. It starts by presenting the ISO/IEC 11172-3~\cite{11172} standard. Then, it describes the MPEG-1/2 Layers I/II encoders available in the market. At the end, it presents the tools used in this work, IOb-Soc and \textit{Versat}.
 
 \subsection{ISO/IEC 11172-3: 1993 (E)}
 
@@ -47,7 +47,7 @@ The ISO/IEC 11172-3 (MPEG-Audio) psychoacoustic algorithm contains four primary 
 \label{fig:algorithm}
 \end{figure}
 
-The \textbf{Filter Bank} does a time-to-frequency mapping, being one of two types. It can be a polyphase filter bank or a hybrid polyphase/MDCT filter bank, with each delivering a specific mapping in time and frequency.
+The \textbf{Filter Bank} does a time-to-frequency mapping, being one of two types. It can be a polyphase filter bank or a hybrid polyphase/Modified discrete cosine transform (MDCT)~\cite{mdct} filter bank, with each delivering a specific mapping in time and frequency.
 These filterbanks are critically sampled, having the same number of samples in both analyzed and time domains, and provide the primary frequency separation for the encoder, with quantized output samples. \\
 In layer II, a filter bank with 32 subbands is used. In each subband, 12 or 36 samples are grouped for processing.
 
@@ -115,7 +115,7 @@ Within the professional and consumer market, four fields of applications can be 
 
 Knowing the wide range of customers that need digital audio, belonging to all industries, this work proposes developing an IP core to encode MPEG-1/2 Layer II, using a RISC-V processor and hardware accelerators.
  
-An intellectual property core (IP core) consists of a block of logic or data that is used in a semiconductor chip when making a field-programmable gate array (FPGA)~\cite{fpga} or application-specific integrated circuit (ASIC)~\cite{asic}.
+An intellectual property core (IP core) consists of a block of logic or data that is used in a semiconductor chip when making a field-programmable gate array (FPGA) or application-specific integrated circuit (ASIC)~\cite{fpga}.
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
 Ideally, an IP core should be entirely portable, meaning it should be possible to insert it into any vendor technology or design methodology. However, this is not always the case, existing two main categories of IP cores, soft IP core, and hard IP core.\\
@@ -133,7 +133,7 @@ Two IP Cores, two Chips, and one Software that perform MPEG-1/2 Layer I/II audio
 The \textit{CWda74}~\cite{CWda74} is an audio IP core capable of encoding one audio stream in real-time, provided by \textit{Coreworks, S.A.}~\cite{coreworks}.
 
 This IP core contains the MPEG-1/2 Layer I/II encoder software and the \textit{Coreworks} processor-based hardware audio engine platform (\textit{CWda1011}).\\
-Initially, the software is compiled into a binary file, which can be automatically boot-loaded through one of the control interfaces, parallel Advanced Microcontroller Bus Architecture (AMBA) Advanced Peripheral Bus (APB) or serial Serial Peripheral Interface (SPI). 
+Initially, the software is compiled into a binary file, which can be automatically boot-loaded through one of the control interfaces, parallel Advanced Microcontroller Bus Architecture (AMBA)~\cite{bib:axi_amba} Advanced Peripheral Bus (APB) or serial Serial Peripheral Interface (SPI). 
 Once the software is loaded, the program runs on the audio engine platform. The system can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. \\
 The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as Inter-IC Sound (I2S)/Time Division Multiplexed (TDM) and Sony/Philips Digital Interface (SPDIF), are also available.
 The Memory Interface can be AMBA Advanced eXtensible Interface (AXI) (for ASIC or Xilinx~\cite{xilinx} FPGA), Avalon (for Altera~\cite{intel} FPGA), or Memory Interface Generator (MIG) (for Xilinx FPGA).
@@ -282,7 +282,7 @@ Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\ci
 
 \subsubsection{TwoLAME}
 
-Despite being unmaintained since 2003, the \textit{TooLAME} software was directly succeeded by the \textit{TwoLAME}~\cite{twolame} code fork, which is the focus of this work.
+Despite being unmaintained since 2003, the \textit{TooLAME}~\cite{toolame} software was directly succeeded by the \textit{TwoLAME}~\cite{twolame} code fork, which is the focus of this work.
 Thus, \textit{TwoLAME} is an optimized MPEG Layer 2 audio encoder, based on \textit{TooLAME}, with its latest version (0.4) released in 2019. 
 Table~\ref{tab:twolame} describes the additional features not provided in the original \textit{TooLAME}.
 
@@ -312,7 +312,7 @@ Table~\ref{tab:twolame} describes the additional features not provided in the or
 \end{table}
 
 The \textit{TwoLAME} repository includes a \textit{simplefrontend} directory that contains a basic implementation of the software, written in C.
-It has a \textit{simplefrontend.c} file, which includes the \textit{main()} function, and two other files, \textit{audio\_wave.c} and \textit{audio\_wave.h}.
+It has a \textit{simplefrontend.c} file, containing the \textit{main()} function, and two other files, \textit{audio\_wave.c} and \textit{audio\_wave.h}.
 Figure \ref{pseudo1} shows the pseudo code for the first part of \textit{simplefrontend.c}, mainly consisting of initialization.
 
 \begin{figure}[H]
@@ -325,7 +325,7 @@ Figure \ref{pseudo1} shows the pseudo code for the first part of \textit{simplef
 
 The program starts by allocating memory for two different buffers to allow the encoding process. One of them is \textit{pcmaudio}, which receives part of the original input file. This PCM buffer has a size of AUDIOBUFSIZE multiplied by two (corresponds to the number of bytes of short integer type), being allocated and initialized with zero by \textit{calloc}. The other buffer is \textit{mp2buffer}, which receives part of the encoded file that is later written in the output file. This MP2 buffer has a size of MP2BUFSIZE (corresponds to the number of bytes of unsigned char type), being allocated and initialized with zero by \textit{calloc} as well.
 
-Then comes the \textit{TwoLAME}-related stuff. The first function is \textit{twolame\_init}, which initializes the encoding software by setting defaults for all parameters and returning a pointer necessary to all future \textit{TwoLAME} calls. The second function is \textit{wave\_init}, which parses the wave header. This function belongs to \textit{audio\_wave.c} and is responsible for processing the wave header (the first four bytes). Apart from identifying the file as WAVE, the header gives relevant information like sample rate and audio mode, which is collected in a \textit{wave\_info\_t} struct.
+Then comes the \textit{TwoLAME}-related stuff. The first function is \textit{twolame\_init}, which initializes the encoding software by setting defaults for all parameters and returning a pointer necessary to all future \textit{TwoLAME} calls~\cite{twolameapi}. The second function is \textit{wave\_init}, which parses the wave header. This function belongs to \textit{audio\_wave.c} and is responsible for processing the wave header (the first four bytes). Apart from identifying the file as WAVE, the header gives relevant information like sample rate and audio mode, which is collected in a \textit{wave\_info\_t} struct.
 The remaining initialization functions specify encoding options. There is the \textit{twolame\_set\_num\_channels}, which sets the number of channels in the input stream. There is also the \textit{twolame\_set\_mode}, which sets the MPEG Audio Mode (like mono or stereo) for the output stream. In addition, the \textit{twolame\_set\_in\_samplerate} sets the sample rate of the PCM audio input, while the \textit{twolame\_set\_out\_samplerate} sets the sample rate of the MPEG audio output. The \textit{twolame\_set\_bitrate} sets the bitrate of the MPEG audio output stream.
 
 After defining the main encoding options, \textit{twolame\_init\_params} function is called. It prepares \textit{TwoLAME} to start encoding by checking all the parameters, making sure they are valid as well as allocating buffers and initializing internally used variables. Then, \textit{fopen} opens the output file where the encoded MP2 data is later written.
@@ -341,7 +341,7 @@ Moving to the \textit{TwoLAME} execution, figure \ref{pseudo2} shows the pseudo 
 %\vspace{1cm}
 
 This process is based on a \textit{while} loop, as the main idea is to encode one part of the input audio file at a time, repeating the loop as many times as required. Therefore, each loop iteration starts by reading a chunk of audio data from the input WAV file through \textit{wave\_get\_samples}. This function also belongs to \textit{audio\_wave.c} and is responsible for reading AUDIOBUFSIZE samples to the PCM buffer (\textit{pcmaudio}).\\
-With the buffer already loaded, \textit{twolame\_encode\_buffer\_interleaved} is responsible for encoding the audio data using TwoLAME. This function has a high level of complexity, as expected. It makes use of the \textit{libtwolame} library, which englobes many processes. In particular, the function is composed by \textit{twolame\_buffer\_init}, which sets the \textit{bit\_stream} struct, and \textit{encode\_frame}, which encodes one audio frame at a time.
+With the buffer already loaded, \textit{twolame\_encode\_buffer\_interleaved} is responsible for encoding the audio data using TwoLAME~\cite{twolameapi}. This function has a high level of complexity, as expected. It makes use of the \textit{libtwolame} library, which englobes many processes. In particular, the function is composed by \textit{twolame\_buffer\_init}, which sets the \textit{bit\_stream} struct, and \textit{encode\_frame}, which encodes one audio frame at a time.
 After being encoded, the chunk of data is written in the output file through \textit{fwrite}. The \textit{frames} variable, which counts the number of frames encoded, is also updated. \\
 
 Lastly, figure \ref{pseudo3} shows the pseudo code for the third part of \textit{simplefrontend.c}. 
@@ -355,7 +355,7 @@ Lastly, figure \ref{pseudo3} shows the pseudo code for the third part of \textit
 %\vspace{1cm}
 
 In this part, the \textit{TwoLAME} software finishes execution and so does the IOb-SoC system.
-The first function is \textit{twolame\_encode\_flush}, which encodes any remaining buffered PCM audio, i.e., any remaining audio samples in the PCM buffer. This function is simpler than \textit{twolame\_encode\_buffer\_interleaved} and returns at most a single frame.
+The first function is \textit{twolame\_encode\_flush}, which encodes any remaining buffered PCM audio, i.e., any remaining audio samples in the PCM buffer~\cite{twolameapi}. This function is simpler than \textit{twolame\_encode\_buffer\_interleaved} and returns at most a single frame.
 The \textit{fwrite} is used once again to write the remaining encoded data in the output file. Lastly, the encoding software is closed through \textit{twolame\_close} function. It shuts down the \textit{TwoLAME} encoder and frees all memory that was previously allocated, including PCM and MP2 buffers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -370,8 +370,8 @@ A System-on-Chip (SoC) is an integrated circuit that combines components of an e
 Putting many elements of a computer system on a single piece of silicon has some advantages, such as low power requirements, reduced cost, increased performance, and reduced physical size.
 
 %iob-soc (%components, FPGA resources, repository, accelerators)
-The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V processor, which users can modify, simulate, and implement in ASICs and FPGAs.
-This SoC, provided by \textit{IObundle, Lda}, supports stand-alone and boot-loading modes. It also allows an internal RAM or an external DDR controller via an L1/L2 cache system. 
+The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V~\cite{riscv} processor, which users can modify, simulate, and implement in ASICs~\cite{asic} and FPGAs~\cite{fpga}.
+This SoC, provided by \textit{IObundle, Lda}, supports stand-alone and boot-loading modes. It also allows an internal RAM~\cite{ram} or an external Double Data Rate (DDR)~\cite{ddr} controller via an L1/L2 cache system. 
 
 Figure \ref{fig:iob} shows the IOb-SoC high-level block diagram.
 
@@ -386,14 +386,14 @@ Figure \ref{fig:iob} shows the IOb-SoC high-level block diagram.
 \subsubsection{IOb-SoC Components}
 Starting with the \textbf{CPU}, the IOb-SoC uses a PicoRV32 CPU core, an open-source 32-bit processor that implements the RV32IMC instruction set, with an operating frequency of 167MHz.
 
-As \textbf{Memory} subsystem, this SoC includes three main components. The Boot Read-Only Memory \textbf{Boot ROM} is a ROM used for booting the system. The Static Random Access Memory \textbf{SRAM} is an internal memory that allows the system to run the program or the bootloader without the need for external memory. The \textbf{Cache} is an optional component that stores data from the external Double Data Rate (DDR) memory.
+As \textbf{Memory} subsystem, this SoC includes three main components. The Boot Read-Only Memory \textbf{Boot ROM} is a ROM used for booting the system. The Static Random Access Memory \textbf{SRAM}~\cite{sram} is an internal memory that allows the system to run the program or the bootloader without the need for external memory. The \textbf{Cache} is an optional component that stores data from the external Double Data Rate (DDR) memory.
 
 The communication between the CPU and the system’s components (master and slaves) occurs through two buses. The \textbf{Memory bus} allows the CPU to communicate with the memory subsystem, while the \textbf{Peripheral bus} allows the CPU to communicate with system peripherals.
 
 In addition, the \textbf{IOb-Interconnect} component is a bus switch responsible for the valid-ready handshake protocol between the CPU and all the peripherals. Based on the peripheral prefix from the address bus, this component selects which peripheral-specific bus connects to the CPU bus. \\
 The \textbf{IOb-Interconnect} multiplexes or demultiplexes, depending on the direction, the CPU bus signals (\textit{valid}, \textit{ready} and \textit{rdata}). By doing so, the component creates enough signals to ensure that there is one of each signal for each of the peripherals. Optionally, two peripherals connected to the peripheral bus can communicate directly without CPU intervention, allowing for faster data transfers between peripherals.
 
-There is also a \textbf{Native to AXI adapter}, which allows communication between peripherals and memory controllers that use the AXI4 protocol. Since the CPU only contains the native bus, the IOb-SoC uses this component to convert the signals from one bus to the other, with each peripheral that uses the AXI4-Lite port containing one \textbf{Native to AXI adapter}.
+There is also a \textbf{Native to AXI adapter}, which allows communication between peripherals and memory controllers that use the AXI4~\cite{bib:axi_amba} protocol. Since the CPU only contains the native bus, the IOb-SoC uses this component to convert the signals from one bus to the other, with each peripheral that uses the AXI4-Lite port containing one \textbf{Native to AXI adapter}.
 
 Finally, The Universal Asynchronous Receiver-Transmitter (\textbf{\textbf{UART}}) peripheral allows the SoC to communicate with external systems, through the RS-232 serial communication protocol. \\
 
@@ -501,15 +501,15 @@ The IOb-SoC Repository is a \textit{GitHub} repository that allows the user to m
 
 \textit{Versat} constitutes a reconfigurable hardware accelerator tailored for integration within embedded systems. Operating on a Coarse-Grain Reconfigurable Array (CGRA) architecture, \textit{Versat} exhibits compact dimensions and low power consumption. The design features a simplified controller unit, facilitating self and partial reconfiguration.
 
-The architecture is characterized by a modest number of functional units interlinked in a comprehensive graph topology to ensure optimal adaptability. The reduced functional unit count is offset by the ease of configuration and dynamic reconfiguration during runtime. Distinguishing itself from conventional CGRAs, \textit{Versat} is proficient in mapping sequences of nested program loops rather than individual loops, with self and partial reconfiguration occurring between these nested loops.
+The architecture is characterized by a modest number of functional units interlinked in a comprehensive graph topology to ensure optimal adaptability. The reduced functional unit count is offset by the ease of configuration and dynamic reconfiguration during runtime. Distinguishing itself from conventional CGRAs, \textit{Versat} is proficient in mapping sequences of nested program loops rather than individual loops, with self and partial reconfiguration occurring between these nested loops~\cite{tese2019}.
 
 Programming \textit{Versat} is achievable through assembly language and a specialized C++ dialect. The ability to program using assembly language presents a novel and valuable aspect for program optimization and circumventing compiler or architectural challenges.
-Regarding practical utilization, \textit{Versat} can serve as an accelerator for host processors on the same chip, enabling certain procedures to run faster and consume less energy when executed on \textit{Versat}. To diminish dependency on the host Central Processing Unit (CPU), \textit{Versat} incorporates a straightforward Controller responsible for algorithmic control, self-reconfiguration, and data movement. This frees up the host for more productive tasks. The Controller is programmable and encompasses an instruction memory storing \textit{Versat} programs. Control over the various modules is administered through a Control Bus.
+Regarding practical utilization, \textit{Versat} can serve as an accelerator for host processors on the same chip, enabling certain procedures to run faster and consume less energy when executed on \textit{Versat}. To diminish dependency on the host Central Processing Unit (CPU), \textit{Versat} incorporates a straightforward Controller responsible for algorithmic control, self-reconfiguration, and data movement~\cite{tese2017}. This frees up the host for more productive tasks. The Controller is programmable and encompasses an instruction memory storing \textit{Versat} programs. Control over the various modules is administered through a Control Bus.
 
 Incorporated within \textit{Versat} is a dedicated Data Engine (DE) unit that conducts data computation. The DE unit comprises Functional Units (FUs) interconnected in a complete mesh, offering multiple configurations for a given datapath. This multiplicity aids in simplifying the compiler.
 The Configuration Module (CM) retains the DE's configuration, specifying the present datapath, and accommodates a register for preparing the subsequent configuration of the DE. Additionally, it possesses another register capable of temporarily storing numerous complete configurations, switchable during runtime. The Controller can write partial configurations to the CM and manage to save and restore entire configurations from the configuration memory.
 
-Furthermore, \textit{Versat} integrates a Direct Memory Access (DMA) module, enabling autonomous and efficient data, program, and configuration transfers in and out of the device. The DMA operates through a master Advanced Extensible Interface – AXI4, an interface stemming from the Advanced Microcontroller Bus Architecture (AMBA) and designed by ARM.
+Furthermore, \textit{Versat} integrates a Direct Memory Access (DMA) module, enabling autonomous and efficient data, program, and configuration transfers in and out of the device. The DMA operates through a master Advanced Extensible Interface – AXI4, an interface stemming from the Advanced Microcontroller Bus Architecture (AMBA)~\cite{bib:axi_amba} and designed by ARM.
 
 Facilitating communication with the host processor, \textit{Versat} is equipped with a shared Control Register File (CRF). The CRF incorporates two host interfaces, selectable during compilation: a Serial Peripheral Interface (SPI) and a parallel bus interface. The SPI slave interface is employed when the host system is an off-chip master device, primarily for debugging and testing purposes. On the other hand, the parallel bus interface is utilized when the host is an embedded processor and may adhere to the AXI4 Lite format.
 
@@ -574,6 +574,7 @@ A brief description of each functional unit is provided in the table below.
 \subsubsection{Operators}
 
 \textit{Versat} also contains a set of 6 operators defined in its specification source. The operators execute either over the right operand or between the left and right operands.
+In practice, this terminology just abstracts the implementation of the operators in \textit{Versat}, through functionals units. 
 
 A brief description of each operator is provided in the table below.
 

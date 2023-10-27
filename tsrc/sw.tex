@@ -2,7 +2,7 @@ This chapter addresses the software architecture.
 It starts by setting up the IOb-Soc and configuring the firmware to allow execution of \textit{TwoLAME} encoding algorithm. Then, software optimizations are done to run \textit{TwoLAME} in FPGA. 
 At the end, a detailed profiling analysis defines which part of the \textit{TwoLAME} software requires hardware acceleration.
 
-Knowing beforehand that \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, porting the software to PICORV32 CPU would not be the best option, due to its fixed-point arithmetic limitation. Therefore, the ideal option is porting \textit{TwoLAME} to \textbf{VEXRISCV} (RV32IM) CPU, since it includes a floating-point unit (FPU)~\cite{fpu}.
+Knowing beforehand that \textit{TwoLAME}~\cite{audacity} uses floating-point arithmetic (FP)~\cite{floatingpoint}, porting the software to PICORV32 CPU would not be the best option, due to its fixed-point arithmetic limitation. Therefore, the ideal option is porting \textit{TwoLAME} to \textbf{VEXRISCV} CPU, since it includes a floating-point unit (FPU)~\cite{fpu}.
 In this process, the first step was removing the \textit{PICORV32} from the IOb-SoC and adding the VEXRISCV as the only CPU. This was straightforward, as \textit{VEXRISCV} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding the submodule to IOb-SoC's repository, some paths were changed to allow the correct compilation of the CPU. Interrupt signals were also added to the system data bus, such as \textit{timerInterrupt}, \textit{softwareInterrupt}, and \textit{externalInterrupt}.
 
 \subsection{Audio test files}
@@ -10,7 +10,7 @@ In this process, the first step was removing the \textit{PICORV32} from the IOb-
 Before porting the software, the \textit{TwoLAME} itself had to be verified. This verification was just in a practical way since this open-source software was already tested and approved by other users in various systems, with positive feedback. Considering this, the verification consisted of listening to an original audio file and the corresponding encoded file, produced by \textit{TwoLAME}.
 
 %For testing purposes
-To do so, four audio files were initially generated with \textit{Audacity} software. This is free open-source audio software, compatible with GNU/Linux (current working environment), and capable of multi-track audio editing and recording.
+To do so, four audio files were initially generated with \textit{Audacity} software~\cite{audacity}. This is free open-source audio software, compatible with GNU/Linux~\cite{gnulinux} (current working environment), and capable of multi-track audio editing and recording.
 There are some reasons for having more than one testing file, preferably with different characteristics. One of them is the number of frames, which varies depending on several factors, including the audio codec being used, the settings or parameters selected for encoding, and the duration of the audio being processed (the easiest to notice). Another reason is the ability to check if the encoding software behaves the same way for different specifications, which is a crucial point as the main goal of the intended IP core is to allow real-time encoding.
 
 Thus, the first generated file was \textit{short.wav}, using the \textit{Generate Tone} option in \textit{Audacity}. This mono audio has a sine waveform, 44.1KHz sampling rate, 16 bits per sample, and a size of 27KB (the smallest audio file in the repository).
@@ -19,7 +19,7 @@ The second generated file was \textit{long.wav}, using the \textit{Generate Rhyt
 
 The third generated file was \textit{noise.wav}, using the \textit{Generate Noise} option configured with \textit{White} noise type in \textit{Audacity}. This audio has a 44.1KHz sampling rate, 16 bits per sample, a size of 529KB and, unlike the previous ones, it is stereo. The mono default track was duplicated, with one being distributed 100\% to the Left and the other being distributed 100\% to the Right (\textit{panning effect}).
 
-The fourth and last generated file was \textit{vivaldi.wav}. This file was not generated from scratch in \textit{Audacity}. Instead, it was simply converted to WAV format. The original file, entitled 'Vivaldi - Spring', was downloaded from the Internet (for free) and opened on \textit{Audacity}. After that, the track was reduced to the initial 4 seconds and exported as WAV, being also stereo. What motivated the use of this file was the recognized quality and complexity of \textit{Vivaldi}'s songs.
+The fourth and last generated file was \textit{vivaldi.wav}. This file was not generated from scratch in \textit{Audacity}. Instead, it was simply converted to WAV format. The original file, entitled 'Vivaldi - Spring', was downloaded from the Internet (for free) and opened on \textit{Audacity}. After that, the track was reduced to the initial 4 seconds and exported as WAV, being also stereo. What motivated the use of this file was the recognized quality and complexity of \textit{Vivaldi}'s songs~\cite{vivaldi}.
 
 With four audio files available at the repository, it was possible to verify the \textit{TwoLAME} software. Using a standard \textit{automake} process, composed of \textit{./configure}, \textit{make}, and \textit{make install} commands, \textit{TwoLAME} was successfully installed. Then, by simply typing \textit{stwolame} followed by the input file name, white space, and the output file name (the one desired), the software would run and produce an MP2-encoded version of the original file.
 It is important to mention that both input and output file names should include the file extension. For this work, the relevant extensions are '.wav' as input and '.mp2' as output.
@@ -58,9 +58,9 @@ Apart from main(), some header files were included in \textit{firmware.c}, relat
 
 With the \textit{TwoLAME} already implemented in firmware.c, it is possible to emulate the program, by running it on a PC. It is also possible to simulate its execution on a PC. However, the major interest is in running \textit{TwoLAME} in FPGA, as the goal is to encode MP2 audio in real time. Considering this, some basic software improvements were done before evaluating the performance in FPGA.
 
-The first change in \textit{libtwolame} was the software precision. In \textit{comon.h}, there is a macro for FLOAT that was initially defined as \textit{double}, but it was changed to \textit{float}. One reason for this is the fact that \textit{TwoLAME} should be faster rather than more accurate, without compromising the encoded audio quality. The other reason was IOb-SoC does not support double precision, since it contains floating-point units with single precision, exclusively. Apart from altering the macro, one function in \textit{subband.c} was also changed. The original code contained \textit{modf}, a function that belongs to \textit{math.h} and requires double precision. Therefore, it was substituted by \textit{modff}, which has the same functionality (returns the fractional part) but uses single precision.
+The first change in \textit{libtwolame} was the software precision. In \textit{comon.h}, there is a macro for FLOAT that was initially defined as \textit{double}, but it was changed to \textit{float}. One reason for this is the fact that \textit{TwoLAME} should be faster rather than more accurate, without compromising the encoded audio quality. The other reason was IOb-SoC does not support double precision~\cite{doubleprecision}, since it contains floating-point units with single precision, exclusively. Apart from altering the macro, one function in \textit{subband.c} was also changed. The original code contained \textit{modf}~\cite{modf}, a function that belongs to \textit{math.h}~\cite{mathh} and requires double precision. Therefore, it was substituted by \textit{modff}~\cite{modf}, which has the same functionality (returns the fractional part) but uses single precision.
 
-The second change was more strategic, as it involved a more careful analysis of the encoding software. It is known that trigonometric functions are computationally complex, and \textit{TwoLAME}, as an audio-processing software, requires different mathematical functions. For this reason, some math functions were removed and substituted by tables, wherever it was possible. To evaluate this possibility, the \textit{TwoLAME} was emulated on a PC, and compiled with different test files.
+The second change was more strategic, as it involved a more careful analysis of the encoding software. It is known that trigonometric functions~\cite{trigonometric} are computationally complex, and \textit{TwoLAME}, as an audio-processing software, requires different mathematical functions. For this reason, some math functions were removed and substituted by tables, wherever it was possible. To evaluate this possibility, the \textit{TwoLAME} was emulated on a PC, and compiled with different test files.
 
 The first case was \textit{psycho\_3\_powerdensityspectrum}, in \textit{psycho\_3.c}. In this function, there was a \textit{log10} operation inside a \textit{i} loop, with \textit{i} ranging from 1 to 512 (HBLKSIZE-1). Since the \textit{log10} operation was performed based on \textit{energy[i]}, the solution was creating a table with 512 positions, so that \textit{energy[i]} determines the index that should be accessed from the table. To be linear access, \textit{energy[i]} has to be multiplied by 1000 and converted to an integer. Since it is guaranteed that in the \textit{else} condition the array value is always positive, a condition was added to upper limit the index of the log10 table (511 is the maximum index). With this, and noticing the multiplication by 10 (of log10) in the original code, the \textit{tablog10\_psycho\_3\_powerdensityspectrum} was created by calculating $LOG10(x/10000)$ in an excel sheet, with \textit{x} ranging from 0 and 511. It was then copied and defined in \textit{psycho\_3.c}, with a change in index 0. Since \textit{log10(0)=-inf}, the first index in the table was defined as -40 (the same value as index 1).
 
@@ -143,8 +143,8 @@ In addition, the \textit{free()} functions were also inserted in a \textit{\#ifd
 
 \subsection{Profiling}
 
-With everything set up, the last implementation in the software architecture was \textbf{profiling}. This process is a form of dynamic program analysis that can measure different variables, like memory space or time complexity. In this case, it was used to measure the duration of each function.
-To do so, an eight component was added to IOb-SoC, the \textbf{TIMER}. This peripheral is a 64-bit hardware timer, equipped with reset, enable, and reading functions. It includes a software driver and an example C application, which helps understand how it works. 
+With everything set up, the last implementation in the software architecture was \textbf{profiling}~\cite{profiling}. This process is a form of dynamic program analysis that can measure different variables, like memory space or time complexity. In this case, it was used to measure the duration of each function.
+To do so, an eight component was added to IOb-SoC, the \textbf{TIMER}~\cite{bib:iobtimer}. This peripheral is a 64-bit hardware timer, equipped with reset, enable, and reading functions. It includes a software driver and an example C application, which helps understand how it works. 
 Similarly to the other components, the TIMER is tracked by a \textit{GitHub} repository (forked from \textit{IObundle, Lda}), integrating the IOb-SoC as a submodule. This component was previously implemented and tested by \textit{IObundle, Lda} as well. In addition, some paths were added to allow correct compilation.
 
 With this, IOb-SoC was ready for profiling. The process consisted of three phases, with the first phase being a more high-level approach. 
@@ -160,29 +160,29 @@ Table \ref{profiling1} shows the first phase of the profiling for all input file
     \cline{2-5}
      & short.wav & long.wav & noise.wav & vivaldi.wav \\
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_init()}  & 3 & 2 & 3 & 0 \\ 
+    \multicolumn{1}{|c|}{twolame\_init()}  & 3 & 2 & 3 & 0 \\ 
     \hline
     \multicolumn{1}{|c|}{wave\_init()}  & 0 & 0 & 0 & 0 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_set\_num\_channels()}   & 0 & 0 & 0 & 0 \\ 
+    \multicolumn{1}{|c|}{twolame\_set\_num\_channels()}   & 0 & 0 & 0 & 0 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_set\_in\_samplerate()}   & 0 & 0 & 0 & 0 \\ 
+    \multicolumn{1}{|c|}{twolame\_set\_in\_samplerate()}   & 0 & 0 & 0 & 0 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_set\_bitrate()}   & 0 & 0 & 0 & 0 \\ 
+    \multicolumn{1}{|c|}{twolame\_set\_bitrate()}   & 0 & 0 & 0 & 0 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_init\_params()}   & 11 & 11 & 11 & 11 \\ 
+    \multicolumn{1}{|c|}{twolame\_init\_params()}   & 11 & 11 & 11 & 11 \\ 
     \hline
     \multicolumn{1}{|c|}{wave\_get\_samples()}   & 4 & 126 & 89 & 135 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_encode\_buffer\_interleaved()}   & 1510 & 24345 & 19820 & 26010 \\ 
+    \multicolumn{1}{|c|}{twolame\_encode\_buffer\_interleaved()}   & 1510 & 24345 & 19820 & 26010 \\ 
     \hline
     \multicolumn{1}{|c|}{memcpy()}  & 2 & 59 & 19 & 32 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_encode\_flush()}   & 79 & 80 & 185 & 155 \\ 
+    \multicolumn{1}{|c|}{twolame\_encode\_flush()}   & 79 & 80 & 185 & 155 \\ 
     \hline
     \multicolumn{1}{|c|}{memcpy()}  & 0 & 0 & 0 & 0 \\ 
     \hline
-    \multicolumn{1}{|c|}{\textit{TwoLAME}\_close()}   & 0 & 0 & 0 & 1 \\ 
+    \multicolumn{1}{|c|}{twolame\_close()}   & 0 & 0 & 0 & 1 \\ 
     \hline
     \multicolumn{1}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
     \hline
@@ -197,7 +197,7 @@ Table \ref{profiling1} shows the first phase of the profiling for all input file
 The previous table shows that \textit{twolame\_encode\_buffer\_interleaved} occupies most of the execution time, which is expected as it is responsible for the encoding, calling many other \textit{TwoLAME} functions. Nonetheless, this information is not enough, mainly because developing hardware to accelerate the whole function would be an extremely difficult task.
 By analyzing \textit{twolame\_encode\_buffer\_interleaved}, it is noticeable that the relevant operation inside the function is \textit{encode\_frame()}, as all the other operations are basic.
 Considering this, the second phase of profiling includes all function calls inside \textit{encode\_frame}. 
-This phase was similar to the previous one in terms of methodology. The only differences were the usage of the \textit{elapsed\_time\_\textit{TwoLAME}} array, which was declared and set to 0 in \textit{main()} and passed as an argument to \textit{twolame\_encode\_buffer\_interleaved} and \textit{encode\_frame()}, consecutively. The variables that store the time values are also different, being \textit{start\_elapse\_time\_twolame} and \textit{end\_elapse\_time\_twolame}, declared in \textit{twolame.c} as global unsigned integers.
+This phase was similar to the previous one in terms of methodology. The only differences were the usage of the \textit{elapsed\_time\_twolame} array, which was declared and set to 0 in \textit{main()} and passed as an argument to \textit{twolame\_encode\_buffer\_interleaved} and \textit{encode\_frame()}, consecutively. The variables that store the time values are also different, being \textit{start\_elapse\_time\_twolame} and \textit{end\_elapse\_time\_twolame}, declared in \textit{twolame.c} as global unsigned integers.
 By doing this, 23 functions were included in the second phase of \textit{TwoLAME} profiling. It was not 23 functions but 23 blocks of code from \textit{encode\_frame()}, because apart from the \textit{libtwolame} functions, there is additional code that has to be included for correct measurements, like if conditions and \textit{for} loops.
 At the end of \textit{main()}, every position of the array is printed, showing how many ms each part of \textit{encode\_frame()} took. 
 Table \ref{profiling2} shows the second phase of the profiling for all input files.
@@ -210,7 +210,7 @@ Table \ref{profiling2} shows the second phase of the profiling for all input fil
     \cline{3-6}
     \multicolumn{2}{c|}{} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
     \cline{1-6}
-   \multirow{23}{*}{\parbox{2.5cm}{\centering \textbf{\textit{TwoLAME}} \\ \textbf{\_encode} \\ \textbf{\_buffer} \\ \textbf{\_interleaved()}}}  & \multicolumn{1}{c|}{\textit{scale\_and\_mix\_samples}}  & 0 & 9 & 5 & 3 \\ 
+   \multirow{23}{*}{\parbox{2.5cm}{\centering \textbf{twolame} \\ \textbf{\_encode} \\ \textbf{\_buffer} \\ \textbf{\_interleaved()}}}  & \multicolumn{1}{c|}{\textit{scale\_and\_mix\_samples}}  & 0 & 9 & 5 & 3 \\ 
     \cline{2-6}
     & \multicolumn{1}{c|}{\textit{twolame\_buffer\_sstell}} & 3 & 139 & 52 & 78 \\ 
     \cline{2-6}
@@ -316,6 +316,6 @@ Table \ref{profiling3} shows the third phase of the profiling for all input file
 \vspace{1cm}
 
 The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to others. Second, it is clear that \textit{psycho\_3 function 11}, which is \textit{psycho\_3\_threshold}, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
-Therefore, \textit{psycho\_3\_threshold} should be the first function accelerated in Hardware.
+Therefore, \textit{psycho\_3\_threshold} should be the first function accelerated in hardware.
 
 %These functions have more specific names as we are going lower in abstraction.

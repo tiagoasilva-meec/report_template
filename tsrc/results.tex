@@ -10,7 +10,7 @@ It starts by presenting the implementation results in FPGA. Then, the execution 
 
 \subsection{FPGA implementation}
 This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
-All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}. This device features 1,760K logic cells, making it capable of handling complex digital logic designs. It also boasts 7,560Kb of on-chip memory, which facilitates efficient data storage and manipulation. In addition, the FPGA offers 2,520 DSP slices, enabling high-performance signal processing tasks. \\ 
+All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}~\cite{xcku040}. This chip is based on the 28nm \textit{UltraScale+} architecture and is equipped with a total of 242400 LUTs, 484800 FFs, 600 BRAMs, and 1920 DSPs. In this work, it runs at 100MHz, the frequency at which both the \textit{VexRiscv} CPU and \textit{Versat} hardware are compiled.\\ 
 
 Table \ref{implementation} shows the implementation results of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat}, first using \textit{spectrum\_search} accelerator, then using \textit{masking\_threshold} accelerator.
 
@@ -24,23 +24,23 @@ Table \ref{implementation} shows the implementation results of \textit{TwoLAME} 
     \cline{1-1} \cline{3-4}
     \multicolumn{1}{|c|}{\textbf{Metric}} & & \textit{spectrum\_search} & \textit{masking\_threshold} \\
     \hline
-    \multicolumn{1}{|c|}{Total LUTs}  & 24489 &  26198 & 26590\\ 
+    \multicolumn{1}{|c|}{Total LUTs}  & 24489 &  38913 & 34810\\ 
     \hline
-    \multicolumn{1}{|c|}{Logic LUTs}  & 19818 &  21346 & 21738\\ 
+    \multicolumn{1}{|c|}{Logic LUTs}  & 19818 &  33359 & 29267\\ 
     \hline
-    \multicolumn{1}{|c|}{LUTRAMs}  & 4288 & 4464 & 4464\\ 
+    \multicolumn{1}{|c|}{LUTRAMs}  & 4288 & 5160 & 5152\\ 
     \hline
-    \multicolumn{1}{|c|}{SRLs}  & 383 & 388 & 388\\ 
+    \multicolumn{1}{|c|}{SRLs}  & 383 & 394 & 391\\ 
     \hline
-    \multicolumn{1}{|c|}{Flip-Flops}  & 24888 & 27347 & 28027 \\ 
+    \multicolumn{1}{|c|}{Flip-Flops}  & 24888 & 37653 &  35186\\ 
     \hline
-    \multicolumn{1}{|c|}{RAMB36}  & 157 &  157 & 157 \\ 
+    \multicolumn{1}{|c|}{RAMB36}  & 157 &  161 &  176\\ 
     \hline
-    \multicolumn{1}{|c|}{RAMB18}  & 5 &  5 & 5\\ 
+    \multicolumn{1}{|c|}{RAMB18}  & 5 &  5 & 6\\ 
     \hline
     \multicolumn{1}{|c|}{URAM}  & 0 &  0 & 0\\ 
     \hline
-    \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 10 & 10\\ 
+    \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 26 & 14\\ 
     \hline
     \end{tabular}
     \caption{FPGA implementation results in IOb-SoC with and without \textit{Versat}.}
@@ -72,18 +72,19 @@ The previous information offers valuable insights into the influence of \textit{
 
 \end{itemize}
 
-Focusing on the measurement without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, the results show a modest increase from 24,489 Total LUTs without \textit{Versat} to 26,198 Total LUTs with \textit{Versat}. This suggests that \textit{Versat} consumes additional LUT resources within the FPGA, as expected.
-The inclusion of \textit{Versat} increases from 19,818 Logic LUTs to 21,346, affirming its impact on logic operations within the system. It also exhibits a change in LUTRAMs from 4,288 to 4,464, indicating the utilization of dedicated memory resources within the FPGA.
-The small difference between the two scenarios, from 383 SRLs to 388 SRLs, suggests that \textit{Versat} minimally affects this particular resource. On the opposite, the significant jump in Flip-Flops from 24,888 without \textit{Versat} to 27,347 with it is notable, indicating a requirement increase for sequential storage elements within the FPGA.
-Interestingly, there is no difference in the number of RAMB36, RAMB18, URAM, and DSP Blocks resources, suggesting that \textit{Versat} does not utilize this specific resource.
+Focusing on the measurement without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, the results show a significant increase from 24489 Total LUTs without \textit{Versat} to 38913 Total LUTs with \textit{Versat}. This suggests that \textit{Versat} consumes additional LUT resources within the FPGA, as expected.
+The inclusion of \textit{Versat} increases from 19818 Logic LUTs to 33359, affirming its impact on logic operations within the system. It also exhibits a change in LUTRAMs from 4288 to 5160, indicating the utilization of dedicated memory resources within the FPGA.
+The small difference between the two scenarios, from 383 SRLs to 394 SRLs, suggests that \textit{Versat} minimally affects this particular resource. On the opposite, the significant jump in Flip-Flops from 24888 without \textit{Versat} to 37653 with it is notable, indicating a requirement increase for sequential storage elements within the FPGA.
+There is also a slight increase in RAMB36, and a big one in DSP Blocks, from 10 to 26.
+Interestingly, there is no difference in the number of RAMB18 and URAM resources, suggesting that \textit{Versat} does not utilize this specific resource.
 
-The measurement results with \textit{Versat} using \textit{masking\_threshold} accelerator are similar to the \textit{spectrum\_search} accelerator ones. More precisely, the \textit{masking\_threshold} accelerator requires a few more Total LUTs, Logic LUTs, and Flip-Flops, compared to the other accelerator.
+The measurement results with \textit{Versat} using \textit{masking\_threshold} accelerator are similar to the \textit{spectrum\_search} accelerator ones. More precisely, the \textit{masking\_threshold} accelerator requires a bit less resources than the previous accelerator, except for RAMB36, RAMB18 and DSP Blocks, which are all in higher quantity.
 
 % This information can guide system architects and designers in making informed decisions about hardware resource allocation within the FPGA.
 
 \subsection{Execution time}
 
-Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat} using \textit{spectrum\_search} accelerator, for all input files.
+Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat}, using \textit{spectrum\_search} and \textit{masking\_threshold} accelerators, for all input files.
 
 \vspace{1cm}
 
@@ -103,14 +104,19 @@ Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC
     \cline{2-6}
     & \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 974 & 9391 & 7209 & 9729 \\ 
     \hline
+    \multirow{2}{*}{\parbox{3.2cm}{\centering with \\ \textbf{\textit{masking\_threshold}}}}  & \multicolumn{1}{c|}{\textit{psycho\_3\_threshold}}  & 555 & 13807 & 11761 & 15168 \\ 
+    \cline{2-6}
+    & \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1518 & 22677 & 18637 & 24458 \\ 
+    \hline
     \end{tabular}
     \caption{Execution time for all input files with and without \textit{Versat} [ms].}
     \label{time}
 \end{table}
 
-The previous information shows that the \textit{spectrum\_search} \textit{Versat} accelerator can induce a substantial reduction in execution time. Specifically, the execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
-Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
-Therefore, the \textit{masking\_threshold} accelerator was not tested in FPGA, since it would not reduce the execution times. After being developed, this accelerator was only tested for correctness using emulation on a PC.
+The previous information shows that the \textit{spectrum\_search} \textit{Versat} accelerator can induce a substantial reduction in execution time. Specifically, the \textit{psycho\_3\_threshold} execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
+Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. In this accelerator there is only a a main transference of data at the beginning, followed by the execution of many loop iterations, keeping the data inside the accelerator. Since only a few constants are changed in each iteration, the performance gain is big.\\
+Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
+In fact, the \textit{masking\_threshold} accelerator increased the execution time by a few milliseconds for all input files, i.e. no acceleration was achieved with \textit{masking\_threshold} at all. This can be explained by the fact that the overhead of transferring data is greater than any gain in using the accelerator, since the loop executes 512 iterations, which are not enough to make the data transfer worth it (for performance).
 
 
 \subsection{Real-time requirements}
@@ -123,7 +129,7 @@ After measuring the execution time of the original and the hardware-accelerated 
     \textit{Speedup achieved} = \frac{\textit{Execution time without acceleration}}{\textit{Execution time with acceleration}} 
 \end{equation}\\
 
-Additionally, the \textit{Amdahl's Law} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
+Additionally, the \textit{Amdahl's Law}~\cite{amdahl} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
 
 \begin{equation}
     \textit{Speedup desired} = \frac{1}{(1 - p) + \frac{p}{s}} 
