@@ -1,5 +1,16 @@
-\hspace{0.4cm} This work introduces a floating-point Moving Picture Experts Group (MPEG)-1/2 Layer II Audio encoder, offering high accuracy at the cost of increased silicon area in a market with limited commercial MPEG-1/2 Layer II Intellectual Property (IP) cores.
-The software architecture features the \textit{VexRiscv} Central Processing Unit (CPU) in an IOb-SoC setup, using the \textit{TwoLAME} encoding algorithm. Software optimizations are applied. Profiling with a \textit{TIMER} peripheral highlights the significant impact of the \textit{psycho\_3\_threshold} function, accounting for 37\% to 64\% of execution time.
-On the hardware side, the \textit{Versat} accelerator is integrated into IOb-SoC to speed up the \textit{psycho\_3\_threshold} function. Two hardware accelerators are developed, \textit{spectrum\_search} and \textit{masking\_threshold}, addressing different parts of the \textit{psycho\_3\_threshold} function. The field-programmable gate array (FPGA) implementation shows increased Total Look Up Tables (LUTs), LUTRAMs, Flip-Flops, and Digital Signal Processor (DSP) Blocks.
-The execution time of \textit{psycho\_3\_threshold} function is significantly reduced with the \textit{spectrum\_search} accelerator.
-Comparing the achieved speedup with the required speedup for real-time encoding, some input files come close to meeting the requirements. While the first file, with a small number of frames, still falls short, the remaining files, especially the one representing the worst-case scenario, show promising results.
+\hspace{0.4cm}
+This work introduces an MPEG-1/2 Layer II Audio encoder for a RISC-V embedded
+architecture featuring a reconfigurable hardware accelerator. The software uses
+the TwoLAME encoder open-source library ported to the system. Although such
+systems are standard on commercial embedded processors such as ARM, this work is
+the first to present a RISC-V implementation. The advantage is that the RISC-V
+architecture is an open specification with a few open-source hardware designs
+available. A hardware accelerator allows the system to run on low-frequency
+environments like an FPGA device. The system hardware is based on IOb-SoC, an
+open-source RISC-V SoC platform written in Verilog. The VexRiscv CPU has been
+chosen, and the hardware accelerator has been implemented using the Versat
+open-source reconfigurable accelerator design tool. The work features software
+optimizations and two hardware accelerators to accelerate the computation of the
+psychoacoustic model of the algorithm. The achieved performance is 2.4x slower
+than real-time for a system running at 100MHz, which indicates that an
+implementation for 240MHz would meet the goal.
