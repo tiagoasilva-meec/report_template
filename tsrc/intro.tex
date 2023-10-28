@@ -1,5 +1,3 @@
-\subsection{Topic overview}
-
 The \textit{Moving Picture Experts Group} (MPEG)~\cite{MPEG} is a working group that sets standards for media coding, established by International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication.
 
 %MPEG, 1 e 2, audio
@@ -10,23 +8,26 @@ The MPEG standard also differentiates three coding schemes, called Layer I, Laye
 
 \subsection{Motivation}
 
-Since its formation in 1988, the MPEG~\cite{MPEG} has made an indelible mark on the transition from analog to digital video. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product.
+Since its formation in 1988, the MPEG~\cite{MPEG} has made an indelible mark on the transition from analog to digital video and audio. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product. Nonetheless, an increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. 
 
-An increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. To integrate an MPEG-1/2 Layer II encoder in a system, there are two available options.
+To integrate an MPEG-1/2 Layer II encoder in a system, there are three available options.\\
+One option is buying an encoder chip, like the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, the \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888}, or the \textit{Futura II ASI+IP}~\cite{futura}. For the user, this means an additional chip on the board, increasing its area/volume, weight, and power consumption. \\
+Another option is to use a software encoder, which requires a Central Processing Unit (CPU), either one already available, or an additional processor chip or Intellectual Property (IP) core~\cite{ipcore}. The cost of porting the software to the CPU cannot be ignored. Depending on the application, this factor may impact both the system's viability and efficiency.\\
+Another interesting option is to license a commercial MPEG-1/2 Layer II encoder an IP Core. This reduces area/volume, weight, and power consumption, allowing the user to develop a top-notch system and beat the competition. To the best of the author's knowledge, there is only one IP core specifically designed for MPEG-1/2 Layer I/II Audio in the market, namely the \textit{CWda74}~\cite{CWda74}, later re-branded \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}, which uses fixed-point calculations. 
 
-One option is buying an encoder chip, like the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, the \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888}, or the \textit{Futura II ASI+IP}~\cite{futura}. For the user, this means an additional chip on the board, increasing its area/volume, weight, and power consumption. Another option is to use a software encoder, which requires a Central Processing Unit (CPU), either one already available, or an additional processor chip or Intellectual Property (IP) core~\cite{ipcore}. The cost of porting the software to the CPU cannot be ignored. Depending on the application, these factors may impact the system's viability.
+The scarcity of IP core alternatives underscores the pressing need for innovation in this domain. One way to implement an MP2 Audio encoder is by utilizing a RISC-V processor in conjunction with hardware accelerators. The RISC-V approach provides specialization and ensures greater energy efficiency, as the tailored hardware accelerators consume less power, making it well-suited for energy-constrained applications.\\
+Furthermore, the RISC-V and hardware accelerators combination leverages parallel processing to enhance encoding speed, particularly valuable for real-time applications. The flexibility to customize the RISC-V processor to the specific encoding requirements ensures optimal resource utilization, while a general CPU may struggle to achieve comparable efficiency. \\
+Finally, by offloading encoding tasks to hardware accelerators, the RISC-V system allows the CPU to manage other critical functions effectively, resulting in a well-balanced resource allocation and improved overall system performance.
 
-Another interesting option is to license a commercial MPEG-1/2 Layer II encoder an IP Core. This reduces area/volume, weight, and power consumption, allowing the user to develop a top-notch system and beat the competition. However, to the best of the author's knowledge, there is only one IP core specifically designed for MPEG-1/2 Layer I/II Audio in the market, namely the \textit{CWda74}~\cite{CWda74}, later re-branded \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}, which uses fixed-point calculations. Therefore, the market can greatly benefit from more diversity and competition.
 
+%\subsection{Topic overview}
 \subsection{Objectives}
 
-Addressing the need for digital audio integrated solutions, and with the MPEG Layer II (MP2) audio being the base of DAB, this work proposes an IP core capable of encoding MPEG-1/2 Layer II Audio using floating-point calculations.
-%, and beating the fixed-point CWda74 in terms of accuracy.
-The work will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC~\cite{bib:iobsoc-github}, a System-on-Chip template comprising an open-source RISC-V~\cite{riscv} processor. The TwoLAME~\cite{twolamerepo} repository, an optimized MPEG Audio Layer II encoding software based on the ISO/IEC 11172~\cite{11172}, will provide the algorithm.\\
+This work proposes an IP core capable of encoding MP2 Audio, using a RISC-V processor and hardware accelerators. The encoder will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC~\cite{bib:iobsoc-github}, a System-on-Chip template comprising an open-source RISC-V~\cite{riscv} processor. The TwoLAME~\cite{twolamerepo} repository, an optimized MPEG Audio Layer II encoding software based on the ISO/IEC 11172~\cite{11172}, will provide the algorithm.\\
 The objectives of this work are the following:
 
 \begin{itemize}
-    \item Port the \textit{TwoLAME}~\cite{twolame} software to the IOb-SoC.
+    \item Port the \textit{TwoLAME}~\cite{twolame} software to the IOb-SoC with floating-point precision.
     \item Do basic software optimizations.
     \item Profile the \textit{TwoLAME} running on the IOb-SoC in FPGA~\cite{fpga}.
     \item Implement custom instructions in \textit{VexRiscv}~\cite{vexriscv} CPU. 
