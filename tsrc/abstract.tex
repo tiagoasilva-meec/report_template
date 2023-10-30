@@ -1,16 +1,1 @@
-\hspace{0.4cm}
-This work introduces an MPEG-1/2 Layer II Audio encoder for a RISC-V embedded
-architecture featuring a reconfigurable hardware accelerator. The software uses
-the TwoLAME encoder open-source library ported to the system. Although such
-systems are standard on commercial embedded processors such as ARM, this work is
-the first to present a RISC-V implementation. The advantage is that the RISC-V
-architecture is an open specification with a few open-source hardware designs
-available. A hardware accelerator allows the system to run on low-frequency
-environments like an FPGA device. The system hardware is based on IOb-SoC, an
-open-source RISC-V SoC platform written in Verilog. The VexRiscv CPU has been
-chosen, and the hardware accelerator has been implemented using the Versat
-open-source reconfigurable accelerator design tool. The work features software
-optimizations and two hardware accelerators to accelerate the computation of the
-psychoacoustic model of the algorithm. The achieved performance is 2.4x slower
-than real-time for a system running at 100MHz, which indicates that an
-implementation for 240MHz would meet the goal.
+\hspace{0.4cm} This work introduces an MPEG-1/2 Layer II Audio encoder for a RISC-V embedded architecture featuring a reconfigurable hardware accelerator. The software uses the TwoLAME encoder open-source library ported to the system. Although such systems are standard on commercial embedded processors such as ARM, this work is the first to present a RISC-V implementation. The advantage is that the RISC-V architecture is an open specification with a few open-source hardware designs available. A hardware accelerator allows the system to run on low-frequency environments like an FPGA device. The system hardware is based on IOb-SoC, an open-source RISC-V SoC platform written in Verilog. The VexRiscv CPU has been chosen, and the hardware accelerator has been implemented using the Versat open-source reconfigurable accelerator design tool. The work features software optimizations and two hardware accelerators to accelerate the computation of the psychoacoustic model of the algorithm. The base performance is 6.2x slower than real-time for a system running at 100MHz, which indicates that an implementation for 620MHz would meet the goal. With hardware acceleration, the achieved performance is 2.4x slower than real-time for a system running at 100MHz, which indicates that an implementation for 240MHz would meet the goal.

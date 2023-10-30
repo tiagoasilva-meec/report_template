@@ -1,45 +1,31 @@
+This chapter addresses the hardware architecture. It starts by looking over the base FPGA implementation and setting up \textit{Versat} in the IOb-MP2-E. Then, it describes new Functional Units that are required to accelerate the \textit{psycho\_3\_threshold} function. Afterward, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function. In the end, accelerator functionality is described and a system overview is done.
 
-This chapter addresses the hardware architecture. It starts by implementing a Single Instruction, Multiple Data (SIMD) addition instruction in the \textit{VexRiscv} CPU. Then, it sets up \textit{Versat} in the IOb-SoC. After, it describes new Functional Units that are required to accelerate the \textit{psycho\_3\_threshold} function. In the end, two hardware accelerators are developed, with each one executing part of the mentioned \textit{TwoLAME} function.
+At the end of the previous section, it was well-marked that \textit{psycho\_3\_threshold} function was suitable for acceleration using hardware. Based on the profiling, accelerating this function would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the input file.
+In the context of hardware acceleration, it's crucial to understand the hardware architecture of IOb-MP2-E, especially its synthesis and FPGA implementation. Therefore, a description of how the software integrates with the hardware is presented below.
 
-\subsection{VexRiscv}
-After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
+The process of creating an FPGA-based SoC involves synthesizing and implementing the entire system configuration within the FPGA (the chip). For IOb-MP2-E, this configuration includes elements like \textit{VEXRISCV} CPU, \textit{UART}, \textit{TIMER}, etc.
+The process defines how these hardware components are mapped and interconnected within the FPGA fabric (in Configurable Logic Elements (CLEs), Block RAM (BRAM), Look-Up Tables (LUTs), etc) ensuring that the CPU, memory, and peripherals work together seamlessly.
+%and external memory, such as DDR, which is available on boards like the KU040.
 
-The \textit{VexRiscv} is a robust RISC-V~\cite{bib:riscvmanual} CPU implemented via a 5-stage in-order pipeline, enhancing its functionality through various optional and complementary plugins~\cite{vexriscv}. This unconventional strategy is made possible thanks to the use of meta hardware description languages, such as \textit{SpinalHDL}~\cite{bib:spinalhdl}, clearly evident in the \textit{VexRiscv} implementation. The user has the flexibility to swap, activate, or deactivate specific CPU components directly through the plugin system. The user can also introduce new functionalities and instructions without the need to make modifications to the CPU's source code.
-
-
-\subsubsection{Single Instruction, Multiple Data (SIMD) ADD instruction}
-Considering this, the first option to accelerate \textit{psycho\_3\_threshold} function was creating a custom instruction. In theory, this would accelerate all the operations not only present in the function but also in the whole \textit{TwoLAME} software, being executed as a custom instruction in the CPU. It would consist of a horizontal acceleration.\\
-To do so, a Single Instruction, Multiple Data instruction (SIMD)~\cite{simd} was first tested in \textit{VEXRISCV}, without any connection with the \textit{TwoLAME}, i.e., being simply evoked from firmware. The plugin responsible for the implementation of this instruction in the CPU was already present in the original repository. However, the execution of the instruction from the firmware required several modifications.
-
-First, the header file, \textit{firmware.h}, contains the function prototype for the \textit{simd\_add} function (the chosen name).
-Then, in the assembly code file \textit{firmware.S}, a label called \textit{simd\_add} is defined, which is expected to call the custom instruction implemented in the CPU (MAC was the chosen name), followed by a return from this assembly code back to the firmware.
-Lastly, in a \textit{custom\_ops.S} file, macros for encoding custom instructions are defined. 
-
-The \textit{SIMD\_ADD} macro, in this case, represents the custom instruction, corresponding to a RISC-V R-type instruction~\cite{bib:riscvmanual}. In RISC-V assembly language, R-type instructions are a category of instructions that operate on registers and have a common encoding format. 
-Therefore, the \textit{SIMD\_ADD} macro is a specific instruction encoding for a SIMD (Single Instruction, Multiple Data) addition operation. It uses a \textit{R\_TYPE\_INSTR} macro to generate the encoding for the operation. The arguments for \textit{SIMD\_ADD} match the fields expected by \textit{R\_TYPE\_INSTR}, but the values are specific to the \textit{SIMD ADD} operation.
-The macro takes the arguments presented below.
-
-\begin{itemize}
-    \item \textit{\_f7}: 7-bit field for a specific function code.
-    \item \textit{\_rs2}: 5-bit field for the source register 2.
-    \item \textit{\_rs1}: 5-bit field for the source register 1.
-    \item \textit{\_f3}: 3-bit field for a specific function code (within the \_opc field).
-    \item \textit{\_rd}: 5-bit field for the destination register.
-    \item \textit{\_opc}: 7-bit field for the primary operation code.
-\end{itemize}
-
-With all these arguments, the \textit{.word} assembler directive generates a 32-bit instruction word by \textit{bitwise OR}-ing together the shifted values of these fields, according to the RISC-V instruction encoding format. The 32-bit matches the instruction decoding of the plugin, making the CPU execution the intended instruction.
-
-The whole process related to the inclusion of a new instruction in the CPU was not that complex, since the plugin was already available in the original \textit{VEXRISCV} repository. However, implementing custom instructions with several operations and input registers seemed difficult due to the unfamiliarity with the base CPU plugins and also with the \textit{SpinalHDL} language. For this reason, the custom instruction option was discarded and the option of using \textit{Versat} was considered.
+Once the system configuration is established, the firmware becomes a vital component. The firmware is converted into machine instructions specific to the CPU architecture used in the IOB-MP2-E (which is RISC-V). After synthesis and compilation, the firmware is stored in a Block RAM (SRAM) in the FPGA, allowing high-speed access. When the FPGA is powered on or reset, the firmware is loaded from this memory and executed by the CPU. \\
+This process makes the IOb-MP2-E a self-contained, programmable system within the FPGA, with all its hardware components integrated into a coherent, functional unit.
 
 \subsection{Versat}
-%After measuring the execution times of \textit{TwoLAME} in IOb-SoC, through profiling, it was well-marked that \textit{psycho\_3\_threshold} function needed hardware acceleration, i.e., it should be executed by custom-made hardware. This would bring the possibility of reducing between 37\% to 64\% total execution time, depending on the audio input.
-At this stage, the IOb-SoC was comprised of eight main components: \textbf{AXI}, \textbf{CACHE}, \textbf{LIB}, \textbf{MEM}, \textbf{VEXRISCV}, \textbf{TWOLAME}, \textbf{UART} and \textbf{TIMER}. Given \textit{Versat} being the optimal choice for accelerating the \textit{psycho\_3\_threshold} function, integration into IOb-SoC becomes imperative.
-Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-SoC. This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as a submodule to IOb-SoC's repository, some paths were changed to allow correct compilation.
-The second step was more complex, consisting of adding an interconnection between \textit{Versat} and RAM. Iob-SoC usually contains a single AXI~\cite{bib:axi_xilinx} instance, used by both cache memory and CPU. Considering this, the solution was to double the size of the wires from the already existing AXI, providing an additional interface to \textit{Versat} while avoiding a new separate interface.
-%explain better
+At this stage, the IOb-MP2-E was comprised of eight main components: \textbf{AXI}, \textbf{CACHE}, \textbf{LIB}, \textbf{MEM}, \textbf{VEXRISCV}, \textbf{TWOLAME}, \textbf{UART} and \textbf{TIMER}. Given \textit{Versat} being the optimal choice for accelerating the \textit{psycho\_3\_threshold} function, integration into IOb-MP2-E becomes imperative.
+Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-MP2-E. This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as a submodule to IOb-MP2-E's repository, some paths were changed to allow correct compilation.
+The second step was more complex, consisting of adding an AXI interconnection between \textit{Versat} and IOB-MP2-E's external memory (DDR4 SDRAM). The system usually contains a single AXI~\cite{bib:axi_xilinx} interconnect instance, used by external memory and CPU. Therefore, a pragmatic solution was to double the wire size of the existing AXI interconnection, providing communication from/to \textit{Versat} while keeping the same AXI instance.
 
-Understanding the resources that \textit{Versat} offers, the subsequent step involves examining the \textit{psycho\_3\_threshold} function.
+Figure \ref{fig:newiob2} shows a high-level block diagram of the IOb-MP2-E at this point.
+
+\vspace{0.1cm}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.85\linewidth]{iob2.pdf}}
+\caption{High-level block diagram of the IOb-MP2-E in use.}
+\label{fig:newiob2}
+\end{figure}
+
+The subsequent step involves examining the \textit{psycho\_3\_threshold} function.
 This function contains three for loops, with the first one being a simple initialization process, setting each element of arrays \textit{LTtm} and \textit{LTnm} to a constant value (\textit{DBMIN}) within the range of 0 to 135 ($SUBSIZE-1$). Performing this initialization in hardware incurs unnecessary overhead, as the result remains constant for all iterations. Instead, in a hardware implementation, we can directly use the constant value DBMIN as an input for the subsequent hardware operations (the next for loops, in this case), optimizing efficiency and reducing the need for a dedicated initialization loop.
 Therefore, only two accelerators should be developed to execute the second and third for loops of \textit{psycho\_3\_threshold}.
 
@@ -55,7 +41,7 @@ A brief description of each functional unit is provided in the table below.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|p{0.8\linewidth}|}
+    \begin{tabular}{|c|p{0.7\linewidth}|}
         \hline
         \multicolumn{1}{|c|}{\textbf{FU}} & \multicolumn{1}{c|}{\textbf{Description}} \\
         \hline
@@ -76,7 +62,7 @@ A brief description of each functional unit is provided in the table below.
 
 \vspace{0.5cm}
 
-Concerning hardware acceleration, a crucial step is to determine the control and data paths of the software that is intended to be accelerated. In other words, the paths refer to the fundamental components that dictate how the software interacts with the hardware to achieve acceleration.
+Concerning hardware acceleration, a crucial step is to determine the control and data paths of the algorithm part that is intended to be accelerated. In other words, the paths refer to the fundamental components that dictate how the software interacts with the hardware to achieve acceleration.
 
 The control path defines the flow and sequencing of operations within the software that need to be accelerated. It includes decisions, branching, loops, and other control structures that determine the program's behavior~\cite{datacontrolpath}. Determining the control path is vital for optimizing the hardware design to efficiently execute these operations.
 The data path refers to the route through which data flows within the software during its execution. It involves operations and transformations applied to the input data to produce the desired output. Understanding the data path is crucial for designing hardware components that can process and manipulate the data effectively to accelerate the software's performance.
@@ -273,17 +259,17 @@ A brief description of each module is provided in the list below.
 
 \textbf{\textit{start}}
 
-This is the main module, which is responsible for invoking all the other modules. It interconnects all modules by defining the correct inputs and outputs, apart from executing simple logical operations.
+This is the main module, which is responsible for invoking all the other modules. It interconnects all modules by defining the correct inputs and outputs, and it also executes simple logical operations.
 
 
-\subsubsection{Firmware}
+\subsubsection{Configuration}
 Apart from specifying the data process, configuring all the input data for the hardware accelerator is also required. The inputs can either be simple constants or data arrays that are streamed by a memory unit, sequentially. The inputs can also be stored in a memory unit and accessed randomly.
 
 As mentioned in the \textit{psycho\_3\_threshold} function section, the first accelerator executes both inner loops in the second for loop of \textit{psycho\_3\_threshold}.
 Therefore, this accelerator executes several runs, i.e. there is the need to configure the accelerator with at least two sets of input data.
 This is done in two separate functions because part of the data configuration is valid for all the runs. Part of the configuration that doesn't change (between runs) belongs to the \textit{initVersat} function, while the remaining part belongs to \textit{configureVersat} function.
 
-In \textit{initVersat} the constants (that don't change between runs) are configured by assigning the intended value to the constant name (from the hardware accelerator). For floating-point data, the \textit{PackInt} function is required, which receives the intended value as argument.
+In \textit{initVersat} the constants (that don't change between runs) are configured by assigning the intended value to the constant name (in the source files generated by \textit{Versat}). For floating-point data, the \textit{PackInt} function is required, which receives the intended value as argument.
 There is also a memory unit configuration for \textit{freq\_subset} array. This sets an internal memory with each position of the array, from 0 to SUBSIZE, read by the CPU through \textit{VersatUnitWrite} function, sequentially.
 There are also two memory unit configurations for \textit{bark} and \textit{mem}$\rightarrow$\textit{dbtable} arrays. These set two lookup tables, with SUBSIZE and HBLKSIZE, respectively.
 
@@ -329,9 +315,51 @@ This section shows both control and data paths of the second accelerator, \texti
 This module has some similarities with the \textit{start} module of the first accelerator since it contains most of the \textit{start} module description but is duplicated.
 It invokes and interconnects all the other modules, apart from executing simple logical and conditional operations.
 
-\subsubsection{Firmware}
+\subsubsection{Configuration}
 
 As mentioned in the \textit{psycho\_3\_threshold} function section, the second accelerator executes the third for loop of \textit{psycho\_3\_threshold}.
 The configuration of this accelerator is done inside a single function since it performs only one run. Therefore, all the configuration belongs to \textit{configureVersat1} function.
 
-In this function, the process is similar to the previous configuration function, since the second accelerator does not contain any functional unit that is not present in the first accelerator.
+In this function, the process is similar to the previous configuration function, since the second accelerator does not contain any functional unit that is not present in the first one.
+
+\subsection{Accelerator Functionality and Interfaces}
+
+Focusing on the \textit{Versat} matter, \textit{versatSpec.txt} functions like a code script, while \textit{Versat} operates akin to a compiler. In other words, \textit{Versat} takes the code, described in a Domain Specific Language (DSL), and generates not only the accelerator (in Verilog) but also the necessary headers and C source code. The generated code empowers the firmware to govern the accelerator effectively, i.e. it ensures correct correspondence between CPU actions and the accelerator.
+
+\textit{Versat} generates hardware accelerators according to the dataflow paradigm. The algorithm is implemented by instantiating functional units (specified in \textit{versatSpec.txt}) and connecting them to execute the intended part of the algorithm. \textit{Versat} handles data validity transparently from the user, inserting buffer units between connections to ensure data from convergent paths arrive at the same time when needed.
+Regarding the accelerator's internal registers, some of these registers are constant and shared by all accelerators, such as Direct Memory Access (DMA) and control registers. On the opposite, others depend on the specific functional units present in the accelerator.\\
+The key points on how these FUs operate are presented below.
+
+\begin{itemize}
+    \item \textbf{Configuration Interfaces:} In the \textit{Verilog} description, the accelerator incorporates configuration interfaces, which are inputs that allow the CPU to modify and control the functionality of individual units. A configuration register connects to the configuration entries of each unit, conditioning its behavior. 
+    \item \textbf{Memory-Mapped Interfaces:} The memory-mapped interfaces involve the allocation of specific address space for units, allowing access to them through read and write operations. This interface is primarily used for memory units, enabling the CPU to read and write data as required.
+    \item \textbf{State:} State serves as a mechanism for the CPU to read data from the units, through the memory-mapped interfaces.
+\end{itemize}
+
+The accelerator generated by \textit{Versat} groups all these interfaces into a single memory-mapped interface, accessed by the CPU. When the CPU accesses an address inside the accelerator memory space, the CPU can be accessing a control register of the accelerator, the configuration, or the state registers (which are connected to the configuration and state interfaces of their specific units) or it can be accessing the FUs directly through the memory mapped interface.
+
+Moreover, a DMA mechanism is used for efficient data transfers between the accelerator and external memory, specifically between the accelerator's memory-mapped interfaces and DDR. This DMA can be configured by the CPU. In practice, the accelerator loads memories such as \textit{LTtm}, \textit{LTnm}, \textit{freq\_subt}, and $mem\to dbtable$ using the DMA, enabling efficient and high-speed data movement.
+
+\subsection{Overview}
+
+An overview of the hardware setup employed in this work is presented below.
+
+\vspace{0.1cm}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.80\linewidth]{system.pdf}}
+\caption{Hardware setup overview.}
+\label{system}
+\end{figure}
+
+The relevant components are the Xilinx XCKU040-1FBVA676 FPGA and the DDR4 SDRAM, as explained previously. Nonetheless, a basic description of how the hardware setup works is presented below.
+
+\begin{itemize}
+    \item \textbf{Personal Computer (PC):} The PC is responsible for the synthesis, compilation, and programming of IOb-MP2-E into the FPGA.
+    \item \textbf{Xilinx Board:} The Xilinx board is an integral part of our hardware setup, housing the FPGA and related resources. This Xilinx board is where IOb-MP2-E is ultimately implemented and executed.
+    \item \textbf{USB-UART Connection:} To facilitate communication between the PC and the Xilinx board, a USB-UART connection is employed. This connection is utilized for transferring the synthesized configuration bitstream from the PC to the FPGA.
+    \item \textbf{Compilation and Synthesis Software:} On the PC, specialized compilation and synthesis software tools are used to design and compile IOb-MP2-E. These tools generate a configuration bitstream that specifies the functionality and behavior of IOb-MP2-E. Once generated, this bitstream is transferred to the Xilinx board via the USB connection.
+    \item \textbf{FPGA Implementation:} The FPGA is responsible for the physical implementation of IOb-MP2-E.
+    \item \textbf{IOb-MP2-E Execution:} Once the IOb-MP2-E is successfully implemented in the FPGA, it can be executed within the FPGA's logic fabric. The SoC interacts with other components on the Xilinx board, such as DDR memory, to carry out the intended computational tasks.
+\end{itemize}
+

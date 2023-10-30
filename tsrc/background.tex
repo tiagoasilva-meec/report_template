@@ -3,7 +3,7 @@
 %This section, or section group, should explain in detail the problem this work is trying to solve and why it is essential. More sections containing background or state-of-the-art descriptions may be added if that improves the explanation.
 %Describe the existing attempts at solving the problem and their limitations. One must perform a bibliography search, identify the principal works on this topic, and reference them in this document. An example citation is given in this sentence [1].
 
-This chapter addresses the state-of-the-art. It starts by presenting the ISO/IEC 11172-3~\cite{11172} standard. Then, it describes the MPEG-1/2 Layers I/II encoders available in the market. At the end, it presents the tools used in this work, IOb-Soc and \textit{Versat}.
+This chapter addresses the state-of-the-art. It starts by presenting the ISO/IEC 11172-3~\cite{11172} standard. Then, it describes the MPEG-1/2 Layers I/II encoders available in the market. In the end, it presents the tools used in this work, IOb-Soc and \textit{Versat}.
 
 \subsection{ISO/IEC 11172-3: 1993 (E)}
 
@@ -18,7 +18,7 @@ The audio encoder is responsible for processing the digital audio signal and pro
 The encoder algorithm is not standardized and may use various means of encoding, such as estimation of the auditory masking threshold, quantization, and scaling. However, the encoder output must be such that a decoder, conforming to the specifications of the coded audio bitstream, will produce audio suitable for the intended application.
 
 %figure page v iso
-Figure \ref{fig:encoder} illustrates the basic structure of an audio encoder. 
+Figure \ref{fig:encoder} illustrates the basic structure of an audio encoder~\cite{11172}. 
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.85\linewidth]{encoder.pdf}}
@@ -38,7 +38,7 @@ The encoding process supports four different modes: single channel, dual channel
 
 \subsubsection{Psychoacoustic encoder}
 
-The ISO/IEC 11172-3 (MPEG-Audio) psychoacoustic algorithm contains four primary parts, as shown in figure \ref{fig:algorithm}: \textit{Filter Bank}, \textit{Psychoacoustic Model}, \textit{Bit or Noise Allocation} and \textit{Bitstream Formatting}.
+The ISO/IEC 11172-3 (MPEG-Audio) psychoacoustic algorithm contains four primary parts, as shown in figure \ref{fig:algorithm}: \textit{Filter Bank}, \textit{Psychoacoustic Model}, \textit{Bit or Noise Allocation} and \textit{Bitstream Formatting}~\cite{11172}.
 
 %figure page 66 iso
 \begin{figure}[H]
@@ -62,7 +62,7 @@ The \textbf{Bitstream Formatting} takes the quantized filterbank outputs, togeth
 In Layer II, a fixed Pulse code modulation (PCM) code is used for each subband sample, with the exception that quantized samples may be grouped.
 
 %figure page 79 iso
-Figure \ref{fig:flow-encoder} shows a more detailed Layer II Encoder flow chart.
+Figure \ref{fig:flow-encoder} shows a more detailed Layer II Encoder flow chart~\cite{11172}.
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.70\linewidth]{flow-encoder.pdf}}
@@ -119,7 +119,7 @@ An intellectual property core (IP core) consists of a block of logic or data tha
 Therefore, IP cores are usually the property of a particular person or company, being created throughout the design process and eventually turned into components for reuse. Third-party IPs can also be purchased and implemented into designs. 
 
 Ideally, an IP core should be entirely portable, meaning it should be possible to insert it into any vendor technology or design methodology. However, this is not always the case, existing two main categories of IP cores, soft IP core, and hard IP core.\\
-A soft IP core is generally offered as a synthesizable RTL model. It is developed in a hardware description language like SystemVerilog~\cite{ieee:systemVerilog} or VHSIC Hardware Description Language (VHDL)~\cite{ieee:vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage of this IP is the possibility to customize during the physical design phase and map to any process technology.\\
+A soft IP core is generally offered as a synthesizable RTL model. It is developed in a hardware description language like SystemVerilog~\cite{systemverilog} or VHSIC Hardware Description Language (VHDL)~\cite{vhdl}, or can occasionally be provided synthesized with a gate-level netlist. One advantage of this IP is the possibility to customize during the physical design phase and map to any process technology.\\
 A hard IP core has logic and physical implementation, meaning that its physical layout is finished and fixed in a particular process technology.
 One advantage of this core is the better predictability of chip timing performance and area for its technology. 
 
@@ -136,7 +136,7 @@ This IP core contains the MPEG-1/2 Layer I/II encoder software and the \textit{C
 Initially, the software is compiled into a binary file, which can be automatically boot-loaded through one of the control interfaces, parallel Advanced Microcontroller Bus Architecture (AMBA)~\cite{bib:axi_amba} Advanced Peripheral Bus (APB) or serial Serial Peripheral Interface (SPI). 
 Once the software is loaded, the program runs on the audio engine platform. The system can be configured, controlled, and monitored through a configuration, control, and status register file, accessed by the control interfaces. \\
 The Audio Input and Output Interfaces use a native parallel interface. Other standard audio interfaces, such as Inter-IC Sound (I2S)/Time Division Multiplexed (TDM) and Sony/Philips Digital Interface (SPDIF), are also available.
-The Memory Interface can be AMBA Advanced eXtensible Interface (AXI) (for ASIC or Xilinx FPGA), Avalon (for Altera~\cite{intel} FPGA), or Memory Interface Generator (MIG) (for Xilinx FPGA).
+The Memory Interface can be AMBA Advanced eXtensible Interface (AXI) (for ASIC or Xilinx FPGA), Avalon (for Altera~\cite{bib:intel} FPGA), or Memory Interface Generator (MIG) (for Xilinx FPGA).
 
 The \textit{CWda74} IP core delivers Program binary, Software manual, Netlist or RTL, Implementation constraints, and Hardware datasheet.\\
 As attributes, it presents low operation frequency and low power consumption, with the possibility of being optimized to fulfill different design specifications.
@@ -179,7 +179,7 @@ Table~\ref{tab:coreworks} describes the main features.
 
 \subsubsection{IPB-MPEG-SE MPEG-1/2 – Layer I/II Audio Encoder}
 
-The \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se} is an audio IP core capable of encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq}~\cite{ipbloq}.
+The \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se} is an audio IP core capable of encoding up to two stereo audio streams in real-time, provided by \textit{IPbloq}~\cite{bib:ipbloq}.
 
 This IP core is designed to run on the \textit{IPbloq} audio engine platform \textit{IPB-PLAT}, which supports the encoding and decoding of multiple streams in multiple formats, on a single device. More precisely, the \textit{IPB-MPEG-SE} software requires an instance of the \textit{IPB-PLAT} audio engine platform with only one processor. 
 
@@ -196,7 +196,7 @@ In terms of features, this IP core is very similar to the \textit{CWda74}, exten
 
 \subsubsection{CX23415 MPEG-2 Codec}
 
-The \textit{CX23415}~\cite{cx23415} is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several Integrated Circuits (ICs) in a single device, provided by \textit{Conexant Systems, Inc}~\cite{conexant}.
+The \textit{CX23415}~\cite{cx23415} is a low-cost, full-duplex MPEG-2 codec that integrates the functionality of several Integrated Circuits (ICs) in a single device, provided by \textit{Conexant Systems, Inc}~\cite{bib:conexant}.
 
 This chip was the first device to deliver MPEG-2 audio/video encoding and decoding, transport stream (TS) generation, and on-screen display control in a single chip. The ability to incorporate up to five different chip functionalities allowed for reducing the cost of designing and manufacturing digital audio and video products.
 
@@ -240,14 +240,14 @@ As attributes, it presents extremely low power consumption, high reliability, an
 
 \subsubsection{TooLAME/LAME}
 
-The \textit{LAME}~\cite{lame} is a high-quality MPEG Layer III audio encoder, licensed under the Lesser General Public License (LGPL)~\cite{lgpl} and considered the best MP3 encoding software at mid-high and variable bitrates.\\
+The \textit{LAME}~\cite{bib:lame} is a high-quality MPEG Layer III audio encoder, licensed under the Lesser General Public License (LGPL)~\cite{lgpl} and considered the best MP3 encoding software at mid-high and variable bitrates.\\
 As attributes, this software delivers better quality compared to all other encoders at most bitrates, better quality and speed compared to ISO reference software, and three different encoding modes (CBR, VBR, and Average Bit Rate (ABR)). This encoder is also free format and compilable as a shared library (on Linux/Unix) and Dynamic link library (DLL)~\cite{dll} (on Windows).
 
-Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\cite{toolame} was developed as a free software MPEG-1 Layer II audio encoder, written primarily by Mike Cheng. \textit{TooLAME} became well-known and widely used for its particularly high audio quality, despite the existence of many MP2 encoders.
+Based on portions of \textit{LAME} and ISO dist10 code, the \textit{TooLAME}~\cite{bib:toolame} was developed as a free software MPEG-1 Layer II audio encoder, written primarily by Mike Cheng. \textit{TooLAME} became well-known and widely used for its particularly high audio quality, despite the existence of many MP2 encoders.
 
 \subsubsection{TwoLAME}
 
-Despite being unmaintained since 2003, the \textit{TooLAME}~\cite{toolame} software was directly succeeded by the \textit{TwoLAME}~\cite{twolame} code fork, which is the focus of this work.
+Despite being unmaintained since 2003, the \textit{TooLAME} software was directly succeeded by the \textit{TwoLAME}~\cite{bib:twolame} code fork, which is the focus of this work.
 Thus, \textit{TwoLAME} is an optimized MPEG Layer 2 audio encoder, based on \textit{TooLAME}, with its latest version (0.4) released in 2019. 
 Table~\ref{tab:twolame} describes the additional features not provided in the original \textit{TooLAME}.
 
@@ -290,7 +290,7 @@ Figure \ref{pseudo1} shows the pseudo code for the first part of \textit{simplef
 
 The program starts by allocating memory for two different buffers to allow the encoding process. One of them is \textit{pcmaudio}, which receives part of the original input file. This PCM buffer has a size of AUDIOBUFSIZE multiplied by two (corresponds to the number of bytes of short integer type), being allocated and initialized with zero by \textit{calloc}. The other buffer is \textit{mp2buffer}, which receives part of the encoded file that is later written in the output file. This MP2 buffer has a size of MP2BUFSIZE (corresponds to the number of bytes of unsigned char type), being allocated and initialized with zero by \textit{calloc} as well.
 
-Then comes the \textit{TwoLAME}-related stuff. The first function is \textit{twolame\_init}, which initializes the encoding software by setting defaults for all parameters and returning a pointer necessary to all future \textit{TwoLAME} calls~\cite{twolameapi}. The second function is \textit{wave\_init}, which parses the wave header. This function belongs to \textit{audio\_wave.c} and is responsible for processing the wave header (the first four bytes). Apart from identifying the file as WAVE, the header gives relevant information like sample rate and audio mode, which is collected in a \textit{wave\_info\_t} struct.
+Then comes the \textit{TwoLAME}-related stuff. The first function is \textit{twolame\_init}, which initializes the encoding software by setting defaults for all parameters and returning a pointer necessary to all future \textit{TwoLAME} calls~\cite{bib:twolameapi}. The second function is \textit{wave\_init}, which parses the wave header. This function belongs to \textit{audio\_wave.c} and is responsible for processing the wave header (the first four bytes). Apart from identifying the file as WAVE, the header gives relevant information like sample rate and audio mode, which is collected in a \textit{wave\_info\_t} struct.
 The remaining initialization functions specify encoding options. There is the \textit{twolame\_set\_num\_channels}, which sets the number of channels in the input stream. There is also the \textit{twolame\_set\_mode}, which sets the MPEG Audio Mode (like mono or stereo) for the output stream. In addition, the \textit{twolame\_set\_in\_samplerate} sets the sample rate of the PCM audio input, while the \textit{twolame\_set\_out\_samplerate} sets the sample rate of the MPEG audio output. The \textit{twolame\_set\_bitrate} sets the bitrate of the MPEG audio output stream.
 
 After defining the main encoding options, \textit{twolame\_init\_params} function is called. It prepares \textit{TwoLAME} to start encoding by checking all the parameters, making sure they are valid as well as allocating buffers and initializing internally used variables. Then, \textit{fopen} opens the output file where the encoded MP2 data is later written.
@@ -306,7 +306,7 @@ Moving to the \textit{TwoLAME} execution, figure \ref{pseudo2} shows the pseudo 
 %\vspace{1cm}
 
 This process is based on a \textit{while} loop, as the main idea is to encode one part of the input audio file at a time, repeating the loop as many times as required. Therefore, each loop iteration starts by reading a chunk of audio data from the input WAV file through \textit{wave\_get\_samples}. This function also belongs to \textit{audio\_wave.c} and is responsible for reading AUDIOBUFSIZE samples to the PCM buffer (\textit{pcmaudio}).\\
-With the buffer already loaded, \textit{twolame\_encode\_buffer\_interleaved} is responsible for encoding the audio data using TwoLAME~\cite{twolameapi}. This function has a high level of complexity, as expected. It makes use of the \textit{libtwolame} library, which englobes many processes. In particular, the function is composed by \textit{twolame\_buffer\_init}, which sets the \textit{bit\_stream} struct, and \textit{encode\_frame}, which encodes one audio frame at a time.
+With the buffer already loaded, \textit{twolame\_encode\_buffer\_interleaved} is responsible for encoding the audio data using TwoLAME~\cite{bib:twolameapi}. This function has a high level of complexity, as expected. It makes use of the \textit{libtwolame} library, which englobes many processes. In particular, the function is composed by \textit{twolame\_buffer\_init}, which sets the \textit{bit\_stream} struct, and \textit{encode\_frame}, which encodes one audio frame at a time.
 After being encoded, the chunk of data is written in the output file through \textit{fwrite}. The \textit{frames} variable, which counts the number of frames encoded, is also updated. \\
 
 Lastly, figure \ref{pseudo3} shows the pseudo code for the third part of \textit{simplefrontend.c}. 
@@ -320,7 +320,7 @@ Lastly, figure \ref{pseudo3} shows the pseudo code for the third part of \textit
 %\vspace{1cm}
 
 In this part, the \textit{TwoLAME} software finishes execution and so does the IOb-SoC system.
-The first function is \textit{twolame\_encode\_flush}, which encodes any remaining buffered PCM audio, i.e., any remaining audio samples in the PCM buffer~\cite{twolameapi}. This function is simpler than \textit{twolame\_encode\_buffer\_interleaved} and returns at most a single frame.
+The first function is \textit{twolame\_encode\_flush}, which encodes any remaining buffered PCM audio, i.e., any remaining audio samples in the PCM buffer~\cite{bib:twolameapi}. This function is simpler than \textit{twolame\_encode\_buffer\_interleaved} and returns at most a single frame.
 The \textit{fwrite} is used once again to write the remaining encoded data in the output file. Lastly, the encoding software is closed through \textit{twolame\_close} function. It shuts down the \textit{TwoLAME} encoder and frees all memory that was previously allocated, including PCM and MP2 buffers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -338,17 +338,17 @@ Putting many elements of a computer system on a single piece of silicon has some
 The IOb-SoC is a System-on-Chip template, comprising an open-source RISC-V~\cite{riscv} processor, which users can modify, simulate, and implement in ASICs~\cite{asic} and FPGAs~\cite{fpga}.
 This SoC, provided by \textit{IObundle, Lda}, supports stand-alone and boot-loading modes. It also allows an internal RAM~\cite{ram} or an external Double Data Rate (DDR)~\cite{ddr} controller via an L1/L2 cache system. 
 
-Figure \ref{fig:iob} shows the IOb-SoC high-level block diagram.
+Figure \ref{fig:iob} shows a base IOb-SoC high-level block diagram~\cite{iobsoc2022}.
 
 \vspace{0.1cm}
 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.85\linewidth]{iob-soc.pdf}}
-\caption{IOb-SoC high-level block diagram.}
+\caption{Base IOb-SoC high-level block diagram.}
 \label{fig:iob}
 \end{figure}
 
-\subsubsection{IOb-SoC Components}
+\subsubsection{IOb-SoC components}
 Starting with the \textbf{CPU}, the IOb-SoC uses a PicoRV32 CPU core, an open-source 32-bit processor that implements the RV32IMC instruction set, with an operating frequency of 167MHz.
 
 As \textbf{Memory} subsystem, this SoC includes three main components. The Boot Read-Only Memory \textbf{Boot ROM} is a ROM used for booting the system. The Static Random Access Memory \textbf{SRAM}~\cite{sram} is an internal memory that allows the system to run the program or the bootloader without the need for external memory. The \textbf{Cache} is an optional component that stores data from the external Double Data Rate (DDR) memory.
@@ -360,13 +360,11 @@ The \textbf{IOb-Interconnect} multiplexes or demultiplexes, depending on the dir
 
 There is also a \textbf{Native to AXI adapter}, which allows communication between peripherals and memory controllers that use the AXI4~\cite{bib:axi_amba} protocol. Since the CPU only contains the native bus, the IOb-SoC uses this component to convert the signals from one bus to the other, with each peripheral that uses the AXI4-Lite port containing one \textbf{Native to AXI adapter}.
 
-Finally, The Universal Asynchronous Receiver-Transmitter (\textbf{\textbf{UART}}) peripheral allows the SoC to communicate with external systems, through the RS-232 serial communication protocol. \\
+Finally, The Universal Asynchronous Receiver-Transmitter (\textbf{\textbf{UART}}) peripheral allows the SoC to communicate with external systems, through the RS-232 serial communication protocol.
 
 All these components are integrated into IOb-SoC as GitHub submodules. They belong to repositories tracked by GitHub and forked from \textit{IObundle, Lda}, but arranged in a different way and with specific names.
-In this work, the IOb-SoC system comprises seven main components/submodules: \textbf{AXI}, an AXI interconnect protocol;
-\textbf{CACHE}, a high-performance Verilog cache; \textbf{LIB}, a set of Verilog macros; \textbf{MEM}, a set of memory Verilog descriptions; \textbf{PICORV32}, a RISC-V processor; \textbf{TWOLAME}, an optimized MP2 encoding software; \textbf{UART}, a UART core. 
 
-\subsubsection{IOb-SoC Deliverables and FPGA Resources}
+\subsubsection{IOb-SoC deliverables and FPGA resources}
 As deliverables, the IOb-SoC includes Hardware Description Language (HDL) source code, software C source code, simulation testbench, implementation constraints for map, place, and route, demo files, and user documentation for system integration.
 
 Tables~\ref{tab:resorucesxilinx} and~\ref{tab:resorucescyclone} show the implementation resources used for \textit{Xilinx Kintex Ultrascale Devices} and \textit{Intel Cyclone V Devices}, respectively, according to the product brief.
@@ -423,11 +421,11 @@ V Devices.}
 
 %If the external memory interface is selected, an instruction L1 cache, a data L1 cache, and a shared L2 cache are added to the system. The L2 cache communicates with a 3rd party memory controller IP (typically a DDR controller) using an AXI4 master bus.
 
-\subsubsection{IOb-SoC Repository}
+\subsubsection{IOb-SoC repository}
 
 %peripherals
 %simulators and FPGA
-The IOb-SoC Repository is a \textit{GitHub} repository that allows the user to modify the system components easily. It contains specific directories and segments (Tool Command Language (TCL), Verilog, Makefile, etc), with the list below describing the main items.
+The IOb-SoC \textit{GitHub} repository is composed of specific directories and segments (Tool Command Language (TCL), Verilog, Makefile, etc), as briefly described in the list below.
 
 \textbf{document/} This directory supports all the documentation, from LaTeX code and scripts to generated PDFs, like the guide and product brief.
 
@@ -464,21 +462,19 @@ The IOb-SoC Repository is a \textit{GitHub} repository that allows the user to m
 
 \subsection{\textit{Versat}}
 
-\textit{Versat} constitutes a reconfigurable hardware accelerator tailored for integration within embedded systems. Operating on a Coarse-Grain Reconfigurable Array (CGRA) architecture, \textit{Versat} exhibits compact dimensions and low power consumption. The design features a simplified controller unit, facilitating self and partial reconfiguration.
+\textit{Versat} is a novel Coarse-Grained Reconfigurable Architecture (CGRA) designed for embedded systems. It addresses the challenge of accelerating compute-intensive inner loops in code while efficiently managing the transitions between code suitable for the CGRA and code that needs to run on the host processor~\cite{paperversat}.\\
+A list of the key features is presented below:
 
-The architecture is characterized by a modest number of functional units interlinked in a comprehensive graph topology to ensure optimal adaptability. The reduced functional unit count is offset by the ease of configuration and dynamic reconfiguration during runtime. Distinguishing itself from conventional CGRAs, \textit{Versat} is proficient in mapping sequences of nested program loops rather than individual loops, with self and partial reconfiguration occurring between these nested loops~\cite{tese2019}.
+\begin{itemize}
+    \item \textbf{Nested Loop Support}: \textit{Versat} incorporates a programmable controller that handles reconfiguration, data transfer, and simple control code between the accelerated program loops, reducing the host processor's frequent interventions.
+    \item \textbf{Self-Reconfiguration}: \textit{Versat} offers self-reconfiguration, allowing it to generate its configurations, which are more efficient to store than pre-defined configurations. This self-reconfiguration reduces the overhead of frequent configuration changes.
+    \item \textbf{Partial Reconfiguration}: \textit{Versat} supports partial reconfiguration by using a configuration register file and a configuration memory. This approach allows for random access to configuration fields and offers flexibility in configuration management.
+    \item \textbf{Integration with Embedded Systems}: \textit{Versat} cores serve as co-processors within embedded systems, working alongside application processors. They optimize performance and energy efficiency for compute-intensive tasks. Application programmers can access \textit{Versat}'s capabilities through a dedicated API library.
+    \item \textbf{Compiler Support}: A specialized compiler has been developed for \textit{Versat}, facilitating the efficient acceleration of tasks. The programming language syntax is a subset of C/C++, with hardware data descriptions, enabling programmers to leverage \textit{Versat}'s power while keeping software tools separate from application processor tools.
+\end{itemize}
 
-Programming \textit{Versat} is achievable through assembly language and a specialized C++ dialect. The ability to program using assembly language presents a novel and valuable aspect for program optimization and circumventing compiler or architectural challenges.
-Regarding practical utilization, \textit{Versat} can serve as an accelerator for host processors on the same chip, enabling certain procedures to run faster and consume less energy when executed on \textit{Versat}. To diminish dependency on the host Central Processing Unit (CPU), \textit{Versat} incorporates a straightforward Controller responsible for algorithmic control, self-reconfiguration, and data movement~\cite{tese2017}. This frees up the host for more productive tasks. The Controller is programmable and encompasses an instruction memory storing \textit{Versat} programs. Control over the various modules is administered through a Control Bus.
-
-Incorporated within \textit{Versat} is a dedicated Data Engine (DE) unit that conducts data computation. The DE unit comprises Functional Units (FUs) interconnected in a complete mesh, offering multiple configurations for a given datapath. This multiplicity aids in simplifying the compiler.
-The Configuration Module (CM) retains the DE's configuration, specifying the present datapath, and accommodates a register for preparing the subsequent configuration of the DE. Additionally, it possesses another register capable of temporarily storing numerous complete configurations, switchable during runtime. The Controller can write partial configurations to the CM and manage to save and restore entire configurations from the configuration memory.
-
-Furthermore, \textit{Versat} integrates a Direct Memory Access (DMA) module, enabling autonomous and efficient data, program, and configuration transfers in and out of the device. The DMA operates through a master Advanced Extensible Interface – AXI4, an interface stemming from the Advanced Microcontroller Bus Architecture (AMBA)~\cite{bib:axi_amba} and designed by ARM.
-
-Facilitating communication with the host processor, \textit{Versat} is equipped with a shared Control Register File (CRF). The CRF incorporates two host interfaces, selectable during compilation: a Serial Peripheral Interface (SPI) and a parallel bus interface. The SPI slave interface is employed when the host system is an off-chip master device, primarily for debugging and testing purposes. On the other hand, the parallel bus interface is utilized when the host is an embedded processor and may adhere to the AXI4 Lite format.
-
-\textit{Versat} is compatible with IOb-Soc. It can be integrated as a peripheral, since it contains an internal AXI DMA that communicates with IOb-SoC's memory system, through an AXI-Interconnect. Figure \ref{fig:iobversat} shows the high-level block diagram of \textit{Versat} integrated into IOb-SoC.
+\begin{comment}
+\textit{Versat} is compatible with IOb-Soc. It can be integrated as a peripheral, since it contains an internal AXI DMA that allows communication with IOb-SoC's memory system, through an AXI-Interconnect. Figure \ref{fig:iobversat} shows the high-level block diagram of \textit{Versat} integrated into IOb-SoC.
 
 \vspace{0.1cm}
 
@@ -487,16 +483,15 @@ Facilitating communication with the host processor, \textit{Versat} is equipped 
 \caption{\textit{Versat} integrated in IOb-SoC high-level block diagram.}
 \label{fig:iobversat}
 \end{figure}
+\end{comment}
 
 \subsubsection{Functional units}
-In practical terms, \textit{Versat} is a reconfigurable hardware accelerator that contains several functional units (FUs) in its source, all written in Verilog. Nonetheless, the user has the possibility of creating and adding new ones to the source.
-
-
+In practical terms, \textit{Versat} contains several functional units (FUs) in its source, all written in Verilog. Nonetheless, the user has the possibility of creating and adding new ones to the source.\\
 A brief description of each functional unit is provided in the table below.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|p{0.8\linewidth}|}
+    \begin{tabular}{|c|p{0.7\linewidth}|}
         \hline
         \multicolumn{1}{|c|}{\textbf{FU}} & \multicolumn{1}{c|}{\textbf{Description}} \\
         \hline
@@ -539,13 +534,13 @@ A brief description of each functional unit is provided in the table below.
 \subsubsection{Operators}
 
 \textit{Versat} also contains a set of 6 operators defined in its specification source. The operators execute either over the right operand or between the left and right operands.
-In practice, this terminology just abstracts the implementation of the operators in \textit{Versat}, through functionals units. 
+In practice, this terminology just abstracts the implementation of the operators in \textit{Versat}, through functional units. 
 
 A brief description of each operator is provided in the table below.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|p{0.8\linewidth}|}
+    \begin{tabular}{|c|p{0.7\linewidth}|}
         \hline
         \multicolumn{1}{|c|}{\textbf{Operator}} & \multicolumn{1}{c|}{\textbf{Description}} \\
         \hline

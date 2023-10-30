@@ -1,28 +1,28 @@
-
 %In this section, one should explain in detail the experiments designed to show the applicability or superiority of the proposed approach and the results obtained. Use tables or figures to facilitate a rapid apprehension of the results.
 
 %For example, if the goal is to design a new platform to accelerate a software application, the execution times of the application running on the existing and new platforms should be presented.
 
 %The resources used should be detailed: the frequency of operation, memory size, power, energy consumption, and communication bandwidth are examples. For FPGA implementations, for example, the number of block RAMs, LUTs, and DSPs should be presented in a Table for the configurations studied.
 
-This chapter addresses the experimental results for the \textit{TwoLAME} encoder running on IOb-Soc, with and without \textit{Versat}.
+This chapter addresses the experimental results for the IOb-MP2-E running on FPGA, with and without hardware accelerators.
 It starts by presenting the implementation results in FPGA. Then, the execution times are analyzed. In the end, the results obtained are compared with the real-time encoding requirements.
 
 \subsection{FPGA implementation}
-This work consists in accelerating the \textit{psycho\_3\_threshold} function in IOb-SoC using \textit{Versat}. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
-All the work was tested using \textit{Xilinx XCKU040-1FBVA676 FPGA}~\cite{xcku040}. This chip is based on the 28nm \textit{UltraScale+} architecture and is equipped with a total of 242400 LUTs, 484800 FFs, 600 BRAMs, and 1920 DSPs. In this work, it runs at 100MHz, the frequency at which both the \textit{VexRiscv} CPU and \textit{Versat} hardware are compiled.\\ 
+This work consists of accelerating the \textit{psycho\_3\_threshold} function in IOb-MP2-E using hardware acceleration. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
+All the work was tested using \textit{KU040 Xilinx Kintex® UltraScale™ Development Kit}~\cite{bib:xcku040}. This chip is based on the 28nm \textit{UltraScale+} architecture, containing \textit{Xilinx XCKU040-1FBVA676 FPGA}, 250 MHz LVDS Oscillator (system clock), 1GB DDR4 SDRAM and USB-UART Interface. As internal resources, it allows a total of 242400 LUTs, 484800 FFs, 600 BRAMs, and 1920 DSPs. \\
+In this work, the Xilinx board runs at 100MHz, the frequency at which IOb-MP2-E is compiled.\\ 
 
-Table \ref{implementation} shows the implementation results of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat}, first using \textit{spectrum\_search} accelerator, then using \textit{masking\_threshold} accelerator.
+Table \ref{implementation} shows the implementation results of IOb-MP2-E without \textit{Versat} and with \textit{Versat}, first using \textit{spectrum\_search} accelerator, then using \textit{masking\_threshold} accelerator.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c|c|c|c|}
-    \cline{2-4}
-    \multicolumn{1}{c|}{}  &  \multirow{2}{*}{\parbox{2.5cm}{\centering \textbf{without \textit{Versat}}}} & \multicolumn{2}{c|}{\textbf{with \textit{Versat}}} \\
-    \cline{1-1} \cline{3-4}
-    \multicolumn{1}{|c|}{\textbf{Metric}} & & \textit{spectrum\_search} & \textit{masking\_threshold} \\
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+     \multirow{2}{*}{\parbox{2.5cm}{\centering \textbf{Metric}}}  &  \multirow{2}{*}{\parbox{2.5cm}{\centering \textbf{without \textit{Versat}}}} & \multicolumn{2}{c|}{\textbf{with \textit{Versat}}} \\
+    \cline{3-4}
+     & & \textit{spectrum\_search} & \textit{masking\_threshold} \\
     \hline
     \multicolumn{1}{|c|}{Total LUTs}  & 24489 &  38913 & 34810\\ 
     \hline
@@ -43,12 +43,13 @@ Table \ref{implementation} shows the implementation results of \textit{TwoLAME} 
     \multicolumn{1}{|c|}{DSP Blocks}  & 10 & 26 & 14\\ 
     \hline
     \end{tabular}
-    \caption{FPGA implementation results in IOb-SoC with and without \textit{Versat}.}
+    \caption{FPGA implementation results of IOb-MP2-E with and without \textit{Versat}.}
     \label{implementation}
 \end{table}
 
+\vspace{0.5cm}
 
-The previous information offers valuable insights into the influence of \textit{Versat} on various hardware utilization metrics, highlighting the potential advantages and trade-offs of its inclusion in the IOb-SoC. A brief description of each metric is presented below.
+The previous information offers valuable insights into the influence of \textit{Versat} on various hardware utilization metrics, highlighting the potential advantages and trade-offs of its inclusion in the IOb-MP2-E. A brief description of each metric is presented below.
 
 \begin{itemize}
     
@@ -78,15 +79,15 @@ The small difference between the two scenarios, from 383 SRLs to 394 SRLs, sugge
 There is also a slight increase in RAMB36, and a big one in DSP Blocks, from 10 to 26.
 Interestingly, there is no difference in the number of RAMB18 and URAM resources, suggesting that \textit{Versat} does not utilize this specific resource.
 
-The measurement results with \textit{Versat} using \textit{masking\_threshold} accelerator are similar to the \textit{spectrum\_search} accelerator ones. More precisely, the \textit{masking\_threshold} accelerator requires a bit less resources than the previous accelerator, except for RAMB36, RAMB18 and DSP Blocks, which are all in higher quantity.
+The measurement results with \textit{Versat} using \textit{masking\_threshold} accelerator are similar to the \textit{spectrum\_search} accelerator ones. More precisely, the \textit{masking\_threshold} accelerator requires a bit less resources than the previous accelerator, except for RAMB36, RAMB18, and DSP Blocks, which are all required in higher quantity.
 
 % This information can guide system architects and designers in making informed decisions about hardware resource allocation within the FPGA.
 
 \subsection{Execution time}
 
-Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC without \textit{Versat} and with \textit{Versat}, using \textit{spectrum\_search} and \textit{masking\_threshold} accelerators, for all input files.
+Table \ref{time} shows the execution time of IOb-MP2-E without \textit{Versat} and with \textit{Versat}, using \textit{spectrum\_search} and \textit{masking\_threshold} accelerators, for all input files.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 \begin{table}[H]
     \centering
@@ -109,61 +110,87 @@ Table \ref{time} shows the execution time of \textit{TwoLAME} running in IOb-SoC
     & \multicolumn{1}{|c|}{\textit{TwoLAME} total}  & 1518 & 22677 & 18637 & 24458 \\ 
     \hline
     \end{tabular}
-    \caption{Execution time for all input files with and without \textit{Versat} [ms].}
+    \caption{Execution time of IOb-MP2-E with and without \textit{Versat} for all input files [ms].}
     \label{time}
 \end{table}
 
-The previous information shows that the \textit{spectrum\_search} \textit{Versat} accelerator can induce a substantial reduction in execution time. Specifically, the \textit{psycho\_3\_threshold} execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
+
+\vspace{0.5cm}
+
+The previous information shows that the \textit{spectrum\_search} accelerator can induce a substantial reduction in execution time. Specifically, the \textit{psycho\_3\_threshold} execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
 Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. In this accelerator there is only a a main transference of data at the beginning, followed by the execution of many loop iterations, keeping the data inside the accelerator. Since only a few constants are changed in each iteration, the performance gain is big.\\
 Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
-In fact, the \textit{masking\_threshold} accelerator increased the execution time by a few milliseconds for all input files, i.e. no acceleration was achieved with \textit{masking\_threshold} at all. This can be explained by the fact that the overhead of transferring data is greater than any gain in using the accelerator, since the loop executes 512 iterations, which are not enough to make the data transfer worth it (for performance).
+The \textit{masking\_threshold} accelerator increased the execution time by a few milliseconds for all input files, i.e. no acceleration was achieved with \textit{masking\_threshold} at all. This can be explained by the fact that the overhead of transferring data is greater than any gain in performance using the accelerator. The loop executes only 512 iterations, which is not enough to make the data transfer worthwhile.
 
 
 \subsection{Real-time requirements}
 
 %The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to others. Second, it is clear that \textit{psycho\_3 function 11}, which is \textit{psycho\_3\_threshold}, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
 
-After measuring the execution time of the original and the hardware-accelerated implementation in IOb-SoC, it is possible to calculate the speedup achieved for each input file, using the formula presented below.
+After measuring the execution time of the original and the hardware-accelerated implementation in IOb-MP2-E, it is possible to calculate the speedup achieved for each input file, using the formula presented below.
+
+%\vspace{0.5cm}
 
 \begin{equation}
-    \textit{Speedup achieved} = \frac{\textit{Execution time without acceleration}}{\textit{Execution time with acceleration}} 
-\end{equation}\\
+    \textbf{\textit{Speedup achieved}} = \frac{\textit{Execution time without \textit{Versat}}}{\textit{Execution time with \textit{Versat}}} 
+\end{equation}
 
-Additionally, the \textit{Amdahl's Law}~\cite{amdahl} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
+Additionally, the \textit{Amdahl's Law}~\cite{amdahls} can be applied to understand the limitations of the hardware acceleration, for the \textit{psycho\_3\_threshold} function.
 
 \begin{equation}
     \textit{Speedup desired} = \frac{1}{(1 - p) + \frac{p}{s}} 
-\end{equation}\\
+\end{equation}
 
 In the formula above, $s$ is the speedup of the part of the task that benefits from improved system resources, i.e. is the speedup achieved on the parallelizable portion; $p$ is the proportion of execution time that the part benefiting from improved resources originally occupied, i.e. is the proportion of the program that can be parallelized.
 
-In the ideal case where the parallelizable part ($p$) disappears or, in other words, where the speedup ($s$) becomes very high, the value of $s$ approaches infinity, and the formula simplifies accordingly.
+In the ideal case where the parallelizable part ($p$) disappears or, in other words, where the speedup ($s$) is very high, the value of $s$ approaches infinity, and the formula simplifies accordingly.
 
 \begin{equation}
-    \textit{Speedup desired} \approx \frac{1}{1 - p}
-\end{equation}\\
+    \textbf{\textit{Speedup desired}} \approx \frac{1}{1 - p}
+\end{equation}
 
 %in meeting the specified real-time constraints.
 A more interesting point is to compare the achieved speedup with the desired speedup based on the real-time requirements, for each input file. 
-
 This involves a formula to estimate how long it would take to encode the audio file in real time, which is presented below.
 
 \begin{equation}
-    \textit{Real-time} = \frac{\textit{number of frames} \times \textit{number of samples}}{\textit{sampling frequency}} 
-\end{equation}\\
+    \textbf{\textit{Real-time}} = \frac{\textit{number of frames} \times \textit{number of samples}}{\textit{sampling frequency}} 
+\end{equation}
 
 In this case, the real-time is calculated from the number of frames, the number of samples, and the sampling frequency.
-The \textit{number of samples} refers to the total number of audio samples in the audio file, which are individual data points that represent the amplitude of the audio signal at a particular point in time. This value is multiplied by the \textit{number of frames} since each frame typically consists of a fixed number of audio samples to process audio data efficiently. The result of the product is then divided by the \textit{sampling frequency}, a fundamental parameter of digital audio that specifies how many samples are taken per second to represent the analog audio signal.
+The \textit{number of samples} refers to the total number of audio samples in the audio file, which are individual data points that represent the amplitude of the audio signal at a particular point in time~\cite{twolamefrontend}. This value is multiplied by the \textit{number of frames} since each frame typically consists of a fixed number of audio samples (the case of this work) to process audio data efficiently. The result of the product is then divided by the \textit{sampling frequency}, a fundamental parameter of digital audio that specifies how many samples are taken per second to represent the analog audio signal.
 
-Knowing the real-time, the speedup required can be determined by the following formula.
+The \textit{sampling frequency} is $44100Hz$ and the \textit{number of samples} is $1152$, for all input files. The remaining variable, \textit{number of frames}, is different for each input file. In concrete, \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} contain $11$, $296$, $114$ and $162$ frames, respectively.
+Table \ref{realtime} shows the real-time for all input files.
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{2-5}
+    \multicolumn{1}{c|}{} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
+    \hline
+    \textbf{Real time} & 287 & 7732 & 2978 & 4232  \\ 
+    \hline
+    \end{tabular}
+    \caption{Real time for all input files encoding [ms].}
+    \label{realtime}
+\end{table}
+
+\vspace{0.3cm}
+
+Based on the previous information, the speedup required can be determined by the following formula.
 
 \begin{equation}
-    \textit{Speedup required} = \frac{\textit{Execution time without acceleration}}{\textit{Real-time}} 
-\end{equation}\\
+    \textit{Speedup required} = \frac{\textit{Execution time without \textit{Versat}}}{\textit{Real-time}} 
+\end{equation}
 
 Table \ref{speedup} presents the outcomes of the previously discussed calculations.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 \begin{table}[H]
     \centering
@@ -173,7 +200,7 @@ Table \ref{speedup} presents the outcomes of the previously discussed calculatio
     \cline{1-5}
     \multicolumn{1}{|c|}{\textbf{Speedup}} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
     \hline
-    \multirow{2}{*}{\parbox{3.2cm}{\centering achieved with \\ \textbf{\textit{spectrum\_search}}}} & \multirow{2}{*}{\centering 1.549} & \multirow{2}{*}{\centering 2.414} & \multirow{2}{*}{\centering 2.569} & \multirow{2}{*}{\centering 2.5}  \\ 
+    \multirow{2}{*}{\parbox{3.2cm}{\centering achieved with \\ \textit{spectrum\_search}}} & \multirow{2}{*}{\centering 1.549} & \multirow{2}{*}{\centering 2.414} & \multirow{2}{*}{\centering 2.569} & \multirow{2}{*}{\centering 2.5}  \\ 
     & & & &  \\ 
     \hline
     \multicolumn{1}{|c|}{desired}  & 1.551 & 2.436 & 2.594  & 2.526 \\ 
@@ -181,20 +208,25 @@ Table \ref{speedup} presents the outcomes of the previously discussed calculatio
     \multicolumn{1}{|c|}{required}  & 5.251 & 2.9321 & 6.219 & 5.748 \\ 
     \hline
     \end{tabular}
-    \caption{Calculation results for all input files.}
+    \caption{Speedup achieved, desired, and required for all input files.}
     \label{speedup}
 \end{table}
 
-%real-time 287.3469   7732.2448   2977.9591   4231.8367
+\vspace{0.3cm}
 
-In more detail, the achieved speedup is first calculated based on the \textit{TwoLAME total} execution times from table \ref{time}, showing the performance gain compared to the original \textit{TwoLAME} software in IOb-SoC.\\
-Then, the desired speedup is calculated taking into account the proportion of the \textit{TwoLAME} that can be parallelized, which is, in practice, the result of the division between \textit{psycho\_3\_threshold} and \textit{TwoLAME total} execution times without \textit{Versat}, also from table \ref{time}. \\
-Lastly, the required speedup is calculated with a \textit{sampling frequency} of $44100Hz$ and a \textit{number of samples} of $1152$, for all input files. It also considers the \textit{TwoLAME total} execution times without \textit{Versat}. The remaining variable, \textit{number of frames}, is different for each input file. In concrete, \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} contain $11$, $296$, $114$ and $162$ frames, respectively.
+In more detail, the achieved speedup is calculated based on the \textit{TwoLAME total} execution times with \textit{spectrum\_search} and without \textit{Versat}, from table \ref{time}.\\
+The desired speedup is calculated taking into account the proportion of the \textit{TwoLAME} that can be parallelized, which is obtained as the result of the division between \textit{psycho\_3\_threshold} and \textit{TwoLAME total} execution times without \textit{Versat}, also from table \ref{time}. \\
+Lastly, the required speedup is calculated based on the \textit{TwoLAME total} execution times without \textit{Versat}, from table \ref{time}, and the Real-time, from table\ref{realtime}.
 
-Focusing on the results, it is noticeable that the \textit{spectrum\_search} \textit{Versat} accelerator provides a speedup very close to the desired one (which is the maximum possible speedup achievable by accelerating \textit{psycho\_3\_threshold} function).
+Focusing on the results, it is noticeable that the \textit{spectrum\_search} accelerator provides a speedup very close to the desired one (the maximum speedup achievable by accelerating \textit{psycho\_3\_threshold} function).
 However, the required speedup indicates that the acceleration of \textit{psycho\_3\_threshold} is not enough to meet the real-time requirements. 
 In particular, the first two input files encoding is approximately at 3.39 and 1.21 speedup from meeting the real-time requirements, respectively. In the first case, the input file has a small number of frames, which doesn't potentiate \textit{Versat} acceleration and, consequently, the achieved speedup stays far from the required one.
-In the second case, the input file has a significant number of frames but the audio itself is simple, which implies a higher demand of \textit{psycho\_3\_threshold} function (executed by \textit{Versat}) compared to the other \textit{TwoLAME} functions, and so the achieved speedup gets close to the required one. \\
-The last two input files' encoding is approximately at 2.42 and 2.30 speedup from meeting the real-time requirements. These results give some guarantees about achieving the goal of this work since the third input file has a considerable number of frames and represents the worst-case scenario for real-time encoding (being a stereo white noise audio file). The fourth input file has a normal audio complexity since it is part of an existing soundtrack, and so the achieved and the required speedups are also not far away.
+In the second case, the input file has a significant number of frames but the audio itself is simple, which implies a lower demand of \textit{psycho\_3\_threshold} function (executed by \textit{spectrum\_search} accelerator). For this reason, the required speedup is lower and easier to reach, which makes the achieved speedup very close to the required one. \\
+The last two input files' encoding is approximately at 2.42 and 2.30 speedup from meeting the real-time requirements. These results give some guarantees about achieving the goal of this work since the third input file has a considerable number of frames and represents the worst-case scenario for real-time encoding (being a stereo white noise audio file). The fourth input file has a normal audio complexity since it is part of an existing soundtrack, and so the difference between achieved and required speedup is similar to the previous file.
 
-%In the second case, the input file has a significant number of frames, but the audio is simple so it does not take advantage of \textit{Versat} acceleration, due to the low demand of \textit{psycho\_3\_threshold} function (in the original software).
+Regarding the hardware architecture, the speedup values give a direct relation to the frequency necessary to meet the real-time requirements. Picking the \textit{noise.wav} input file as an example, the required speed up for IOB-MP2-E without hardware acceleration is 6.2. Since IOb-MP2-E operates at 100MHz, this means that an implementation for 620MHz would meet the goal. 
+
+In a case where high clock speeds are a priority, application-specific integrated circuits (ASICs) are often more capable of running at faster frequencies. This integrated circuit can be optimized for specific tasks and, in some cases, achieve clock speeds as high as 500MHz in advanced semiconductor technologies like 28nm.\\
+However, ASICs require a significant upfront investment, and the industry's low volume may make them less cost-effective. In contrast, FPGAs offer flexibility and programmability, allowing for quicker design iterations and so often preferred for low-volume or prototyping applications. \\
+Decoders may benefit from ASICs, but for general-purpose or adaptable solutions, CPUs, GPUs, and FPGAs provide versatile off-the-shelf options. Although they may operate at slightly lower clock speeds, this brings the advantages of reduced power consumption, lower heat generation, and potentially longer component lifespan.\\
+Considering this, the IOB-MP2-E has the potential to be a top-notch system in the future, as the achieved performance for the worst-case scenario shows that an implementation at 240MHz would meet the goal.
