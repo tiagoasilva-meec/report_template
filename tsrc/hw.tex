@@ -1,42 +1,22 @@
 This chapter addresses the hardware architecture. It starts by setting up \textit{VexRiscv}, \textit{Versat} and \textit{Timer} in the IOb-MP2-E. Then, it describes two hardware accelerators that were developed to accelerate the \textit{psycho\_3\_threshold} function. In the end, a system overview is done.
 
 In the initial stage of this work, the IOb-MP2-E system comprised eight main components: \textbf{AXI}, an AXI interconnect protocol;
-\textbf{CACHE}, a high-performance Verilog cache; \textbf{LIB}, a set of \textit{Verilog} macros; \textbf{MEM}, a set of memory Verilog descriptions; \textbf{PICORV32}, a RISC-V processor; \textbf{TWOLAME}, an optimized MP2 encoding software; \textbf{UART}, a UART core; \textbf{DDR4 Controller}, a controller for DDR memory.
+\textbf{CACHE}, a high-performance Verilog cache; \textbf{LIB}, a set of \textit{Verilog} macros; \textbf{MEM}, a set of memory Verilog descriptions; \textbf{PICORV32}, a RISC-V processor; \textbf{TWOLAME}, an optimized MP2 encoding software; \textbf{UART}, a UART core; \textbf{DDR4 Controller}, a controller for DDR memory (figure~\ref{fig:newiob1}).
 As previously stated, the ultimate goal of this work is to develop a system that beats the only MPEG1/2 Layer II encoding IP core on the market, the \textit{CWda74}~\cite{CWda74}. This system uses fixed-point precision, and so the most logical approach to the problem turns out to be implementing the \textit{TwoLAME} algorithm using floating-point precision.  
 Looking at the \textbf{PICORV32} CPU available, porting the software in these conditions would be undoable, due to its fixed-point arithmetic limitation.
 
 \subsection{VexRiscv}
 
-For this reason, the current CPU has to be substituted, and the \textbf{VEXRISCV} becomes the premier pick, as it includes a floating-point unit (FPU)~\cite{fpu}. In this process, the \textit{PICORV32} was removed from the IOb-MP2-E and the \textit{VEXRISCV} was added as the only CPU. This was straightforward, as \textit{VEXRISCV} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding the submodule to IOb-MP2-E's repository, some paths were changed to allow the correct compilation of the CPU. Interrupt signals were also added to the system data bus, such as \textit{timerInterrupt}, \textit{softwareInterrupt}, and \textit{externalInterrupt}. 
+For this reason, the current CPU has to be substituted, and the \textbf{VEXRISCV} becomes the premier pick, as it includes a floating-point unit (FPU)~\cite{fpu}. In this process, the \textit{PICORV32} was removed from the IOb-MP2-E and the \textit{VEXRISCV} was added as the only CPU (figure~\ref{fig:newiob1}). This was straightforward, as \textit{VEXRISCV} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding the submodule to IOb-MP2-E's repository, some paths were changed to allow the correct compilation of the CPU. Interrupt signals were also added to the system data bus, such as \textit{timerInterrupt}, \textit{softwareInterrupt}, and \textit{externalInterrupt}. 
 %explain vexriscv
-
-Figure \ref{fig:newiob} shows a high-level block diagram of the IOb-SoC system at this point.
-
-\vspace{0.1cm}
-
-\begin{figure}[H]
-\centerline{\includegraphics[width=0.85\linewidth]{iob.pdf}}
-\caption{High-level block diagram of the IOb-SoC in use.}
-\label{fig:newiob}
-\end{figure}
 
 %In the context of hardware acceleration, it is crucial to understand the hardware architecture of IOb-MP2-E, especially its synthesis and FPGA implementation. Therefore, a description of how the software integrates with the hardware is presented below.
 
 \subsection{Versat}
 
 Given \textit{Versat} being the optimal choice for accelerating \textit{TwoLAME} algorithm, integration into IOb-MP2-E becomes imperative.
-Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-MP2-E. This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as a submodule to IOb-MP2-E's repository, some paths were changed to allow correct compilation.
+Therefore, the first step in this process was adding \textbf{VERSAT} to the IOb-MP2-E (figure~\ref{fig:newiob1}). This was simple as \textit{VERSAT} was previously implemented and tested by \textit{IObundle, Lda}. Apart from adding it as a submodule to IOb-MP2-E's repository, some paths were changed to allow correct compilation.
 The second step was more complex, consisting of adding an AXI interconnection between \textit{Versat} and IOB-MP2-E's external memory (DDR4 SDRAM). The system usually contains a single AXI~\cite{bib:axi_xilinx} interconnect instance, used by external memory and CPU. Therefore, a pragmatic solution was to double the wire size of the existing AXI interconnection, providing communication from/to \textit{Versat} while keeping the same AXI instance.
-
-Figure \ref{fig:newiob2} shows a high-level block diagram of the IOb-MP2-E at this point.
-
-\vspace{0.1cm}
-
-\begin{figure}[H]
-\centerline{\includegraphics[width=0.85\linewidth]{iob1.pdf}}
-\caption{High-level block diagram of the IOb-MP2-E in use.}
-\label{fig:newiob2}
-\end{figure}
 
 \subsubsection{Functionality and Interfaces}
 
