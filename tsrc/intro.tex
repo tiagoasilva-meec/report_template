@@ -1,55 +1,86 @@
-The \textit{Moving Picture Experts Group} (MPEG)~\cite{MPEG} is a working group that sets standards for media coding, established by the International Organization for Standardization (ISO)~\cite{iso} and International Electrotechnical Commission (IEC)~\cite{iec}. Within the professional and consumer market, four fields of applications can be identified, namely broadcasting, storage, multimedia, and telecommunication.
+\subsection{About MP2}
 
-%MPEG, 1 e 2, audio
-The MPEG standard includes two variations, MPEG-1 and MPEG-2, with both covering audio and video compression.  Today, MPEG-1 Audio is the most widely compatible lossy audio format in the world. It standardizes the information that an audio encoder must produce to write a bitstream conformant to the standard requirements.  Nonetheless, MPEG-2 Audio is an extension of the first variation, providing lower sampling frequencies, backward compatibility, and a more advanced coding scheme.
 
-%layers
-The MPEG standard also differentiates three coding schemes, called Layer I, Layer II, and Layer III, with the first two being the most relevant ones. 
-Layer I, the simpler of the two, is characterized by its lower complexity, making it a practical choice for scenarios where computational resources are limited or where a higher degree of compression is required.
-On the other hand, Layer II demands a more intricate encoder and decoder setup. This complexity allows it to deliver superior audio quality, making it the preferred option for one-to-many applications where audio fidelity is paramount.
-These formats are regulated by the \textit{ISO/IEC 11172} international standard~\cite{11172}, which specifies the coded representation of high-quality audio for storage media.
+
+MPEG-1 Layer II, often referred to simply as MP2, is an audio compression format developed as part of the MPEG-1 standard. MPEG-1 is a set of standards created by the Moving Picture Experts Group (MPEG) for video and audio compression. MPEG-1 Layer II specifically addresses audio compression.
+
+MP2 is less well-known and widely used than its successor, MP3 (MPEG-1 Layer III), which offers higher compression and better audio quality for consumer applications. However, MP2 has been used in various professional applications, including:
+
+1. Digital Broadcasting: MP2 was widely used in Digital Audio Broadcasting (DAB) systems, particularly in Europe. It provided a good balance between audio quality and compression efficiency for radio and television broadcasting.
+
+2. Digital Audio Recording: Some early digital audio recorders and workstations used MP2 for audio compression. It was considered a high-quality audio format for professional applications.
+
+3. Video DVDs: MP2 audio compression was used in some early video DVD standards, particularly in European and Japanese releases.
+
+4. Video Conferencing: MP2 was used in video conferencing and telecommunication applications for its relatively good audio quality and low latency.
+
+5. Archival Audio: MP2 was used for archiving audio in some cases, as it provided a good compromise between file size and audio quality.
+
+
 
 \subsection{Motivation}
 
-Since its formation in 1988, the MPEG~\cite{MPEG} has made an indelible mark on the transition from analog to digital video and audio. As proof, the annual value of products and services that rely on MPEG standards is approximately 2\% of the world's gross product. Nonetheless, an increasing number of broadcasting applications are based on MPEG technology, such as Digital Satellite System (DSS)~\cite{dss}, Digital Audio Broadcast (DAB)~\cite{dab}, and Digital Video Broadcast (DVB)~\cite{dvb}. 
+There are three options for integrating an MPEG-1/2 Layer II encoder in a system: buy an encoder chip, use a software encoder in the user system, or buy an IP core.
 
-To integrate an MPEG-1/2 Layer II encoder in a system, there are three available options.\\
-One option is buying an encoder chip, like the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, the \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888}, or the \textit{Futura II ASI+IP}~\cite{futura}. For the user, this means an additional chip on the board, increasing its area/volume, weight, and power consumption. \\
-Another option is to utilize a software encoder, which relies on a Central Processing Unit (CPU). This CPU can be either an existing one available in the system or an additional processor chip or Intellectual Property (IP) core~\cite{ipcore}. Such software encoders are commonplace in commercial embedded processors, with ARM processors being a notable example. However, it's important to consider the cost and effort associated with porting the software to the CPU. Depending on the specific application, this factor may significantly influence both the overall viability and efficiency of the system.\\
-Another interesting option is to license a commercial MPEG-1/2 Layer II encoder IP Core. This reduces area/volume, weight, and power consumption, allowing the user to develop a top-notch system and beat the competition. To the best of the author's knowledge, there is only one IP core specifically designed for MPEG-1/2 Layer I/II Audio in the market, namely the \textit{CWda74}~\cite{CWda74}, later re-branded \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}, which uses fixed-point calculations. 
+Encoder chips, like the \textit{CX23415 MPEG-2 Codec}~\cite{cx23415}, the \textit{MPEG-2 Encoder CW-4888}~\cite{cw4888}, or the \textit{Futura II ASI+IP}~\cite{futura} can be purchased off the shelf. However, this means an additional chip on the board, increasing its area/volume, weight, and power consumption.
 
+A software encoder, which relies on a Central Processing Unit (CPU), may be used instead. This CPU can be either an existing one available in the system or an additional processor chip or Intellectual Property (IP) core~\cite{ipcore}. Such software encoders are commonplace in commercial embedded processors, with ARM processors being a notable example. However, it is essential to consider the cost and effort associated with porting the software to the CPU. Depending on the specific application, this factor may significantly influence both the overall viability and efficiency of the system.
 
-The scarcity of IP core alternatives underscores the pressing need for innovation in this domain. Hence, this work represents a pioneering effort in presenting a RISC-V implementation. \\
-The RISC-V architecture offers distinct advantages, primarily due to its open specification and the availability of open-source hardware designs. In combination with a hardware accelerator, the RISC-V approach provides specialization and ensures greater energy efficiency, as the tailored hardware accelerator consumes less power, making it well-suited for energy-constrained applications. This combination also leverages parallel processing to enhance encoding speed, particularly valuable for real-time applications. \\
-Additionally, the flexibility to customize the RISC-V processor to the specific encoding requirements also ensures optimal resource utilization, while a general CPU may struggle to achieve comparable efficiency.\\
-Lastly, by offloading encoding tasks to hardware accelerators, the RISC-V system allows the CPU to manage other critical functions effectively, resulting in a well-balanced resource allocation and improved overall system performance. 
-%This combination of RISC-V and hardware accelerators not only enhances energy efficiency and encoding speed but also optimizes resource utilization, making it a compelling solution for a wide range of applications.
+The last option is to license a commercial MPEG-1/2 Layer II encoder IP Core. It reduces area/volume, weight, and power consumption, allowing users to develop a top-notch system and beat the competition. To the best of the author's knowledge, there is only one IP core designed explicitly for MPEG-1/2 Layer I/II Audio in the market, namely the \textit{CWda74}~\cite{CWda74}, later re-branded \textit{IPB-MPEG-SE}~\cite{ipb-mpeg-se}, which uses fixed-point calculations.
+
+This work considers the design of a RISC-V IP core. Designing an embedded MP2 encoder using a RISC-V processor can have several motivations and advantages, depending on the specific use case and requirements. Here are some reasons for such a design:
+
+1. **Open-Source and Customizable Architecture:** RISC-V is an open-source instruction set architecture (ISA). This openness allows developers to customize and optimize the processor for their specific application, making it a flexible choice for embedded systems. You can tailor the processor to handle the tasks required for MP2 encoding efficiently.
+
+2. **Low Power Consumption:** RISC-V processors can be designed to be power-efficient. It  is crucial for embedded systems, especially in applications where power constraints are significant, such as portable devices and battery-powered equipment.
+
+3. **Real-Time Processing:** MP2 encoding often requires real-time processing, which RISC-V processors can be optimized for. Real-time capabilities are essential in applications like live audio streaming, broadcasting, or communication systems.
+
+4. **Integration and System-on-Chip (SoC):** RISC-V processors can be integrated into a larger system-on-chip (SoC), including various components, such as memory, peripherals, and custom accelerators. This integration can result in a compact and efficient solution for MP2 encoding, making it well-suited for embedded applications.
+
+5. **Custom Instructions and Accelerators:** RISC-V allows for creating custom instructions and accelerators tailored to specific tasks. It can significantly accelerate the MP2 encoding process by implementing instructions that directly assist in the encoding algorithm.
+
+6. **Licensing and Cost:** Using RISC-V is often cost-effective because it's open-source, which means no licensing fees are required. It  can be particularly advantageous for embedded system manufacturers looking to minimize costs.
+
+7. **Scalability:** RISC-V processors come in various configurations and can be scaled to match the performance requirements of the target application. This scalability is beneficial for accommodating different processing needs in various embedded devices.
+
+8. **Longevity and Future-Proofing:** RISC-V is designed to be a stable and long-lasting architecture. By using RISC-V, you can ensure that your embedded MP2 encoder will remain compatible and supported for years.
+
+9. **Research and Education:** Using RISC-V for an MP2 encoder project can also serve educational and research purposes. It allows researchers and students to experiment with processor design, optimization techniques, and multimedia encoding algorithms.
+
+Overall, designing an embedded MP2 encoder using a RISC-V processor can provide a high degree of flexibility, optimization, and efficiency for specific embedded applications where MP2 encoding is still relevant, such as in legacy systems, broadcasting equipment, or custom audio processing devices.
+
+The scarcity of IP core alternatives underscores the pressing need for innovation in this domain. Hence, this work represents a pioneering effort in presenting a RISC-V implementation.
+
+The RISC-V architecture offers distinct advantages, primarily due to its open specification and the availability of open-source hardware designs. In combination with a hardware accelerator, the RISC-V approach provides specialization. It ensures greater energy efficiency, as the tailored hardware accelerator consumes less power, making it well-suited for energy-constrained applications. This combination also leverages parallel processing to enhance encoding speed, which is particularly valuable for real-time applications.
+
+Additionally, the flexibility to customize the RISC-V processor to the specific encoding requirements also ensures optimal resource utilization, while a general CPU may need help to achieve comparable efficiency.
+
+Lastly, by offloading encoding tasks to hardware accelerators, the RISC-V system allows the CPU to manage other critical functions effectively, resulting in a well-balanced resource allocation and improved overall system performance.  This combination of RISC-V and hardware accelerators not only enhances energy efficiency and encoding speed but also optimizes resource utilization, making it a compelling solution for a wide range of applications.
 
 
 %\subsection{Topic overview}
 \subsection{Objectives}
 
 This work introduces an MPEG-1/2 Layer II Audio encoder for a RISC-V embedded architecture
-featuring a reconfigurable hardware accelerator. The encoder will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC~\cite{bib:iobsoc-github}, a System-on-Chip template comprising an open-source RISC-V~\cite{riscv} processor. The TwoLAME~\cite{twolamerepo} repository, an open-source MPEG Audio Layer II encoding software based on the ISO/IEC 11172~\cite{11172}, will provide the algorithm.\\
+featuring a reconfigurable hardware accelerator. The encoder will be developed using \textit{IObundle, Lda}'s~\cite{iobundle} IOb-SoC~\cite{bib:iobsoc-github}, a System-on-Chip template comprising an open-source RISC-V~\cite{riscv} processor. The TwoLAME~\cite{twolamerepo} repository, an open-source MPEG Audio Layer II encoding software based on the ISO/IEC 11172~\cite{11172}, will provide the algorithm.
 The objectives of this work are the following:
 
 \begin{itemize}
     \item Port the \textit{TwoLAME}~\cite{bib:twolame} encoder open-source library to the system, using floating-point precision.
-    \item Do basic software optimizations.
+    \item Perform software optimizations.
     \item Profile the \textit{TwoLAME} algorithm while running in FPGA~\cite{fpga}.
     %\item Implement custom instructions in \textit{VexRiscv}~\cite{bib:vexriscv} CPU. 
     \item Use \textit{Versat}~\cite{bib:iobversat} open-source reconfigurable accelerator design tool to accelerate \textit{TwoLAME} algorithm.
     \item Check the requirements for \textit{TwoLAME} real-time encoding.
-    \item Beat the fixed-point \textit{CWda74}~\cite{CWda74}.
+    \item Compare with the fixed-point \textit{CWda74}~\cite{CWda74}, the only competitor.
 \end{itemize}
-
-%Finally, a hardware accelerator will be developed and used as an IOb-SoC peripheral, in case real-time operation cannot be achieved with the CPU alone.
-
-%The \textit{TwoLAME} software will be ported to IOb-SoC's CPU (PicoRV32). However, when encoding at the sampling frequency, the system may not finish execution in real time. If this is the case, a peripheral will be developed to accelerate the process bottlenecks.
-
-%In addition, \textit{TwoLAME} uses floating-point arithmetic (FP)~\cite{floatingpoint}, which can make the hardware implementation quite large. Therefore, developing the peripheral with fixed-point arithmetic~\cite{fixedpoint} is plausible.
-%In this case, the VexRiscv (RV32IM) CPU could be used, since it includes a floating-point unit (FPU)~\cite{fpu}. To allow transferring data between the CPU and the peripheral (accelerator), two hardware converters (from floating-point/fixed-point to fixed-point/floating-point) are also required.
 
 \subsection{Outline}
 
-This document is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out and directions for future work are outlined.
+This document is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out, and directions for future work are outlined.
+
+
+
+
+
