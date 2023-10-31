@@ -462,13 +462,13 @@ The IOb-SoC \textit{GitHub} repository is composed of specific directories and s
 
 \subsection{\textit{Versat}}
 
-\textit{Versat} is a Coarse-Grained Accelerator designed for embedded systems. It addresses the challenge of accelerating compute-intensive inner loops in code while efficiently managing the transitions between code suitable for the CGRA and code that needs to run on the host processor~\cite{paperversat}. 
+\textit{Versat} is a Coarse-Grained Accelerator designed for embedded systems. It addresses the challenge of accelerating compute-intensive inner loops in code while efficiently managing the transitions between code suitable for the Coarse-Grained Accelerator and code that needs to run on the host processor~\cite{paperversat}. 
 A list of the key features is presented below:
 
 \begin{itemize}
     \item \textbf{Partial Reconfiguration}: \textit{Versat} supports partial reconfiguration by using a configuration register file and a configuration memory. This approach allows for random access to configuration fields and offers flexibility in configuration management.
     \item \textbf{Integration with Embedded Systems}: \textit{Versat} cores serve as co-processors within embedded systems, working alongside application processors. They optimize performance and energy efficiency for compute-intensive tasks. Application programmers can access \textit{Versat}'s capabilities through a dedicated API library.
-    \item \textbf{Compiler Support}: \textit{Versat} acts like a compiler, facilitating the efficient acceleration of tasks. The programming language syntax is a subset of C/C++, with hardware data descriptions, enabling programmers to leverage \textit{Versat}'s power while keeping software tools separate from application processor tools.
+    \item \textbf{Compiler}: \textit{Versat} acts like a compiler, facilitating the efficient acceleration of tasks. The programming language syntax is a subset of C/C++, with hardware data descriptions, enabling programmers to leverage \textit{Versat}'s power while keeping software tools separate from application processor tools.
 \end{itemize}
 
 \begin{comment}

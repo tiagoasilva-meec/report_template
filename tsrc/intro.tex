@@ -1,20 +1,16 @@
 \subsection{About MP2}
 
-
-
 MPEG-1 Layer II, often referred to simply as MP2, is an audio compression format developed as part of the MPEG-1 standard. MPEG-1 is a set of standards created by the Moving Picture Experts Group (MPEG) for video and audio compression. MPEG-1 Layer II specifically addresses audio compression.
 
 MP2 is less well-known and widely used than its successor, MP3 (MPEG-1 Layer III), which offers higher compression and better audio quality for consumer applications. However, MP2 has been used in various professional applications, including:
 
-1. Digital Broadcasting: MP2 was widely used in Digital Audio Broadcasting (DAB) systems, particularly in Europe. It provided a good balance between audio quality and compression efficiency for radio and television broadcasting.
-
-2. Digital Audio Recording: Some early digital audio recorders and workstations used MP2 for audio compression. It was considered a high-quality audio format for professional applications.
-
-3. Video DVDs: MP2 audio compression was used in some early video DVD standards, particularly in European and Japanese releases.
-
-4. Video Conferencing: MP2 was used in video conferencing and telecommunication applications for its relatively good audio quality and low latency.
-
-5. Archival Audio: MP2 was used for archiving audio in some cases, as it provided a good compromise between file size and audio quality.
+\begin{itemize}
+    \item \textbf{Digital Broadcasting:} MP2 was widely used in Digital Audio Broadcasting (DAB) systems, particularly in Europe. It provided a good balance between audio quality and compression efficiency for radio and television broadcasting.
+    \item \textbf{Digital Audio Recording:} Some early digital audio recorders and workstations used MP2 for audio compression. It was considered a high-quality audio format for professional applications.
+    \item \textbf{Video DVDs:} MP2 audio compression was used in some early video DVD standards, particularly in European and Japanese releases.
+    \item \textbf{Video Conferencing:} MP2 was used in video conferencing and telecommunication applications for its relatively good audio quality and low latency.
+    \item \textbf{Archival Audio:} MP2 was used for archiving audio in some cases, as it provided a good compromise between file size and audio quality.
+\end{itemize}
 
 
 
@@ -30,23 +26,17 @@ The last option is to license a commercial MPEG-1/2 Layer II encoder IP Core. It
 
 This work considers the design of a RISC-V IP core. Designing an embedded MP2 encoder using a RISC-V processor can have several motivations and advantages, depending on the specific use case and requirements. Here are some reasons for such a design:
 
-1. **Open-Source and Customizable Architecture:** RISC-V is an open-source instruction set architecture (ISA). This openness allows developers to customize and optimize the processor for their specific application, making it a flexible choice for embedded systems. You can tailor the processor to handle the tasks required for MP2 encoding efficiently.
-
-2. **Low Power Consumption:** RISC-V processors can be designed to be power-efficient. It  is crucial for embedded systems, especially in applications where power constraints are significant, such as portable devices and battery-powered equipment.
-
-3. **Real-Time Processing:** MP2 encoding often requires real-time processing, which RISC-V processors can be optimized for. Real-time capabilities are essential in applications like live audio streaming, broadcasting, or communication systems.
-
-4. **Integration and System-on-Chip (SoC):** RISC-V processors can be integrated into a larger system-on-chip (SoC), including various components, such as memory, peripherals, and custom accelerators. This integration can result in a compact and efficient solution for MP2 encoding, making it well-suited for embedded applications.
-
-5. **Custom Instructions and Accelerators:** RISC-V allows for creating custom instructions and accelerators tailored to specific tasks. It can significantly accelerate the MP2 encoding process by implementing instructions that directly assist in the encoding algorithm.
-
-6. **Licensing and Cost:** Using RISC-V is often cost-effective because it's open-source, which means no licensing fees are required. It  can be particularly advantageous for embedded system manufacturers looking to minimize costs.
-
-7. **Scalability:** RISC-V processors come in various configurations and can be scaled to match the performance requirements of the target application. This scalability is beneficial for accommodating different processing needs in various embedded devices.
-
-8. **Longevity and Future-Proofing:** RISC-V is designed to be a stable and long-lasting architecture. By using RISC-V, you can ensure that your embedded MP2 encoder will remain compatible and supported for years.
-
-9. **Research and Education:** Using RISC-V for an MP2 encoder project can also serve educational and research purposes. It allows researchers and students to experiment with processor design, optimization techniques, and multimedia encoding algorithms.
+\begin{itemize}
+    \item \textbf{Open-Source and Customizable Architecture:} RISC-V is an open-source instruction set architecture (ISA). This openness allows developers to customize and optimize the processor for their specific application, making it a flexible choice for embedded systems. You can tailor the processor to handle the tasks required for MP2 encoding efficiently.
+    \item \textbf{Low Power Consumption:} RISC-V processors can be designed to be power-efficient. It is crucial for embedded systems, especially in applications where power constraints are significant, such as portable devices and battery-powered equipment.
+    \item \textbf{Real-Time Processing:} MP2 encoding often requires real-time processing, which RISC-V processors can be optimized for. Real-time capabilities are essential in applications like live audio streaming, broadcasting, or communication systems.
+    \item \textbf{Integration and System-on-Chip (SoC):} RISC-V processors can be integrated into a larger system-on-chip (SoC), including various components, such as memory, peripherals, and custom accelerators. This integration can result in a compact and efficient solution for MP2 encoding, making it well-suited for embedded applications.
+    \item \textbf{Custom Instructions and Accelerators:} RISC-V allows for creating custom instructions and accelerators tailored to specific tasks. It can significantly accelerate the MP2 encoding process by implementing instructions that directly assist in the encoding algorithm.
+    \item \textbf{Licensing and Cost:} Using RISC-V is often cost-effective because it's open-source, which means no licensing fees are required. It can be particularly advantageous for embedded system manufacturers looking to minimize costs.
+    \item \textbf{Scalability:} RISC-V processors come in various configurations and can be scaled to match the performance requirements of the target application. This scalability is beneficial for accommodating different processing needs in various embedded devices.
+    \item \textbf{Longevity and Future-Proofing:} RISC-V is designed to be a stable and long-lasting architecture. By using RISC-V, you can ensure that your embedded MP2 encoder will remain compatible and supported for years.
+    \item \textbf{Research and Education:} Using RISC-V for an MP2 encoder project can also serve educational and research purposes. It allows researchers and students to experiment with processor design, optimization techniques, and multimedia encoding algorithms.
+\end{itemize}
 
 Overall, designing an embedded MP2 encoder using a RISC-V processor can provide a high degree of flexibility, optimization, and efficiency for specific embedded applications where MP2 encoding is still relevant, such as in legacy systems, broadcasting equipment, or custom audio processing devices.
 
