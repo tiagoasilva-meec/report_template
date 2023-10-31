@@ -5,12 +5,165 @@
 %The resources used should be detailed: the frequency of operation, memory size, power, energy consumption, and communication bandwidth are examples. For FPGA implementations, for example, the number of block RAMs, LUTs, and DSPs should be presented in a Table for the configurations studied.
 
 This chapter addresses the experimental results for the IOb-MP2-E running on FPGA, with and without hardware accelerators.
-It starts by presenting the implementation results in FPGA. Then, the execution times are analyzed. In the end, the results obtained are compared with the real-time encoding requirements.
+It starts by presenting the results of \textit{TwoLAME} profiling. Then, it presents the implementation results in FPGA. Afterward, the execution times are analyzed. In the end, the results obtained are compared with the real-time encoding requirements.
+
+\subsection{Profiling}
+
+The results of the first stage of \textit{TwoLAME}'s profiling are shown in the table below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{2-5}
+     & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{twolame\_init()}  & 3 & 2 & 3 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{wave\_init()}  & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_set\_num\_channels()}   & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_set\_in\_samplerate()}   & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_set\_bitrate()}   & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_init\_params()}   & 11 & 11 & 11 & 11 \\ 
+    \hline
+    \multicolumn{1}{|c|}{wave\_get\_samples()}   & 4 & 126 & 89 & 135 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_encode\_buffer\_interleaved()}   & 1510 & 24345 & 19820 & 26010 \\ 
+    \hline
+    \multicolumn{1}{|c|}{memcpy()}  & 2 & 59 & 19 & 32 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_encode\_flush()}   & 79 & 80 & 185 & 155 \\ 
+    \hline
+    \multicolumn{1}{|c|}{memcpy()}  & 0 & 0 & 0 & 0 \\ 
+    \hline
+    \multicolumn{1}{|c|}{twolame\_close()}   & 0 & 0 & 0 & 1 \\ 
+    \hline
+    \multicolumn{1}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \hline
+    \end{tabular}
+    \caption{Execution time for all input files (first phase of \textit{profiling}) [ms].}
+    \label{profiling1}
+\end{table}
+
+The previous information shows that \textit{twolame\_encode\_buffer\_interleaved} occupies most of the execution time, which is expected as it is responsible for the encoding, calling many other \textit{TwoLAME} functions. Nonetheless, this information is not enough, mainly because developing hardware to accelerate the whole function would be an extremely difficult task.
+Therefore, the results of the second stage of \textit{TwoLAME}'s profiling are shown in the table below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{2-5}
+    \multicolumn{1}{c|}{} & \textit{short.wav} & \textit{long.wav} & \textit{noise.wav} & \textit{vivaldi.wav} \\
+    \hline
+    \multicolumn{1}{|c|}{\textit{scale\_and\_mix\_samples}}  & 0 & 9 & 5 & 3 \\ 
+   \hline
+    \multicolumn{1}{|c|}{\textit{twolame\_buffer\_sstell}} & 3 & 139 & 52 & 78 \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_available\_bits}} & 0 & 16 & 7 & 8  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_window\_filter\_subband}} & 141  & 3487 & 2590 & 3662  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_scalefactor\_calc}} & 7 & 172 & 142 &  201  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_find\_sf\_max}} & 0  & 13 & 3 & 6   \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_scalefactor\_calc}} & 0  & 5 & 6 & 4  \\ 
+    \hline
+      \multicolumn{1}{|c|}{\textit{twolame\_psycho\_3}} & 1377  & 19062 & 16222 &  20829 \\ 
+     \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_sf\_transmission\_pattern}} & 0 & 17 & 8 &  10 \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_main\_bit\_allocation}} & 16  & 424 & 343 & 485  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_write\_header}} & 2 & 12 & 7 &  7 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{buffer\_putbits}} & 0 & 4 & 1 & 4  \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_write\_bit\_alloc}} & 0 & 11 & 11 &  17 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_write\_scalefactors}} & 1 & 22 & 20 & 27 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_subband\_quantization}} & 21 & 503 & 346 & 488 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_write\_samples}} & 12 & 306 & 149 & 210 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{buffer\_put1bit}} & 0 & 10 & 4 & 2 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{buffer\_putbits}} & 0 & 5 & 4 & 2 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_dab\_crc\_calc}} & 0 & 9 & 3 &  3 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{buffer\_put1bit}} & 0 & 3 & 0 &  0 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_buffer\_sstell}} & 0 & 1 & 0 & 1  \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_do\_energy\_levels}} & 0 & 7 & 1 & 3  \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{twolame\_crc\_writeheader}} & 0 & 3 & 1 &  2  \\ 
+    \hline
+    \multicolumn{1}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \hline
+    \end{tabular}
+    \caption{Execution time for all input files (second phase of \textit{profiling}) [ms].}
+    \label{profiling2}
+\end{table}
+
+The previous table shows that the eight block of \textit{encode\_frame()} occupies most of the execution time, which includes two nested loops (executed depending on \textit{if} conditions) and a switch case. The nested loops perform simple operations, so they are not relevant. The switch case calls a certain function depending on the switch condition. However, after inspecting \textit{glopts->psymodel} condition it is perceptible that case 3 is always selected, calling \textit{twolame\_psycho\_3}. Nevertheless, this information is still not enough and the results of the third stage of \textit{TwoLAME}'s profiling are shown in the table below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \cline{2-5}
+    \multicolumn{1}{c|}{}  & \multicolumn{4}{c|}{\textbf{Input file}} \\
+    \cline{2-5}
+    \multicolumn{1}{c|}{} & short.wav & long.wav & noise.wav & vivaldi.wav \\
+    \hline
+    \multicolumn{1}{|c|}{twolame\_psycho\_3\_init}  & 635 & 642 & 635 & 635 \\ 
+   \hline
+    \multicolumn{1}{|c|}{\textit{mem} $\rightarrow$ \textit{fft\_buf}} & 5 & 133 & 115 & 155 \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{mem} $\rightarrow$ \textit{fft\_buf}} &  6 &  117& 77 &  120 \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_fft}} & 47 & 1138 & 886 &  1253  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_powerdensityspectrum}} & 40  & 1026 & 791 &  1115  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_spl}} &  7 & 170 & 148 & 204  \\ 
+    \hline
+      \multicolumn{1}{|c|}{\textit{psycho\_3\_tonal\_label}} &  7 & 153 & 258 & 173  \\ 
+     \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_noise\_label}} & 8 & 220 & 167 & 235  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_dump}} &  0 & 4 & 2 & 4  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_decimation}} & 3 & 45 & 38 & 67   \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_threshold}} & 611 & 15168  & 12975 &  16684 \\
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_minimummasking}} & 0 & 23 & 14 & 29  \\ 
+    \hline
+     \multicolumn{1}{|c|}{\textit{psycho\_3\_smr}} & 0 & 9 & 6 & 13  \\ 
+    \hline
+    \multicolumn{1}{|c|}{\textbf{\textit{TwoLAME} total}}  & 1614 & 24719 & 20210 & 26467 \\ 
+    \hline
+    \end{tabular}
+    \caption{Execution time for all input files (third phase of \textit{profiling}) [ms].}
+    \label{profiling3}
+\end{table}
+
+The previous table shows interesting information. First, it is noticeable that several functions have an insignificant execution time, compared to \textit{TwoLAME} total execution time. Second, it is clear that \textit{psycho\_3 function 11}, which corresponds to \textit{psycho\_3\_threshold} function, occupies the biggest part of the program execution. For \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav}, this function corresponds to 37\%, 61\%, 64\% and 63\% of \textit{TwoLAME} execution time, respectively.
+This motivates the hardware acceleration of \textit{psycho\_3\_threshold}, described in \textit{Hardware architecture} section.
 
 \subsection{FPGA implementation}
-This work consists of accelerating the \textit{psycho\_3\_threshold} function in IOb-MP2-E using hardware acceleration. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration. \\
-All the work was tested using \textit{KU040 Xilinx Kintex® UltraScale™ Development Kit}~\cite{bib:xcku040}. This chip is based on the 28nm \textit{UltraScale+} architecture, containing \textit{Xilinx XCKU040-1FBVA676 FPGA}, 250 MHz LVDS Oscillator (system clock), 1GB DDR4 SDRAM and USB-UART Interface. As internal resources, it allows a total of 242400 LUTs, 484800 FFs, 600 BRAMs, and 1920 DSPs. \\
-In this work, the Xilinx board runs at 100MHz, the frequency at which IOb-MP2-E is compiled.\\ 
+This work consists of accelerating the \textit{psycho\_3\_threshold} function in IOb-MP2-E using hardware acceleration. This requires more hardware, which indeed affects the resource consumption in FPGA, compared to the implementation without hardware acceleration.
+All the work was tested using \textit{KU040 Xilinx Kintex® UltraScale™ Development Kit}~\cite{bib:xcku040}. This chip is based on the 28nm \textit{UltraScale+} architecture, containing \textit{Xilinx XCKU040-1FBVA676 FPGA}, 250 MHz LVDS Oscillator (system clock), 1GB DDR4 SDRAM and USB-UART Interface. As internal resources, it allows a total of 242400 LUTs, 484800 FFs, 600 BRAMs, and 1920 DSPs.
+In this work, the Xilinx board runs at 100MHz, the frequency at which IOb-MP2-E is compiled. 
 
 Table \ref{implementation} shows the implementation results of IOb-MP2-E without \textit{Versat} and with \textit{Versat}, first using \textit{spectrum\_search} accelerator, then using \textit{masking\_threshold} accelerator.
 
@@ -118,7 +271,7 @@ Table \ref{time} shows the execution time of IOb-MP2-E without \textit{Versat} a
 \vspace{0.5cm}
 
 The previous information shows that the \textit{spectrum\_search} accelerator can induce a substantial reduction in execution time. Specifically, the \textit{psycho\_3\_threshold} execution times for \textit{short.wav}, \textit{long.wav}, \textit{noise.wav} and \textit{vivaldi.wav} are reduced by approximately 96.26\%, 94.6\%, 95.34\% and 94.98\%, respectively.
-Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. In this accelerator there is only a a main transference of data at the beginning, followed by the execution of many loop iterations, keeping the data inside the accelerator. Since only a few constants are changed in each iteration, the performance gain is big.\\
+Considering that the \textit{spectrum\_search} accelerator executes part of the original function and not the whole function, these results are extremely positive. In this accelerator there is only a a main transference of data at the beginning, followed by the execution of many loop iterations, keeping the data inside the accelerator. Since only a few constants are changed in each iteration, the performance gain is big.
 Moreover, with a reduction of 94-96\% for all input files, the \textit{masking\_threshold} accelerator becomes unnecessary. That is because \textit{Versat} does not allow execution of different accelerators in the same run, but rather the execution of a single accelerator, with different configurations (the case of this work) or not.
 The \textit{masking\_threshold} accelerator increased the execution time by a few milliseconds for all input files, i.e. no acceleration was achieved with \textit{masking\_threshold} at all. This can be explained by the fact that the overhead of transferring data is greater than any gain in performance using the accelerator. The loop executes only 512 iterations, which is not enough to make the data transfer worthwhile.
 
@@ -214,19 +367,19 @@ Table \ref{speedup} presents the outcomes of the previously discussed calculatio
 
 \vspace{0.3cm}
 
-In more detail, the achieved speedup is calculated based on the \textit{TwoLAME total} execution times with \textit{spectrum\_search} and without \textit{Versat}, from table \ref{time}.\\
-The desired speedup is calculated taking into account the proportion of the \textit{TwoLAME} that can be parallelized, which is obtained as the result of the division between \textit{psycho\_3\_threshold} and \textit{TwoLAME total} execution times without \textit{Versat}, also from table \ref{time}. \\
+In more detail, the achieved speedup is calculated based on the \textit{TwoLAME total} execution times with \textit{spectrum\_search} and without \textit{Versat}, from table \ref{time}.
+The desired speedup is calculated taking into account the proportion of the \textit{TwoLAME} that can be parallelized, which is obtained as the result of the division between \textit{psycho\_3\_threshold} and \textit{TwoLAME total} execution times without \textit{Versat}, also from table \ref{time}.
 Lastly, the required speedup is calculated based on the \textit{TwoLAME total} execution times without \textit{Versat}, from table \ref{time}, and the Real-time, from table\ref{realtime}.
 
 Focusing on the results, it is noticeable that the \textit{spectrum\_search} accelerator provides a speedup very close to the desired one (the maximum speedup achievable by accelerating \textit{psycho\_3\_threshold} function).
 However, the required speedup indicates that the acceleration of \textit{psycho\_3\_threshold} is not enough to meet the real-time requirements. 
 In particular, the first two input files encoding is approximately at 3.39 and 1.21 speedup from meeting the real-time requirements, respectively. In the first case, the input file has a small number of frames, which doesn't potentiate \textit{Versat} acceleration and, consequently, the achieved speedup stays far from the required one.
-In the second case, the input file has a significant number of frames but the audio itself is simple, which implies a lower demand of \textit{psycho\_3\_threshold} function (executed by \textit{spectrum\_search} accelerator). For this reason, the required speedup is lower and easier to reach, which makes the achieved speedup very close to the required one. \\
+In the second case, the input file has a significant number of frames but the audio itself is simple, which implies a lower demand of \textit{psycho\_3\_threshold} function (executed by \textit{spectrum\_search} accelerator). For this reason, the required speedup is lower and easier to reach, which makes the achieved speedup very close to the required one.
 The last two input files' encoding is approximately at 2.42 and 2.30 speedup from meeting the real-time requirements. These results give some guarantees about achieving the goal of this work since the third input file has a considerable number of frames and represents the worst-case scenario for real-time encoding (being a stereo white noise audio file). The fourth input file has a normal audio complexity since it is part of an existing soundtrack, and so the difference between achieved and required speedup is similar to the previous file.
 
 Regarding the hardware architecture, the speedup values give a direct relation to the frequency necessary to meet the real-time requirements. Picking the \textit{noise.wav} input file as an example, the required speed up for IOB-MP2-E without hardware acceleration is 6.2. Since IOb-MP2-E operates at 100MHz, this means that an implementation for 620MHz would meet the goal. 
 
-In a case where high clock speeds are a priority, application-specific integrated circuits (ASICs) are often more capable of running at faster frequencies. This integrated circuit can be optimized for specific tasks and, in some cases, achieve clock speeds as high as 500MHz in advanced semiconductor technologies like 28nm.\\
-However, ASICs require a significant upfront investment, and the industry's low volume may make them less cost-effective. In contrast, FPGAs offer flexibility and programmability, allowing for quicker design iterations and so often preferred for low-volume or prototyping applications. \\
-Decoders may benefit from ASICs, but for general-purpose or adaptable solutions, CPUs, GPUs, and FPGAs provide versatile off-the-shelf options. Although they may operate at slightly lower clock speeds, this brings the advantages of reduced power consumption, lower heat generation, and potentially longer component lifespan.\\
+In a case where high clock speeds are a priority, application-specific integrated circuits (ASICs) are often more capable of running at faster frequencies. This integrated circuit can be optimized for specific tasks and, in some cases, achieve clock speeds as high as 500MHz in advanced semiconductor technologies like 28nm.
+However, ASICs require a significant upfront investment, and the industry's low volume may make them less cost-effective. In contrast, FPGAs offer flexibility and programmability, allowing for quicker design iterations and so often preferred for low-volume or prototyping applications.
+Decoders may benefit from ASICs, but for general-purpose or adaptable solutions, CPUs, GPUs, and FPGAs provide versatile off-the-shelf options. Although they may operate at slightly lower clock speeds, this brings the advantages of reduced power consumption, lower heat generation, and potentially longer component lifespan.
 Considering this, the IOB-MP2-E has the potential to be a top-notch system in the future, as the achieved performance for the worst-case scenario shows that an implementation at 240MHz would meet the goal.
