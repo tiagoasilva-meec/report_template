@@ -47,7 +47,7 @@ One of the last modifications in \textit{main} consists of sending the output da
 Afterward, the UART transmission is closed through \textit{uart\_finish}, and the program returns.
 
 Apart from \textit{main}, some header files were included in \textit{firmware.c}, related to both the IOb-MP2-E system and \textit{libtwolame}. Two macros were also defined, AUDIOBUFSIZE as 2304 and MP2BUFSIZE as 4096. These variables specify the size of input and output buffers, respectively, which in practice represent the chunk of data encoded each time (the number of frames encoded). Therefore, the number of frames can be altered by changing both variables on the same scale. As it stands, the \textit{TwoLAME} encodes one frame at a time. 
-After this process, the system was emulated on PC, passing through a simulation environment developed by \textit{IObundle, Lda}, which allowed full testing. Since the system proved to be capable of successfully encoding MPEG-1/2 Layer II Audio, it can be mentioned as \textbf{IOb-MP2-E} from now on. 
+After this process, the system was emulated on PC, passing through a simulation environment developed by \textit{IObundle, Lda}, which allowed full testing. 
 
 \subsection{Optimization}
 
