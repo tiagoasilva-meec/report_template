@@ -24,6 +24,10 @@
 \usepackage{setspace}
 \setstretch{1.5}
 
+\usepackage{titlesec}
+\titleformat{\section}
+{\fontsize{28}{20}\selectfont\bfseries}{\thesection}{1em}{}
+
 \begin{document}
 
 %\begin{singlespace}
@@ -35,28 +39,35 @@
 %\pagenumbering{gobble}
 \thispagestyle{empty}
 
+\vspace{2.5cm}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.3]{iob2.pdf}
+\end{figure}
+
+
 \begin{onehalfspace}
 
 \begin{center}
 \begin{Large}
-  \vspace{5cm}
-  {\bf \Large {MPEG1/2 layers I/II encoder using a RISC-V processor and hardware accelerators}}\\
-  \vspace{1.5cm}
+  {\bf \Large {MPEG1/2 layers I/II encoder using \\ a RISC-V processor and hardware accelerators}}\\
+  \vspace{1cm}
   {\bf \large Tiago Alves da Silva}\\
-  \vspace{2cm}
+  \vspace{1cm}
   \normalsize {Thesis to obtain the Master of Science Degree in}\\
   \vspace{0.5cm}
   {\bf \Large {Electrical and Computer Engineering}}\\
-  \vspace{2cm}
-  \normalsize {Supervisor: Prof. José João Henriques Teixeira de Sousa}\\
-  \vspace{1.5cm}
+  \vspace{1cm}
+  \normalsize {Supervisor: Prof. Doutor José João Henriques Teixeira de Sousa}\\
+  \vspace{1cm}
   {\bf \large Examination Committee}\\
   \vspace{1cm}
-  \normalsize {Chairperson: Prof. Teresa Maria Canavarro Menéres Mendes de Almeida}\\
-  \normalsize {Supervisor: Prof. José João Henriques Teixeira de Sousa}\\
-  \normalsize {Member of the Committee: Prof. Marcelino Bicho dos Santos}\\
+  \normalsize {Chairperson: Prof. Doutora Teresa Maria Canavarro Menéres Mendes de Almeida}\\
+  \normalsize {Supervisor: Prof. Doutor José João Henriques Teixeira de Sousa}\\
+  \normalsize {Member of the Committee: Prof. Doutor Marcelino Bicho dos Santos}\\
 
-  \vspace{2cm}
+  \vspace{1cm}
   %{\bf \date{\today} }
   {\bf \large October 2023 }
 \end{Large}
@@ -66,25 +77,18 @@
 %\linespread{1.25}
 %\begin{doublespacing}
 
-
-\pagenumbering{roman}
+\clearpage
+\thispagestyle{empty}
 \cleardoublepage
 
+
+\pagenumbering{roman}
 \section*{Declaration}
 \input{declaration}
 
 \cleardoublepage
 \section*{Acknowledgements}
 \input{acknowledgements}
-
-\cleardoublepage
-\section*{Abstract}
-\input{abstract}
-
-\vfill
-
-\section*{}
-\input{keywords}
 
 \cleardoublepage
 \section*{Resumo}
@@ -94,6 +98,15 @@
 
 \section*{}
 \input{palavras}
+
+\cleardoublepage
+\section*{Abstract}
+\input{abstract}
+
+\vfill
+
+\section*{}
+\input{keywords}
 
 \cleardoublepage
 \tableofcontents
@@ -109,7 +122,6 @@
 \cleardoublepage
 
 \pagenumbering{arabic}
-
 
 \section{Introduction}
 \label{sec:intro}
@@ -143,6 +155,7 @@
 \cleardoublepage
 \addcontentsline{toc}{section}{\bibname}
 \bibliographystyle{abbrvunsrtnat} % <<<<< SELECT IF USING REFERENCES BY NUMBER (CITATION ORDER)
+\renewcommand{\refname}{Bibliography}
 \bibliography{citations.bib}
 
 %\end{doublespacing}

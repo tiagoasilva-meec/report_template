@@ -1,6 +1,6 @@
-\subsection{About MP2}
+\subsection{About MPEG-1 Layer II}
 
-MPEG-1 Layer II, often referred to simply as MP2, is an audio compression format developed as part of the MPEG-1 standard. MPEG-1 is a set of standards created by the Moving Picture Experts Group (MPEG) for video and audio compression. MPEG-1 Layer II specifically addresses audio compression.
+Moving Picture Experts Group (MPEG)-1 Layer II, often referred to simply as MP2, is an audio compression format developed as part of the MPEG-1 standard. MPEG-1 is a set of standards created by the MPEG for video and audio compression. MPEG-1 Layer II specifically addresses audio compression.
 
 MP2 is less well-known and widely used than its successor, MP3 (MPEG-1 Layer III), which offers higher compression and better audio quality for consumer applications. However, MP2 has been used in various professional applications, including:
 
@@ -32,7 +32,7 @@ This work considers the design of a RISC-V IP core. Designing an embedded MP2 en
     \item \textbf{Real-Time Processing:} MP2 encoding often requires real-time processing, which RISC-V processors can be optimized for. Real-time capabilities are essential in applications like live audio streaming, broadcasting, or communication systems.
     \item \textbf{Integration and System-on-Chip (SoC):} RISC-V processors can be integrated into a larger system-on-chip (SoC), including various components, such as memory, peripherals, and custom accelerators. This integration can result in a compact and efficient solution for MP2 encoding, making it well-suited for embedded applications.
     \item \textbf{Custom Instructions and Accelerators:} RISC-V allows for creating custom instructions and accelerators tailored to specific tasks. It can significantly accelerate the MP2 encoding process by implementing instructions that directly assist in the encoding algorithm.
-    \item \textbf{Licensing and Cost:} Using RISC-V is often cost-effective because it's open-source, which means no licensing fees are required. It can be particularly advantageous for embedded system manufacturers looking to minimize costs.
+    \item \textbf{Licensing and Cost:} Using RISC-V is often cost-effective because it is open-source, which means no licensing fees are required. It can be particularly advantageous for embedded system manufacturers looking to minimize costs.
     \item \textbf{Scalability:} RISC-V processors come in various configurations and can be scaled to match the performance requirements of the target application. This scalability is beneficial for accommodating different processing needs in various embedded devices.
     \item \textbf{Longevity and Future-Proofing:} RISC-V is designed to be a stable and long-lasting architecture. By using RISC-V, you can ensure that your embedded MP2 encoder will remain compatible and supported for years.
     \item \textbf{Research and Education:} Using RISC-V for an MP2 encoder project can also serve educational and research purposes. It allows researchers and students to experiment with processor design, optimization techniques, and multimedia encoding algorithms.
@@ -48,18 +48,18 @@ featuring a reconfigurable hardware accelerator. The encoder will be developed u
 The objectives of this work are the following:
 
 \begin{itemize}
-    \item Port the \textit{TwoLAME}~\cite{bib:twolame} encoder open-source library to the system, using floating-point precision.
+    \item Port the \textit{TwoLAME}~\cite{bib:twolame} audio encoder open-source library to the system, using floating-point precision.
     \item Perform software optimizations.
-    \item Profile the \textit{TwoLAME} algorithm while running in FPGA~\cite{fpga}.
+    \item Profile the encoding algorithm while running in FPGA~\cite{fpga}.
     %\item Implement custom instructions in \textit{VexRiscv}~\cite{bib:vexriscv} CPU. 
-    \item Use \textit{Versat}~\cite{bib:iobversat} open-source reconfigurable accelerator design tool to accelerate \textit{TwoLAME} algorithm.
-    \item Check the requirements for \textit{TwoLAME} real-time encoding.
+    \item Use \textit{Versat}~\cite{bib:iobversat} open-source reconfigurable accelerator design tool to accelerate the encoding algorithm.
+    \item Check the requirements for real-time encoding.
     \item Compare with the fixed-point \textit{CWda74}~\cite{CWda74}, the only competitor.
 \end{itemize}
 
 \subsection{Outline}
 
-This document is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the software architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out, and directions for future work are outlined.
+This document is composed of 5 more chapters. In the second chapter, the state-of-the-art and the tools used in this work are presented. In the third chapter, the hardware architecture is fully described. In the fourth chapter, the software architecture is fully described. In the fifth chapter, experimental results are presented. In the sixth and final chapter, the achievements are pointed out, and directions for future work are outlined.
 
 
 
